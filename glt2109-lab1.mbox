@@ -1,0 +1,1448 @@
+From 5bfa0e45224b2313a4d40ed4c0ab64c6499fadc2 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 24 Feb 2013 21:21:26 -0500
+Subject: [PATCH 01/24] Starting the programming. Just cloned files, and first
+ made first save.
+
+---
+ 0 files changed
+ create mode 100644 part1/selectionsort.c
+
+diff --git a/part1/selectionsort.c b/part1/selectionsort.c
+new file mode 100644
+index 0000000..e69de29
+-- 
+1.7.9.5
+
+
+From 48802acc0e9c25ed0885c933c725d9124f8dafdf Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Mon, 25 Feb 2013 15:00:45 -0500
+Subject: [PATCH 02/24] Wrote basic info in README.txt, and created
+ selectionsort.c and .h files
+
+---
+ README.txt            |   17 ++++++++++---
+ part1/Makefile        |   65 +++++++++++++++++++++++++++++++++++++++++++++++++
+ part1/selectionsort.c |   18 ++++++++++++++
+ part1/selectionsort.h |    1 +
+ 4 files changed, 98 insertions(+), 3 deletions(-)
+ create mode 100644 part1/Makefile
+ create mode 100644 part1/selectionsort.h
+
+diff --git a/README.txt b/README.txt
+index 66dfd3e..33b7c6c 100644
+--- a/README.txt
++++ b/README.txt
+@@ -1,11 +1,22 @@
+ This file should contain:
+ 
+-  - your name
+-  - your UNI
+-  - lab assignment number
++  - Name: Gentry Tran
++  - UNI: glt2109
++  - Lab assignment number: 1
+   - description for each part
+   
+ The description should indicate whether your solution for the part is
+ working or not.  You may also want to include anything else you would
+ like to communicate to the grader such as extra functionalities you
+ implemented or how you tried to fix your non-working code.
++
++Part 1
++
++
++Part 2
++
++
++Part 3
++
++
++Part 4
+diff --git a/part1/Makefile b/part1/Makefile
+new file mode 100644
+index 0000000..e9545c6
+--- /dev/null
++++ b/part1/Makefile
+@@ -0,0 +1,65 @@
++# We use gcc for C compilation and g++ for C++ compilation
++CC = gcc
++CXX = g++
++
++# Let’s leave a place holder for additional include directories
++
++INCLUDES =
++
++# Compilation options:
++# -g for debugging info and -Wall enables all warnings
++
++CFLAGS = -g -Wall $(INCLUDES)
++CXXFLAGS = -g -Wall $(INCLUDES)
++
++# Linking options:
++# -g for debugging info
++
++LDFLAGS = -g
++
++# List the libraries you need to link with in LDLIBS
++# For example, use "-lm" for the math library
++
++LDLIBS =
++
++# The 1st target gets built when you type "make".
++# It’s usually your executable. ("main" in this case.)
++#
++# Note that we did not specify the linking rule.
++# Instead, we rely on one of make’s implicit rules:
++#
++#	 $(CC) $(LDFLAGS) <all-dependent-.o-files> $(LDLIBS)
++#
++# Also note that make assumes that main depends on main.o,
++# so we can omit it if we want to.
++
++selectionsort: selectionsort.o selectionsort_main.o
++
++# main.o depends not only on main.c, but also on myadd.h because
++# main.c includes myadd.h. main.o will get recompiled if either
++# main.c or myadd.h get modified.
++#
++# make already knows main.o depends on main.c, so we can omit main.c
++# in the dependency list if we want to.#
++# 
++# make uses the following implicit rule to compile a .c file into a .o
++# file:
++#
++# $(CC) -c $(CFLAGS) <the-.c-file>
++#
++
++selectionsort_main.o: selectionsort_main.c selectionsort.h
++selectionsort.o: selectionsort.c selectionsort.h
++
++
++# Always provide the "clean" target that removes intermediate files.
++# What you remove depend on your choice of coding tools
++# (different editors generate different backup files for example).
++#
++# the "clean" target is not a file name, so we tell make that
++# it’s a "phony" target.
++
++.PHONY: clean
++clean:
++	rm -f *.o a.out core selectionsort
++
+diff --git a/part1/selectionsort.c b/part1/selectionsort.c
+index e69de29..725e8b9 100644
+--- a/part1/selectionsort.c
++++ b/part1/selectionsort.c
+@@ -0,0 +1,18 @@
++
++// Iterative Selection Sort
++  void selection_sort(char A[], int n) 
++   {
++    int i, j, small, temp;
++     for (i = 0; i < n - 1; i++) {
++      
++       // find minimum
++       small = i;
++       for(j = i + 1; j < n; j++)
++      	       if (A[j] < A[small]) 
++          small = j;
++       // swap
++       temp = A[small]; 
++       A[small] = A[i]; 
++       A[i] = temp; 
++     }
++    }
+diff --git a/part1/selectionsort.h b/part1/selectionsort.h
+new file mode 100644
+index 0000000..178d2a1
+--- /dev/null
++++ b/part1/selectionsort.h
+@@ -0,0 +1 @@
++void selection_sort(char A[], int n);
+-- 
+1.7.9.5
+
+
+From 1090b677e8a1737087addde3dc65225b2b42bdd5 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 26 Feb 2013 12:00:35 -0500
+Subject: [PATCH 03/24] added Makefile, and merge.c file and appended rule in
+ Makefile for part2
+
+---
+ 0 files changed
+ create mode 100644 part2/Makefile
+ create mode 100644 part2/merge.c
+
+diff --git a/part2/Makefile b/part2/Makefile
+new file mode 100644
+index 0000000..e69de29
+diff --git a/part2/merge.c b/part2/merge.c
+new file mode 100644
+index 0000000..e69de29
+-- 
+1.7.9.5
+
+
+From ace38bdbc98b38ef1c27ad969ac87096cd1ef62b Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 26 Feb 2013 12:03:58 -0500
+Subject: [PATCH 04/24] Initialize arrays in merge.c and added new rule to
+ Makefile
+
+---
+ part2/Makefile |   26 ++++++++++++++++++++++++++
+ part2/merge.c  |    9 +++++++++
+ 2 files changed, 35 insertions(+)
+
+diff --git a/part2/Makefile b/part2/Makefile
+index e69de29..86f94b5 100644
+--- a/part2/Makefile
++++ b/part2/Makefile
+@@ -0,0 +1,26 @@
++
++
++CC = gcc
++CXX = g++
++
++# Let’s leave a place holder for additional include directories
++
++INCLUDES =
++
++# # Compilation options:
++# # -g for debugging info and -Wall enables all warnings
++
++CFLAGS = -g -Wall $(INCLUDES)
++CXXFLAGS = -g -Wall $(INCLUDES)
++
++# # Linking options:
++# # -g for debugging info
++
++LDFLAGS = -g
++LDLIBS =
++
++mergesort: mergesort_main.o merge.o
++	   gcc -o mergesort mergesort_main.o merge.o
++mergesort.o: merge.c merge.h
++	
++
+diff --git a/part2/merge.c b/part2/merge.c
+index e69de29..f67dedf 100644
+--- a/part2/merge.c
++++ b/part2/merge.c
+@@ -0,0 +1,9 @@
++
++
++
++char a1[], int n1,
++char a2[], int n2,
++
++
++
++
+-- 
+1.7.9.5
+
+
+From 056efa641d569b2030260a34cb7e8cd7e50822d9 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 26 Feb 2013 13:11:58 -0500
+Subject: [PATCH 05/24] Created a structure for the code of what to do
+
+---
+ part2/merge.c |   20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/part2/merge.c b/part2/merge.c
+index f67dedf..5735eee 100644
+--- a/part2/merge.c
++++ b/part2/merge.c
+@@ -1,9 +1,13 @@
+-
+-
+-
+-char a1[], int n1,
+-char a2[], int n2,
+-
+-
+-
++void merge(char a1[], int n1, char a2[], int n2, char output[]){
++//initialize array increment iterator variables
++	//test that there are contents remaining to be iterated in either a1 or a2
++		//test that there are contents remaining in both a1 and a2 and thus comparison is possible
++			//test less than
++				//iterate input and output
++			//provide else case
++				//iterate input and output
++		//test if only contents left in n1, iterate through a1
++			//iterate input and output
++		//test if only contents left in n2, iterate through a2
++			//iterate input and output
+ 
+-- 
+1.7.9.5
+
+
+From 225a7f71d47de3f635bf9bba1812aef79f3793e7 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 26 Feb 2013 13:51:27 -0500
+Subject: [PATCH 06/24] Started coding interation through the values in array
+
+---
+ part2/merge.c |   39 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 38 insertions(+), 1 deletion(-)
+
+diff --git a/part2/merge.c b/part2/merge.c
+index 5735eee..4c66585 100644
+--- a/part2/merge.c
++++ b/part2/merge.c
+@@ -1,7 +1,44 @@
+ void merge(char a1[], int n1, char a2[], int n2, char output[]){
+ //initialize array increment iterator variables
++int i,j,k = 0;	
++	
+ 	//test that there are contents remaining to be iterated in either a1 or a2
+-		//test that there are contents remaining in both a1 and a2 and thus comparison is possible
++
++
++while (n1 > 0 || n2 > 0)
++{	
++	if (n1 > 0 && n2 > 0)	
++		
++		for (i = 0; i < n1; i++)
++
++			if (a1[i] <= a2[j])
++			
++		
++		for (j = 0; j < n2; j++)
++				output[k] = a1[i]
++				k++
++
++			else
++			
++	
++				for (j = 0; j < n2; j++)
++	
++	else if (n1 > 0)
++
++	
++
++	if (n2 > 0)
++		
++
++
++
++
++
++
++}			
++for (i = 0; i < n; i++)
++
++	//test that there are contents remaining in both a1 and a2 and thus comparison is possible
+ 			//test less than
+ 				//iterate input and output
+ 			//provide else case
+-- 
+1.7.9.5
+
+
+From b1fcb8156d5eef00c239c5935fb66699389b297f Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 26 Feb 2013 14:17:46 -0500
+Subject: [PATCH 07/24] Finished writing code for mergesort by iteration and
+ if/else statementso
+
+---
+ part2/merge.c |   73 ++++++++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 44 insertions(+), 29 deletions(-)
+
+diff --git a/part2/merge.c b/part2/merge.c
+index 4c66585..eebed6f 100644
+--- a/part2/merge.c
++++ b/part2/merge.c
+@@ -1,50 +1,65 @@
+ void merge(char a1[], int n1, char a2[], int n2, char output[]){
++
++	
+ //initialize array increment iterator variables
+ int i,j,k = 0;	
+ 	
+-	//test that there are contents remaining to be iterated in either a1 or a2
+-
++//test that there are contents remaining to be iterated in either a1 or a2
+ 
+ while (n1 > 0 || n2 > 0)
+ {	
++	
++// Checks if both have any elements in array	
+ 	if (n1 > 0 && n2 > 0)	
++	{
++		// Checks to see if value in array one is larger or equal
++		// then sets output array value equal
++		if (a1[i] <= a2[j])
++		{
++			output[k] = a1[i];
++			k++; // increments values to move to next cell in output array
++			i++; // increments values to move to next cell in first array
++		}
+ 		
+-		for (i = 0; i < n1; i++)
+-
+-			if (a1[i] <= a2[j])
+-			
+-		
+-		for (j = 0; j < n2; j++)
+-				output[k] = a1[i]
+-				k++
+-
+-			else
+-			
+-	
+-				for (j = 0; j < n2; j++)
++		// Sets value equal to the other array since it second array
++		// is smaller
++		else
++		{	output[k] = a2[j];
++                        k++; // increments values to move to next cell in output array
++		        j++; // increments values to move to next cell in second array
++		}
++	}
+ 	
+-	else if (n1 > 0)
++	// Since, one of them is empty, then checks to see if one is empty
++	else
++	{	
++		// Assigns the rest of the values to the output array
++		// for the array that is not empty
++		if (n1 > 0)
++	    	{
++			output[k] = a1[i];
++                        k++;    
++			i++;
++		}
+ 
++		if (n2 > 0)
++		{	output[k] = a2[j];
++	                k++;
++			j++;	
++		}	
+ 	
++	}	
++}
+ 
+-	if (n2 > 0)
+-		
++
++
++
++}
+ 
+ 
+ 
+ 
+ 
+ 
+-}			
+-for (i = 0; i < n; i++)
+ 
+-	//test that there are contents remaining in both a1 and a2 and thus comparison is possible
+-			//test less than
+-				//iterate input and output
+-			//provide else case
+-				//iterate input and output
+-		//test if only contents left in n1, iterate through a1
+-			//iterate input and output
+-		//test if only contents left in n2, iterate through a2
+-			//iterate input and output
+ 
+-- 
+1.7.9.5
+
+
+From 8e684bcd06977534c89a19a62cc5a7d942156ff8 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 26 Feb 2013 15:26:25 -0500
+Subject: [PATCH 08/24] Finished coding merge.c and now debuggingo
+
+---
+ part2/merge.c |   44 +++++++++++++++++++-------------------------
+ 1 file changed, 19 insertions(+), 25 deletions(-)
+
+diff --git a/part2/merge.c b/part2/merge.c
+index eebed6f..ae6fecd 100644
+--- a/part2/merge.c
++++ b/part2/merge.c
+@@ -2,19 +2,21 @@ void merge(char a1[], int n1, char a2[], int n2, char output[]){
+ 
+ 	
+ //initialize array increment iterator variables
+-int i,j,k = 0;	
+-	
++
++int i,j,k = 0;
++
+ //test that there are contents remaining to be iterated in either a1 or a2
+ 
+-while (n1 > 0 || n2 > 0)
++while ((n1 > i) || (n2 > j))
+ {	
+ 	
+ // Checks if both have any elements in array	
+-	if (n1 > 0 && n2 > 0)	
++
++	if ((n1 > i) && (n2 > j))	
+ 	{
+ 		// Checks to see if value in array one is larger or equal
+ 		// then sets output array value equal
+-		if (a1[i] <= a2[j])
++		if ((a1[i]) <= (a2[j]))
+ 		{
+ 			output[k] = a1[i];
+ 			k++; // increments values to move to next cell in output array
+@@ -23,13 +25,16 @@ while (n1 > 0 || n2 > 0)
+ 		
+ 		// Sets value equal to the other array since it second array
+ 		// is smaller
+-		else
+-		{	output[k] = a2[j];
++		else 
++		{
++		
++			output[k] = a2[j];
+                         k++; // increments values to move to next cell in output array
+ 		        j++; // increments values to move to next cell in second array
+-		}
+-	}
++	       	}
+ 	
++	}
++
+ 	// Since, one of them is empty, then checks to see if one is empty
+ 	else
+ 	{	
+@@ -41,25 +46,14 @@ while (n1 > 0 || n2 > 0)
+                         k++;    
+ 			i++;
+ 		}
+-
++		else
+ 		if (n2 > 0)
+-		{	output[k] = a2[j];
++		{	
++			output[k] = a2[j];
+ 	                k++;
+ 			j++;	
+-		}	
+-	
+-	}	
++		}
++	}
+ }
+-
+-
+-
+-
+ }
+ 
+-
+-
+-
+-
+-
+-
+-
+-- 
+1.7.9.5
+
+
+From bcceb5454df5861f29fccb01c7cf38955628859e Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 14:22:08 -0500
+Subject: [PATCH 09/24] Added the code to start printing the merging and
+ sorting statements
+
+---
+ part3/mergesort_main.c |   26 ++++++++++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
+
+diff --git a/part3/mergesort_main.c b/part3/mergesort_main.c
+index 8e506b3..e3278af 100644
+--- a/part3/mergesort_main.c
++++ b/part3/mergesort_main.c
+@@ -26,6 +26,14 @@ void print_array(char a[], int n)
+  */
+ void merge_sort(char a[], int n)
+ {
++	printf("sorting ");
++	print_array(a, n);
++	printf("\n");
++	//print_array(n - m, n - m);
++	//printf("\n");
++    
++	
++
+     // BASIS: if a has only 1 element, there is nothing to do.
+     if (n <= 1) {
+         return;
+@@ -39,11 +47,17 @@ void merge_sort(char a[], int n)
+ 
+     // merge_sort the 1st m elements of a
+     merge_sort(a, m);
++    //print_array(a,m);
++    //print("\n");
+ 
+     // merge_sort the remaining n - m elements of the array "a + m",
+     // which is a way to take a sub-array of "a" where a[m] is the new 
+     // 0th element (i.e., (a+m)[0] is the same as a[m]).
+     merge_sort(a + m, n - m);
++    //print_array(a + m, n - m);
++    //printf("\n");
++    //print_array(n - m, n - m);
++    //printf("\n");
+ 
+     // allocated a temporary array into which the merge function will 
+     // put the merged array.
+@@ -54,11 +68,14 @@ void merge_sort(char a[], int n)
+     //          which are really the same as a[m] to a[n-1])
+     // into the temp array.
+     merge(a, m, a + m, n - m, temp);
+-
++   	printf("merging");
++	printf("\n");
++    
+     // copy the temp array back into a.
+     int i;
+     for (i = 0; i < n; i++) {
+         a[i] = temp[i];
++
+     }
+ }
+ 
+@@ -88,6 +105,11 @@ int main()
+ 
+     print_array(a, n);
+     printf("\n");
+-
++    printf("here");
++    printf("\n");
++    printf("22here");
++    printf("\n");
++    
+     return 0;
+ }
++
+-- 
+1.7.9.5
+
+
+From f32789b13345e4c178049d6dad33f2f93f46d5c5 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 14:26:22 -0500
+Subject: [PATCH 10/24] Created the make file from merge.c and appended to
+ adjust to merge-trace
+
+---
+ part3/Makefile |   28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 part3/Makefile
+
+diff --git a/part3/Makefile b/part3/Makefile
+new file mode 100644
+index 0000000..11b8672
+--- /dev/null
++++ b/part3/Makefile
+@@ -0,0 +1,28 @@
++C = gcc
++CXX = g++
++
++# Let’s leave a place holder for additional include directories
++
++INCLUDES =
++
++# Compilation options:
++# -g for debugging info and -Wall enables all warnings
++
++CFLAGS = -g -Wall $(INCLUDES)
++CXXFLAGS = -g -Wall $(INCLUDES)
++
++# Linking options:
++# -g for debugging info
++
++LDFLAGS = -g
++LDLIBS =
++
++mergesort-trace: merge.o mergesort_main.o
++	gcc -o mergesort-trace mergesort_main.o merge.o
++mergesort_main.o: mergesort_main.c merge.h
++merge.o: merge.c merge.h
++
++.PHONY: clean
++	clean:
++	        rm -f *.o a.out core mergesort-trace
++
+-- 
+1.7.9.5
+
+
+From 142d74c889983c4aec0399369cbf160518c01b3c Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 14:45:26 -0500
+Subject: [PATCH 11/24] Added the spacing to the code with print and loops. k
+ is 3rd argument
+
+---
+ part3/mergesort_main.c |   26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/part3/mergesort_main.c b/part3/mergesort_main.c
+index e3278af..faab46f 100644
+--- a/part3/mergesort_main.c
++++ b/part3/mergesort_main.c
+@@ -24,8 +24,11 @@ void print_array(char a[], int n)
+ /*
+  * Merge-sort an array a, which contains n elements.
+  */
+-void merge_sort(char a[], int n)
+-{
++void merge_sort(char a[], int n, int k)
++{	
++	int i = 0;
++	for(i = 0, i < k, i++);
++	printf(" ");
+ 	printf("sorting ");
+ 	print_array(a, n);
+ 	printf("\n");
+@@ -46,18 +49,15 @@ void merge_sort(char a[], int n)
+     int m = n / 2;
+ 
+     // merge_sort the 1st m elements of a
+-    merge_sort(a, m);
++    merge_sort(a, m, k + 2);
++
+     //print_array(a,m);
+     //print("\n");
+ 
+     // merge_sort the remaining n - m elements of the array "a + m",
+     // which is a way to take a sub-array of "a" where a[m] is the new 
+     // 0th element (i.e., (a+m)[0] is the same as a[m]).
+-    merge_sort(a + m, n - m);
+-    //print_array(a + m, n - m);
+-    //printf("\n");
+-    //print_array(n - m, n - m);
+-    //printf("\n");
++    merge_sort(a + m, n - m, k + 2);
+ 
+     // allocated a temporary array into which the merge function will 
+     // put the merged array.
+@@ -68,7 +68,11 @@ void merge_sort(char a[], int n)
+     //          which are really the same as a[m] to a[n-1])
+     // into the temp array.
+     merge(a, m, a + m, n - m, temp);
+-   	printf("merging");
++   	
++    	for(i = 0, i < 0, k++);
++    	printf(" ");
++    	printf("merging ");
++	print_array(temp, n);
+ 	printf("\n");
+     
+     // copy the temp array back into a.
+@@ -105,10 +109,6 @@ int main()
+ 
+     print_array(a, n);
+     printf("\n");
+-    printf("here");
+-    printf("\n");
+-    printf("22here");
+-    printf("\n");
+     
+     return 0;
+ }
+-- 
+1.7.9.5
+
+
+From 47725cd239c54fd93816347f5628eb9139c72b9b Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 18:43:21 -0500
+Subject: [PATCH 12/24] Trying to debug the code and do spacing with for
+ loops. Giving up.
+
+---
+ part3/mergesort_main.c |   31 ++++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
+
+diff --git a/part3/mergesort_main.c b/part3/mergesort_main.c
+index faab46f..322ba1a 100644
+--- a/part3/mergesort_main.c
++++ b/part3/mergesort_main.c
+@@ -24,19 +24,20 @@ void print_array(char a[], int n)
+ /*
+  * Merge-sort an array a, which contains n elements.
+  */
++
+ void merge_sort(char a[], int n, int k)
+-{	
+-	int i = 0;
+-	for(i = 0, i < k, i++);
+-	printf(" ");
++{
++	int m = n / 2;	
++	while(k < m)
++	{
++		printf(" ");
++		k++;
++	}
+ 	printf("sorting ");
+ 	print_array(a, n);
+ 	printf("\n");
+-	//print_array(n - m, n - m);
+-	//printf("\n");
+     
+ 	
+-
+     // BASIS: if a has only 1 element, there is nothing to do.
+     if (n <= 1) {
+         return;
+@@ -49,15 +50,12 @@ void merge_sort(char a[], int n, int k)
+     int m = n / 2;
+ 
+     // merge_sort the 1st m elements of a
+-    merge_sort(a, m, k + 2);
+-
+-    //print_array(a,m);
+-    //print("\n");
++    merge_sort(a, m);
+ 
+     // merge_sort the remaining n - m elements of the array "a + m",
+     // which is a way to take a sub-array of "a" where a[m] is the new 
+     // 0th element (i.e., (a+m)[0] is the same as a[m]).
+-    merge_sort(a + m, n - m, k + 2);
++    merge_sort(a + m, n - m);
+ 
+     // allocated a temporary array into which the merge function will 
+     // put the merged array.
+@@ -68,9 +66,12 @@ void merge_sort(char a[], int n, int k)
+     //          which are really the same as a[m] to a[n-1])
+     // into the temp array.
+     merge(a, m, a + m, n - m, temp);
+-   	
+-    	for(i = 0, i < 0, k++);
+-    	printf(" ");
++    	
++  //  	for(j = 0, j < k, j + 2)
++//	{ 
++//		printf(" ")
++//	}
++    
+     	printf("merging ");
+ 	print_array(temp, n);
+ 	printf("\n");
+-- 
+1.7.9.5
+
+
+From 3cd0f82deca8f0aee977f07cbee851445cca279d Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 19:02:32 -0500
+Subject: [PATCH 13/24] Trying to edit code to create spaces.
+
+---
+ part3/mergesort_main.c |   13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
+
+diff --git a/part3/mergesort_main.c b/part3/mergesort_main.c
+index 322ba1a..f75837a 100644
+--- a/part3/mergesort_main.c
++++ b/part3/mergesort_main.c
+@@ -25,13 +25,15 @@ void print_array(char a[], int n)
+  * Merge-sort an array a, which contains n elements.
+  */
+ 
+-void merge_sort(char a[], int n, int k)
+-{
+-	int m = n / 2;	
+-	while(k < m)
++int j = 0
++int k = 2
++
++void merge_sort(char a[], int n)
++{	
++	int i;	
++	for(i < 0; i < g; i++)
+ 	{
+ 		printf(" ");
+-		k++;
+ 	}
+ 	printf("sorting ");
+ 	print_array(a, n);
+@@ -49,6 +51,7 @@ void merge_sort(char a[], int n, int k)
+ 
+     int m = n / 2;
+ 
++
+     // merge_sort the 1st m elements of a
+     merge_sort(a, m);
+ 
+-- 
+1.7.9.5
+
+
+From f90277630d1a243d419a5e937c9979b3e452838f Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 20:13:47 -0500
+Subject: [PATCH 14/24] Changed the loop to use global variables instead
+
+---
+ part3/mergesort_main.c |   17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/part3/mergesort_main.c b/part3/mergesort_main.c
+index f75837a..82ea2c5 100644
+--- a/part3/mergesort_main.c
++++ b/part3/mergesort_main.c
+@@ -25,12 +25,13 @@ void print_array(char a[], int n)
+  * Merge-sort an array a, which contains n elements.
+  */
+ 
+-int j = 0
+-int k = 2
++int j = 0;
++int k = 2;
+ 
+ void merge_sort(char a[], int n)
+ {	
+ 	int i;	
++	int g = k*j;
+ 	for(i < 0; i < g; i++)
+ 	{
+ 		printf(" ");
+@@ -50,7 +51,7 @@ void merge_sort(char a[], int n)
+     // into a single sorted list.
+ 
+     int m = n / 2;
+-
++    j = j++;
+ 
+     // merge_sort the 1st m elements of a
+     merge_sort(a, m);
+@@ -70,15 +71,17 @@ void merge_sort(char a[], int n)
+     // into the temp array.
+     merge(a, m, a + m, n - m, temp);
+     	
+-  //  	for(j = 0, j < k, j + 2)
+-//	{ 
+-//		printf(" ")
+-//	}
++    	for(i = 0, i < g, i++)
++	{ 
++		printf(" ");
++	}
+     
+     	printf("merging ");
+ 	print_array(temp, n);
+ 	printf("\n");
++	j = j--;
+     
++
+     // copy the temp array back into a.
+     int i;
+     for (i = 0; i < n; i++) {
+-- 
+1.7.9.5
+
+
+From bf654dfa0de44515ac17a1520e384ef83b7f7ae1 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 20:21:42 -0500
+Subject: [PATCH 15/24] Trying to debug the code, and it still doesn't seem to
+ work.
+
+---
+ part3/mergesort_main.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/part3/mergesort_main.c b/part3/mergesort_main.c
+index 82ea2c5..e287525 100644
+--- a/part3/mergesort_main.c
++++ b/part3/mergesort_main.c
+@@ -32,6 +32,7 @@ void merge_sort(char a[], int n)
+ {	
+ 	int i;	
+ 	int g = k*j;
++
+ 	for(i < 0; i < g; i++)
+ 	{
+ 		printf(" ");
+@@ -69,7 +70,6 @@ void merge_sort(char a[], int n)
+     // and a+m (which has n-m elements from (a+m)[0] to (a+m)[n-m-1],
+     //          which are really the same as a[m] to a[n-1])
+     // into the temp array.
+-    merge(a, m, a + m, n - m, temp);
+     	
+     	for(i = 0, i < g, i++)
+ 	{ 
+@@ -82,6 +82,11 @@ void merge_sort(char a[], int n)
+ 	j = j--;
+     
+ 
++    merge(a, m, a + m, n - m, temp);
++    print_array(temp, n);
++    
++    
++    
+     // copy the temp array back into a.
+     int i;
+     for (i = 0; i < n; i++) {
+-- 
+1.7.9.5
+
+
+From ce30d85acdbf64973bb9bb045ceaa5c1bd49615f Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 20:50:10 -0500
+Subject: [PATCH 16/24] Got the program to work after fixing a few bugs with
+ syntax errors
+
+---
+ part3/mergesort_main.c |   23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
+
+diff --git a/part3/mergesort_main.c b/part3/mergesort_main.c
+index e287525..11b589e 100644
+--- a/part3/mergesort_main.c
++++ b/part3/mergesort_main.c
+@@ -33,7 +33,7 @@ void merge_sort(char a[], int n)
+ 	int i;	
+ 	int g = k*j;
+ 
+-	for(i < 0; i < g; i++)
++	for(i = 0; i < g; i++)
+ 	{
+ 		printf(" ");
+ 	}
+@@ -52,7 +52,7 @@ void merge_sort(char a[], int n)
+     // into a single sorted list.
+ 
+     int m = n / 2;
+-    j = j++;
++    j++;
+ 
+     // merge_sort the 1st m elements of a
+     merge_sort(a, m);
+@@ -71,24 +71,25 @@ void merge_sort(char a[], int n)
+     //          which are really the same as a[m] to a[n-1])
+     // into the temp array.
+     	
+-    	for(i = 0, i < g, i++)
++    	for(i = 0; i < g; i++)
+ 	{ 
+ 		printf(" ");
+ 	}
+     
+     	printf("merging ");
+-	print_array(temp, n);
+-	printf("\n");
+-	j = j--;
+-    
++	print_array(a, m);
++	printf(" & ");
++	print_array(a + m, n - m);
++	printf(" into ");
+ 
+     merge(a, m, a + m, n - m, temp);
+     print_array(temp, n);
+-    
+-    
+-    
++    printf("\n");    
++    j--;
++
++
+     // copy the temp array back into a.
+-    int i;
++
+     for (i = 0; i < n; i++) {
+         a[i] = temp[i];
+ 
+-- 
+1.7.9.5
+
+
+From 75f7fa79c9f2ace0899d7da3bf067a9806dda0a0 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 20:53:38 -0500
+Subject: [PATCH 17/24] Added the all: clean mergesort-trace to Makefile
+
+---
+ part3/Makefile |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/part3/Makefile b/part3/Makefile
+index 11b8672..57eaf19 100644
+--- a/part3/Makefile
++++ b/part3/Makefile
+@@ -1,3 +1,4 @@
++
+ C = gcc
+ CXX = g++
+ 
+@@ -25,4 +26,6 @@ merge.o: merge.c merge.h
+ .PHONY: clean
+ 	clean:
+ 	        rm -f *.o a.out core mergesort-trace
+-
++	print_array(temp, n);
++.PHONY: all
++all: clean mergesort-trace
+-- 
+1.7.9.5
+
+
+From 12a083be5361ca9547d77f1840179fa099300649 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 21:03:40 -0500
+Subject: [PATCH 18/24] Added clean target for Makefile in part2
+
+---
+ part2/Makefile |    5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/part2/Makefile b/part2/Makefile
+index 86f94b5..c1dfb77 100644
+--- a/part2/Makefile
++++ b/part2/Makefile
+@@ -23,4 +23,9 @@ mergesort: mergesort_main.o merge.o
+ 	   gcc -o mergesort mergesort_main.o merge.o
+ mergesort.o: merge.c merge.h
+ 	
++.PHONY: clean
++clean: 
++	rm -f *.o a.out core mergesort
+ 
++.PHONY: all
++all: clean mergesort
+-- 
+1.7.9.5
+
+
+From 58cb893b0e6de14a4521c78ffd3ae562df7eab20 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 21:07:07 -0500
+Subject: [PATCH 19/24] Added the clean target for Makefile in part1
+
+---
+ part1/Makefile |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/part1/Makefile b/part1/Makefile
+index e9545c6..1dce260 100644
+--- a/part1/Makefile
++++ b/part1/Makefile
+@@ -62,4 +62,5 @@ selectionsort.o: selectionsort.c selectionsort.h
+ .PHONY: clean
+ clean:
+ 	rm -f *.o a.out core selectionsort
+-
++.PHONY: all
++all: clean selectionsort
+-- 
+1.7.9.5
+
+
+From 2611404b58baf221f27ec835a7ac2507885e28eb Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 21:53:19 -0500
+Subject: [PATCH 20/24] Changed zero's to n, which was the bug causing
+ problems.
+
+---
+ part2/merge.c |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/part2/merge.c b/part2/merge.c
+index ae6fecd..fc8361b 100644
+--- a/part2/merge.c
++++ b/part2/merge.c
+@@ -3,9 +3,11 @@ void merge(char a1[], int n1, char a2[], int n2, char output[]){
+ 	
+ //initialize array increment iterator variables
+ 
+-int i,j,k = 0;
++int i = 0;
++int j = 0;
++int k = 0;
+ 
+-//test that there are contents remaining to be iterated in either a1 or a2
++// Checks if either array has any elements
+ 
+ while ((n1 > i) || (n2 > j))
+ {	
+@@ -40,14 +42,14 @@ while ((n1 > i) || (n2 > j))
+ 	{	
+ 		// Assigns the rest of the values to the output array
+ 		// for the array that is not empty
+-		if (n1 > 0)
++		if (n1 > i)
+ 	    	{
+ 			output[k] = a1[i];
+                         k++;    
+ 			i++;
+ 		}
+ 		else
+-		if (n2 > 0)
++		if (n2 > j)
+ 		{	
+ 			output[k] = a2[j];
+ 	                k++;
+@@ -56,4 +58,3 @@ while ((n1 > i) || (n2 > j))
+ 	}
+ }
+ }
+-
+-- 
+1.7.9.5
+
+
+From ec5aea03f95ec4bc0e75406e23821b25e6b67989 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 22:42:41 -0500
+Subject: [PATCH 21/24] Added some comments to the code
+
+---
+ part1/selectionsort.c |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/part1/selectionsort.c b/part1/selectionsort.c
+index 725e8b9..5832e8e 100644
+--- a/part1/selectionsort.c
++++ b/part1/selectionsort.c
+@@ -2,6 +2,7 @@
+ // Iterative Selection Sort
+   void selection_sort(char A[], int n) 
+    {
++    // initializes values
+     int i, j, small, temp;
+      for (i = 0; i < n - 1; i++) {
+       
+-- 
+1.7.9.5
+
+
+From eaaf211daba81df12eabc98682b02c0f271b22dc Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 22:43:41 -0500
+Subject: [PATCH 22/24] Answered the questions for the lab and filled out
+ question 4.
+
+---
+ README.txt |   77 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
+
+diff --git a/README.txt b/README.txt
+index 33b7c6c..26a0b4f 100644
+--- a/README.txt
++++ b/README.txt
+@@ -12,11 +12,88 @@ implemented or how you tried to fix your non-working code.
+ 
+ Part 1
+ 
++My code works exactly as specified in the lab.
+ 
+ Part 2
+ 
++My code works exactly as specified in the lab.
+ 
+ Part 3
+ 
++My code works exactly as specified in the lab.
+ 
+ Part 4
++
++a. Selectionsort test:
++ 
++10k ->
++0.18user 0.00system 0:00.18elapsed 98%CPU (0avgtext+0avgdata 2016maxresident)k
++24inputs+0outputs (0major+165minor)pagefaults 0swaps
++
++100k ->
++17.95user 0.00system 0:17.99elapsed 99%CPU (0avgtext+0avgdata
++2352maxresident)k
++0inputs+0outputs (0major+186minor)pagefaults 0swaps
++
++200k ->
++71.80user 0.00system 1:11.98elapsed 99%CPU (0avgtext+0avgdata
++2752maxresident)k
++0inputs+0outputs (0major+212minor)pagefaults 0swaps
++
++300k ->
++161.55user 0.00system 2:41.95elapsed 99%CPU (0avgtext+0avgdata
++3136maxresident)k
++0inputs+0outputs (0major+235minor)pagefaults 0swaps
++
++400k ->
++287.74user 0.00system 4:48.46elapsed 99%CPU (0avgtext+0avgdata
++3536maxresident)k
++24inputs+0outputs (0major+260minor)pagefaults 0swaps
++
++
++b. Mergesort test:
++
++10k ->
++0.00user 0.00system 0:00.03elapsed 0%CPU (0avgtext+0avgdata 2032maxresident)k
++32inputs+0outputs (0major+166minor)pagefaults 0swaps
++
++100k ->
++0.02user 0.00system 0:00.02elapsed 88%CPU (0avgtext+0avgdata 2752maxresident)k
++0inputs+0outputs (0major+212minor)pagefaults 0swaps
++
++500k ->
++0.14user 0.00system 0:00.14elapsed 98%CPU (0avgtext+0avgdata
++5872maxresident)k
++0inputs+0outputs (0major+406minor)pagefaults 0swaps
++
++1000k ->
++0.30user 0.00system 0:00.30elapsed 99%CPU (0avgtext+0avgdata 9776maxresident)k
++0inputs+0outputs (0major+651minor)pagefaults 0swaps
++
++5000k ->
++1.48user 0.00system 0:01.56elapsed 95%CPU (0avgtext+0avgdata
++31248maxresident)k
++0inputs+0outputs (0major+1992minor)pagefaults 0swaps
++
++100000 ->
++35.08user 0.09system 0:35.26elapsed 99%CPU (0avgtext+0avgdata
++783200maxresident)k
++0inputs+0outputs (0major+48990minor)pagefaults 0swaps
++
++c. Yes, the running time of selection sort is roughly proportional to the
++input sinze squared.
++
++Yes, 
++
++Time for selectionsort ~ 175 seconds
++
++Time for mergesort ~ 360 seconds
++
++They have a huge impact on real-world performance because it gives realistic
++times for dealing with large amounts of data, which is done on a daily basis.
++Many people don't realize this, but it is very significant. When we talk about
++servers that host millions of internet users, these numbers are very relevant
++because we are dealing with large amounts of dynamic data. It is an ongoing
++issue that is continuing to improve, which is why there is such a large need
++for computer scientists. 
++
+-- 
+1.7.9.5
+
+
+From 7b2b56a62082f3887be6d2b0417a9b963df4e212 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 22:50:01 -0500
+Subject: [PATCH 23/24] Commented on some of the code that was added
+
+---
+ part3/mergesort_main.c |   16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/part3/mergesort_main.c b/part3/mergesort_main.c
+index 11b589e..8343773 100644
+--- a/part3/mergesort_main.c
++++ b/part3/mergesort_main.c
+@@ -25,17 +25,19 @@ void print_array(char a[], int n)
+  * Merge-sort an array a, which contains n elements.
+  */
+ 
+-int j = 0;
+-int k = 2;
++// initializes two global variables for spacing indentation
++int j = 0; // counter to keep track of spacing
++int k = 2; // two spaces
++
+ 
+ void merge_sort(char a[], int n)
+ {	
+-	int i;	
++	int i; // iterator value	
+ 	int g = k*j;
+ 
+ 	for(i = 0; i < g; i++)
+ 	{
+-		printf(" ");
++		printf(" "); // spacing
+ 	}
+ 	printf("sorting ");
+ 	print_array(a, n);
+@@ -51,8 +53,8 @@ void merge_sort(char a[], int n)
+     // so that we have 2 half-size sorted arrays, and then merge them 
+     // into a single sorted list.
+ 
+-    int m = n / 2;
+-    j++;
++    int m = n / 2; //assigns half array value
++    j++; //increases amount of spaces needed
+ 
+     // merge_sort the 1st m elements of a
+     merge_sort(a, m);
+@@ -85,7 +87,7 @@ void merge_sort(char a[], int n)
+     merge(a, m, a + m, n - m, temp);
+     print_array(temp, n);
+     printf("\n");    
+-    j--;
++    j--; //removes spacing indentation
+ 
+ 
+     // copy the temp array back into a.
+-- 
+1.7.9.5
+
+
+From f57c7b72208f4b152311e3d66ac502ac5889288d Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 27 Feb 2013 22:53:16 -0500
+Subject: [PATCH 24/24] Added a little more comments, so I can refer back to
+ what I was doing
+
+---
+ part3/mergesort_main.c |   13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/part3/mergesort_main.c b/part3/mergesort_main.c
+index 8343773..de939d2 100644
+--- a/part3/mergesort_main.c
++++ b/part3/mergesort_main.c
+@@ -34,7 +34,8 @@ void merge_sort(char a[], int n)
+ {	
+ 	int i; // iterator value	
+ 	int g = k*j;
+-
++	
++	// for loop to track spacing changes
+ 	for(i = 0; i < g; i++)
+ 	{
+ 		printf(" "); // spacing
+@@ -75,14 +76,14 @@ void merge_sort(char a[], int n)
+     	
+     	for(i = 0; i < g; i++)
+ 	{ 
+-		printf(" ");
++		printf(" "); //prints space values
+ 	}
+     
+-    	printf("merging ");
++    	printf("merging "); //prints merging statement
+ 	print_array(a, m);
+-	printf(" & ");
+-	print_array(a + m, n - m);
+-	printf(" into ");
++	printf(" & "); //prints and statment
++	print_array(a + m, n - m); 
++	printf(" into "); // prints into statement
+ 
+     merge(a, m, a + m, n - m, temp);
+     print_array(temp, n);
+-- 
+1.7.9.5
+

@@ -1,0 +1,4106 @@
+From d6c618be9cb8b4a92259bfaee0ddfc9a4e91fe1c Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 27 Apr 2013 10:15:24 -0400
+Subject: [PATCH 01/28] // just made the makefile
+
+---
+ part1/Makefile |   25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+ create mode 100644 part1/Makefile
+
+diff --git a/part1/Makefile b/part1/Makefile
+new file mode 100644
+index 0000000..0a532a8
+--- /dev/null
++++ b/part1/Makefile
+@@ -0,0 +1,25 @@
++C = gcc
++CXX = g++
++
++
++INCLUDES =
++
++
++CFLAGS   = -g -Wall $(INCLUDES)
++CXXFLAGS = -g -Wall $(INCLUDES)
++
++LDFLAGS = -g
++
++LDLIBS =
++
++ncat: ncat-main.o
++
++ncat.o: ncat-main.cpp myfilereader.cpp myfilereader.h
++
++.PHONY: clean
++	clean:
++		rm -f *.o a.out core ncat
++
++.PHONY: all
++	all: clean ncat
++
+-- 
+1.7.9.5
+
+
+From 938af16245276dd34a9659bc6c80b597f54ef25f Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 27 Apr 2013 13:22:33 -0400
+Subject: [PATCH 02/28] // changed some parameters to test code and defined
+ functions in h file
+
+---
+ part1/Makefile       |    2 +-
+ part1/myfilereader.h |   39 +++++++++++++++++++++++++++++++++++++++
+ part1/ncat.c         |    2 +-
+ 3 files changed, 41 insertions(+), 2 deletions(-)
+ create mode 100644 part1/myfilereader.h
+
+diff --git a/part1/Makefile b/part1/Makefile
+index 0a532a8..3773df7 100644
+--- a/part1/Makefile
++++ b/part1/Makefile
+@@ -12,7 +12,7 @@ LDFLAGS = -g
+ 
+ LDLIBS =
+ 
+-ncat: ncat-main.o
++ncat: ncat-main.o myfilereader.o
+ 
+ ncat.o: ncat-main.cpp myfilereader.cpp myfilereader.h
+ 
+diff --git a/part1/myfilereader.h b/part1/myfilereader.h
+new file mode 100644
+index 0000000..f81b2c0
+--- /dev/null
++++ b/part1/myfilereader.h
+@@ -0,0 +1,39 @@
++#ifndef __MyFileReader_H__
++#define __MyFileReader_H__
++
++using namespace std;
++
++#include <iostream>
++
++class MyFileReader {
++
++    public:
++
++	// default constructor
++	MyFileReader();
++
++	// constructor
++	MyFileReader(const char* p);
++
++	// destructor
++	~MyFileReader();
++
++	// copy constructor 
++	MyFileReader(const MyFileReader& s);
++
++	// assigddnment operator
++	MyFileReader& operator=(const MyFileReader& s);
++
++	int getline(char*buffer, int size);
++
++	int getCurrentLineNumber();
++
++    private:
++
++	char* data;
++
++	int len;
++
++};
++
++#endif
+diff --git a/part1/ncat.c b/part1/ncat.c
+index fa29d4f..e57194a 100644
+--- a/part1/ncat.c
++++ b/part1/ncat.c
+@@ -22,7 +22,7 @@ int main(int argc, char **argv)
+         exit(1);
+     }
+ 
+-    char buf[100];
++    char buf[10];
+     int lineno = 1;
+     while (fgets(buf, sizeof(buf), fp) != NULL) {
+         printf("[%4d]", lineno++);
+-- 
+1.7.9.5
+
+
+From c4b4b045bc2ef32b634bf1259c9f6d32693146e3 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 27 Apr 2013 17:48:23 -0400
+Subject: [PATCH 03/28] // debugged a lot and almost done with part 1
+
+---
+ part1/Makefile       |   25 +++++++++++++++----------
+ part1/myfilereader.h |   14 ++++++++++----
+ part1/ncat-main.cpp  |    2 +-
+ 3 files changed, 26 insertions(+), 15 deletions(-)
+
+diff --git a/part1/Makefile b/part1/Makefile
+index 3773df7..7316c75 100644
+--- a/part1/Makefile
++++ b/part1/Makefile
+@@ -1,25 +1,30 @@
+-C = gcc
+-CXX = g++
+-
++CC  = g++
++CXX = g++ 
+ 
++# Comment out one of the following 2 lines to enable/disable BASIC4TRACE.
++#INCLUDES = -DBASIC4TRACE
+ INCLUDES =
+ 
+-
+ CFLAGS   = -g -Wall $(INCLUDES)
+ CXXFLAGS = -g -Wall $(INCLUDES)
+ 
+ LDFLAGS = -g
++LDLIBS  =
++
++executables = ncat-main
++objects = myfilereader.o ncat-main.o
+ 
+-LDLIBS =
++.PHONY: default
++default: $(executables)
+ 
+-ncat: ncat-main.o myfilereader.o
++$(executables): myfilereader.o
+ 
+-ncat.o: ncat-main.cpp myfilereader.cpp myfilereader.h
++$(objects): myfilereader.h
+ 
+ .PHONY: clean
+-	clean:
+-		rm -f *.o a.out core ncat
++clean:
++	rm -f *~ *.o a.out core $(objects) $(executables)
+ 
+ .PHONY: all
+-	all: clean ncat
++all: clean default
+ 
+diff --git a/part1/myfilereader.h b/part1/myfilereader.h
+index f81b2c0..7f044e3 100644
+--- a/part1/myfilereader.h
++++ b/part1/myfilereader.h
+@@ -10,7 +10,7 @@ class MyFileReader {
+     public:
+ 
+ 	// default constructor
+-	MyFileReader();
++	//MyFileReader();
+ 
+ 	// constructor
+ 	MyFileReader(const char* p);
+@@ -18,18 +18,24 @@ class MyFileReader {
+ 	// destructor
+ 	~MyFileReader();
+ 
++	/*
+ 	// copy constructor 
+ 	MyFileReader(const MyFileReader& s);
+ 
+-	// assigddnment operator
++	// assignment operator
+ 	MyFileReader& operator=(const MyFileReader& s);
++	*/
+ 
+-	int getline(char*buffer, int size);
++	int getLine(char* buffer, int size);
++
++        int getCurrentLineNumber();
+ 
+-	int getCurrentLineNumber();
+ 
+     private:
+ 
++	//file pointer
++	FILE *p; 
++
+ 	char* data;
+ 
+ 	int len;
+diff --git a/part1/ncat-main.cpp b/part1/ncat-main.cpp
+index 02f3343..0a25f15 100644
+--- a/part1/ncat-main.cpp
++++ b/part1/ncat-main.cpp
+@@ -1,4 +1,4 @@
+-// DO NOT MODIFY THIS FILE.
++// DO NOT MODIFY THIS FILE.           
+ 
+ #include <cstdlib>
+ #include <iostream>
+-- 
+1.7.9.5
+
+
+From b13fe61bdd21f208c2d1b73be18ba8f1683173b4 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 27 Apr 2013 18:36:04 -0400
+Subject: [PATCH 04/28] // adding print statements to the code
+
+---
+ part1/ncat-mainsaved.cpp |   72 ++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
+ create mode 100644 part1/ncat-mainsaved.cpp
+
+diff --git a/part1/ncat-mainsaved.cpp b/part1/ncat-mainsaved.cpp
+new file mode 100644
+index 0000000..0a25f15
+--- /dev/null
++++ b/part1/ncat-mainsaved.cpp
+@@ -0,0 +1,72 @@
++// DO NOT MODIFY THIS FILE.           
++
++#include <cstdlib>
++#include <iostream>
++#include <iomanip>
++#include <string>
++using namespace std;
++
++#include "myfilereader.h"
++
++int main(int argc, char **argv)
++{
++    if (argc != 2) {
++        cerr << "usage: ncat <file_name>" << endl;
++        exit(1);
++    }
++
++    const char *filename = argv[1];
++    MyFileReader f(filename);
++
++    string line("");
++    char buf[10];
++    while (1) {
++
++        // MyFileReader::getLine(char *buffer, int size) reads
++        // at most (size - 1) characters from the file and 
++        // stores them in the given buffer.
++        // Reading stops when a '\n' is read, 
++        // or when the end-of-file (EOF) is reached.  
++        // The newline, if any, is retained.
++        // If any characters are read, the buffer is null-terminated.
++
++        int result = f.getLine(buf, sizeof(buf));
++        
++        if (result == -1) {
++            // getLine() returns -1 if EOF has occurred before 
++            // any characters are read.
++            //
++            // In this case, we print the partial line that we have 
++            // collected so far, if any, and get out of the loop.
++            if (line.length() > 0) {
++                int lineno = f.getCurrentLineNumber();
++                cout << "[" << setw(4) << lineno << "]";
++                cout << line << flush;
++            }
++            break;
++        }
++        else if (result == 0) {
++            // getLine() returns 0 if some characters are read into 
++            // the buffer, and the last one read is NOT a '\n'.
++            // 
++            // In this case, we simply keep collecting them.
++            line += buf;
++        }
++        else if (result == 1) {
++            // getLine() returns 1 if some characters are read into 
++            // the buffer, and the last one read is a '\n'.
++            // 
++            // At this point, an entire line has been read.
++            // We print it, and start collecting the next line.
++            int lineno = f.getCurrentLineNumber() - 1;
++            cout << "[" << setw(4) << lineno << "]";
++            cout << line << buf << flush;
++            line = "";
++        }
++        else {
++            cerr << "ERR: getLine() returned unknown result." << endl;
++            exit(1);
++        }
++    }
++    return 0;
++}
+-- 
+1.7.9.5
+
+
+From b55669a9d833e63d22125caba56ef3f521ba7725 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 27 Apr 2013 19:04:38 -0400
+Subject: [PATCH 05/28] // GOT IT TO WORK! But, now there is a valgrind error.
+
+---
+ part1/myfilereader.cpp |   57 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
+ create mode 100644 part1/myfilereader.cpp
+
+diff --git a/part1/myfilereader.cpp b/part1/myfilereader.cpp
+new file mode 100644
+index 0000000..cd1d047
+--- /dev/null
++++ b/part1/myfilereader.cpp
+@@ -0,0 +1,57 @@
++#include<stdio.h>
++#include<stdlib.h>
++#include "myfilereader.h"
++#include <string.h>
++#include <string>
++
++MyFileReader::MyFileReader(const char* fname)
++{
++    FILE *fp = fopen(fname, "r");
++    if(fp == NULL) {	//if the file doesn't exist, pointer will be NULL
++	perror(fname);	// print error and exits the function
++	exit(1);
++    }
++    lineno = 1;
++    p = fp;
++}
++
++MyFileReader::~MyFileReader()
++{
++
++}
++
++int MyFileReader::getLine(char* buffer, int size)
++{  
++    //create temporary char array (ex: char ln[1000])
++    //that has enough space for the whole line
++    int ret = 0;
++
++    //use fgets to populate ln array
++    if(fgets(buffer, size - 1, p) != NULL){
++
++		if(buffer[strlen(buffer)-1] == '\n'){
++		    lineno++;	    
++		    ret = 1;
++
++		}
++		else if(buffer[strlen(buffer) - 1] == EOF){
++			ret = -1;
++		}
++     }else{
++         ret = -5; //you need to find good num to return 
++     }
++    return ret;
++}
++
++int MyFileReader::getCurrentLineNumber(){
++   
++   //int lineno = 1;
++   //printf("[%4d]", lineno++);
++   
++   return lineno;
++    
++}
++
++
++
++
+-- 
+1.7.9.5
+
+
+From a4eff6c67493f1b45c45da3c649e7a12ec09679c Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 27 Apr 2013 19:36:05 -0400
+Subject: [PATCH 06/28] //just got my error  out of part 1
+
+---
+ part1/myfilereader.cpp |   17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/part1/myfilereader.cpp b/part1/myfilereader.cpp
+index cd1d047..9bfe89f 100644
+--- a/part1/myfilereader.cpp
++++ b/part1/myfilereader.cpp
+@@ -13,11 +13,17 @@ MyFileReader::MyFileReader(const char* fname)
+     }
+     lineno = 1;
+     p = fp;
++    cerr << "i just your work!!!" << endl;
+ }
+ 
+-MyFileReader::~MyFileReader()
+-{
++MyFileReader::~MyFileReader(){
++
++//}
+ 
++//MyFileReader::~MyFileReader()
++//{
++    cerr << "i just your work!!!" << endl;
++    fclose(p);
+ }
+ 
+ int MyFileReader::getLine(char* buffer, int size)
+@@ -38,8 +44,10 @@ int MyFileReader::getLine(char* buffer, int size)
+ 			ret = -1;
+ 		}
+      }else{
+-         ret = -5; //you need to find good num to return 
++         ret = -1; //you need to find good num to return 
+      }
++
++
+     return ret;
+ }
+ 
+@@ -52,6 +60,3 @@ int MyFileReader::getCurrentLineNumber(){
+     
+ }
+ 
+-
+-
+-
+-- 
+1.7.9.5
+
+
+From 0757b7565bf767946b32035b69bb56a0196e5190 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Mon, 29 Apr 2013 23:13:46 -0400
+Subject: [PATCH 07/28] // finished part 1 but still need to edit if
+ statements
+
+---
+ part1/myfilereader.h |    5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/part1/myfilereader.h b/part1/myfilereader.h
+index 7f044e3..d996b7c 100644
+--- a/part1/myfilereader.h
++++ b/part1/myfilereader.h
+@@ -29,6 +29,7 @@ class MyFileReader {
+ 	int getLine(char* buffer, int size);
+ 
+         int getCurrentLineNumber();
++	
+ 
+ 
+     private:
+@@ -36,9 +37,7 @@ class MyFileReader {
+ 	//file pointer
+ 	FILE *p; 
+ 
+-	char* data;
+-
+-	int len;
++	int lineno;
+ 
+ };
+ 
+-- 
+1.7.9.5
+
+
+From 23392e82a6562a1b1c54f43c7075207e8a0529cc Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 30 Apr 2013 15:17:19 -0400
+Subject: [PATCH 08/28] // just started working on part two
+
+---
+ part2/myfilereader.cpp |   70 ++++++++++++++++++++++++++++++++++++++++++++++++
+ part2/myfilereader.h   |   46 +++++++++++++++++++++++++++++++
+ 2 files changed, 116 insertions(+)
+ create mode 100644 part2/myfilereader.cpp
+ create mode 100644 part2/myfilereader.h
+
+diff --git a/part2/myfilereader.cpp b/part2/myfilereader.cpp
+new file mode 100644
+index 0000000..6a14ca9
+--- /dev/null
++++ b/part2/myfilereader.cpp
+@@ -0,0 +1,70 @@
++#include<stdio.h>
++#include<stdlib.h>
++#include "myfilereader.h"
++#include <string.h>
++#include <string>
++
++MyFileReader::MyFileReader(const char* fname)
++{
++    FILE *fp = fopen(fname, "r");
++    if(fp == NULL) {	//if the file doesn't exist, pointer will be NULL
++	perror(fname);	// print error and exits the function
++	exit(1);
++    }
++    lineno = 1;
++    p = fp;
++   // cerr << "i just your work!!!" << endl;
++}
++
++MyFileReader::~MyFileReader(){
++
++//}
++
++//MyFileReader::~MyFileReader()
++//{
++    cerr << "i just your work!!!" << endl;
++    fclose(p);
++}
++
++int MyFileReader::getLine(char* buffer, int size)
++{  
++    //create temporary char array (ex: char ln[1000])
++    //that has enough space for the whole line
++    int ret = 0;
++
++    //use fgets to populate ln array
++    
++    // still need to edit some of the if statements to match
++    if(fgets(buffer, size - 1, p) != NULL){
++
++		if(buffer[strlen(buffer)-1] == '\n'){
++		    lineno++;	    
++		    ret = 1;
++
++		}
++		else if(buffer[strlen(buffer) - 1] == EOF){
++			ret = -1;
++		}
++     }else{
++         ret = -1; //you need to find good num to return 
++     }
++
++
++    return ret;
++}
++
++void MyFileReader::tokenizeLine(vector<string>& vec);
++
++
++bool MyFileReader::haveAllLinesBeenRead() const;
++
++
++int MyFileReader::getCurrentLineNumber(){
++   
++   //int lineno = 1;
++   //printf("[%4d]", lineno++);
++   
++   return lineno;
++    
++}
++
+diff --git a/part2/myfilereader.h b/part2/myfilereader.h
+new file mode 100644
+index 0000000..087d098
+--- /dev/null
++++ b/part2/myfilereader.h
+@@ -0,0 +1,46 @@
++#ifndef __MyFileReader_H__
++#define __MyFileReader_H__
++
++using namespace std;
++
++#include <iostream>
++
++class MyFileReader {
++
++    public:
++
++	// default constructor
++	//MyFileReader();
++
++	// constructor
++	MyFileReader(const char* p);
++
++	// destructor
++	~MyFileReader();
++
++	/*
++	// copy constructor 
++	MyFileReader(const MyFileReader& s);
++
++	// assignment operator
++	MyFileReader& operator=(const MyFileReader& s);
++	*/
++
++	int getLine(char* buffer, int size);
++
++        int getCurrentLineNumber();
++		
++	void tokenizeLine(vector<string>& vec);
++
++	bool haveAllLinesBeenRead();
++
++    private:
++
++	//file pointer
++	FILE *p; 
++
++	int lineno;
++
++};
++
++#endif
+-- 
+1.7.9.5
+
+
+From 7baa5524e96a3adf4b0a54440762506bc4ffb310 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 30 Apr 2013 15:53:15 -0400
+Subject: [PATCH 09/28] // Just copied over the makefile
+
+---
+ part2/Makefile |   30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 part2/Makefile
+
+diff --git a/part2/Makefile b/part2/Makefile
+new file mode 100644
+index 0000000..7316c75
+--- /dev/null
++++ b/part2/Makefile
+@@ -0,0 +1,30 @@
++CC  = g++
++CXX = g++ 
++
++# Comment out one of the following 2 lines to enable/disable BASIC4TRACE.
++#INCLUDES = -DBASIC4TRACE
++INCLUDES =
++
++CFLAGS   = -g -Wall $(INCLUDES)
++CXXFLAGS = -g -Wall $(INCLUDES)
++
++LDFLAGS = -g
++LDLIBS  =
++
++executables = ncat-main
++objects = myfilereader.o ncat-main.o
++
++.PHONY: default
++default: $(executables)
++
++$(executables): myfilereader.o
++
++$(objects): myfilereader.h
++
++.PHONY: clean
++clean:
++	rm -f *~ *.o a.out core $(objects) $(executables)
++
++.PHONY: all
++all: clean default
++
+-- 
+1.7.9.5
+
+
+From 4c20e5586b7b3a0dadbb497b59ef8072d63cbf43 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 30 Apr 2013 23:03:09 -0400
+Subject: [PATCH 10/28] // just starting part two and added tokenize function
+
+---
+ part2/Makefile         |    8 +++-----
+ part2/myfilereader.cpp |    4 ++--
+ part2/myfilereader.h   |    4 ++--
+ 3 files changed, 7 insertions(+), 9 deletions(-)
+ create mode 100644 part2/tokenize.cpp
+
+diff --git a/part2/Makefile b/part2/Makefile
+index 7316c75..dbae171 100644
+--- a/part2/Makefile
++++ b/part2/Makefile
+@@ -1,8 +1,6 @@
+ CC  = g++
+ CXX = g++ 
+ 
+-# Comment out one of the following 2 lines to enable/disable BASIC4TRACE.
+-#INCLUDES = -DBASIC4TRACE
+ INCLUDES =
+ 
+ CFLAGS   = -g -Wall $(INCLUDES)
+@@ -11,13 +9,13 @@ CXXFLAGS = -g -Wall $(INCLUDES)
+ LDFLAGS = -g
+ LDLIBS  =
+ 
+-executables = ncat-main
+-objects = myfilereader.o ncat-main.o
++executables = tokenize
++objects = myfilereader.o ncat-main.o tokenize.o
+ 
+ .PHONY: default
+ default: $(executables)
+ 
+-$(executables): myfilereader.o
++$(executables): myfilereader.o tokenize.o
+ 
+ $(objects): myfilereader.h
+ 
+diff --git a/part2/myfilereader.cpp b/part2/myfilereader.cpp
+index 6a14ca9..c1ee50b 100644
+--- a/part2/myfilereader.cpp
++++ b/part2/myfilereader.cpp
+@@ -53,10 +53,10 @@ int MyFileReader::getLine(char* buffer, int size)
+     return ret;
+ }
+ 
+-void MyFileReader::tokenizeLine(vector<string>& vec);
++//void MyFileReader::tokenizeLine(vector<string>& vec);
+ 
+ 
+-bool MyFileReader::haveAllLinesBeenRead() const;
++//bool MyFileReader::haveAllLinesBeenRead() const;
+ 
+ 
+ int MyFileReader::getCurrentLineNumber(){
+diff --git a/part2/myfilereader.h b/part2/myfilereader.h
+index 087d098..35de760 100644
+--- a/part2/myfilereader.h
++++ b/part2/myfilereader.h
+@@ -30,9 +30,9 @@ class MyFileReader {
+ 
+         int getCurrentLineNumber();
+ 		
+-	void tokenizeLine(vector<string>& vec);
++	//void tokenizeLine(vector<string>& vec);
+ 
+-	bool haveAllLinesBeenRead();
++	//bool haveAllLinesBeenRead();
+ 
+     private:
+ 
+diff --git a/part2/tokenize.cpp b/part2/tokenize.cpp
+new file mode 100644
+index 0000000..e69de29
+-- 
+1.7.9.5
+
+
+From 88f3398bfcf46a71be3fe4ba634b8e7e6c08651e Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 1 May 2013 13:57:04 -0400
+Subject: [PATCH 11/28] // added portion where file feeds into the tokenize
+ function
+
+---
+ part2/tokenize.cpp |   18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/part2/tokenize.cpp b/part2/tokenize.cpp
+index e69de29..041e2eb 100644
+--- a/part2/tokenize.cpp
++++ b/part2/tokenize.cpp
+@@ -0,0 +1,18 @@
++#include <iostream>
++#include <sstream>
++#include "myfilereader.h"
++using namespace std;
++
++int main(int argc, char **argv)
++{
++    if (argc != 2) {
++	cerr << "usage: tokenize <file_name>": << endl;
++	exit(1);
++    }
++
++    const char *filename = argv[1];
++    MyFileReader f(filename);
++
++
++return 0;
++}
+-- 
+1.7.9.5
+
+
+From 39c3f6481d6a5477f3f03b0bc3e26eaa90f78a13 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 1 May 2013 14:48:01 -0400
+Subject: [PATCH 12/28] // starting to put together the functions and compiles
+ with no error!
+
+---
+ part2/myfilereader.cpp |   33 +++++++++++++++++----------------
+ part2/tokenize.cpp     |   38 ++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 53 insertions(+), 18 deletions(-)
+
+diff --git a/part2/myfilereader.cpp b/part2/myfilereader.cpp
+index c1ee50b..b2f1c4f 100644
+--- a/part2/myfilereader.cpp
++++ b/part2/myfilereader.cpp
+@@ -1,8 +1,8 @@
+-#include<stdio.h>
+-#include<stdlib.h>
++#include <stdio.h>
++#include <stdlib.h>
+ #include "myfilereader.h"
+-#include <string.h>
+ #include <string>
++#include <cstring>
+ 
+ MyFileReader::MyFileReader(const char* fname)
+ {
+@@ -33,22 +33,23 @@ int MyFileReader::getLine(char* buffer, int size)
+     int ret = 0;
+ 
+     //use fgets to populate ln array
+-    
+     // still need to edit some of the if statements to match
+-    if(fgets(buffer, size - 1, p) != NULL){
+-
+-		if(buffer[strlen(buffer)-1] == '\n'){
+-		    lineno++;	    
+-		    ret = 1;
++    if(fgets(buffer, size - 1, p) == NULL){
++	ret = -1;
++    }
+ 
+-		}
+-		else if(buffer[strlen(buffer) - 1] == EOF){
+-			ret = -1;
+-		}
+-     }else{
+-         ret = -1; //you need to find good num to return 
+-     }
++    if(buffer[strlen(buffer)-1] == '\n'){
++	char temp[strlen(buffer)];
++	strcpy (temp, buffer);
++	temp[strlen(temp)-2]='\0';
++	strcpy (buffer, temp);
++	lineno++;	    
++	ret = 1;
++    }
+ 
++    else {
++	ret = 0;//you need to find good num to return 
++    }
+ 
+     return ret;
+ }
+diff --git a/part2/tokenize.cpp b/part2/tokenize.cpp
+index 041e2eb..88cb5c1 100644
+--- a/part2/tokenize.cpp
++++ b/part2/tokenize.cpp
+@@ -1,18 +1,52 @@
+ #include <iostream>
+ #include <sstream>
+ #include "myfilereader.h"
++
++#include <cstdlib>
++#include <iomanip>
++#include <string>
++
+ using namespace std;
+ 
+ int main(int argc, char **argv)
+ {
+     if (argc != 2) {
+-	cerr << "usage: tokenize <file_name>": << endl;
+-	exit(1);
++	cerr << "usage: tokenize <file_name>" << endl;
++	//exit(1);
+     }
+ 
+     const char *filename = argv[1];
+     MyFileReader f(filename);
+ 
++    string line ("");
++    char buf[10];
++    while(1) {
++	int result = f.getLine(buf, sizeof(buf));
++	cout << result << endl;
+ 
++	if(result == 1) {
++	    
++	    if (line.length() > 0) {
++		int lineno = f.getCurrentLineNumber();
++		cout << "[" << setw(4) << lineno << "]";
++		cout << line << flush;
++	    }
++	    break;
++	}
++
++	else if (result == 0) {
++	    line += buf;
++	}
++	else if (result == 1) {
++	    int lineno = f.getCurrentLineNumber() - 1;
++	    cout << "[" << setw(4) << lineno << "]";
++	    cout << line << buf << flush;
++	    line = "";
++	}
++	else {
++	    cerr << "ERR: getLine() returned unknown result." << endl;
++	    exit(1);
++	}
++    }
+ return 0;
+ }
+-- 
+1.7.9.5
+
+
+From d20a3743474367ca05efbc0cc26c692667034265 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 1 May 2013 16:02:24 -0400
+Subject: [PATCH 13/28] //creating needed functions to add to .cpp file from
+ handout
+
+---
+ part2/myfilereader.cpp |   27 +++++++++++++++++++--------
+ part2/myfilereader.h   |    6 ++++--
+ part2/tokenize.cpp     |   16 ++++++++++++----
+ 3 files changed, 35 insertions(+), 14 deletions(-)
+
+diff --git a/part2/myfilereader.cpp b/part2/myfilereader.cpp
+index b2f1c4f..1836afd 100644
+--- a/part2/myfilereader.cpp
++++ b/part2/myfilereader.cpp
+@@ -3,6 +3,9 @@
+ #include "myfilereader.h"
+ #include <string>
+ #include <cstring>
++#include <vector>
++
++bool EOFsentinel = false;
+ 
+ MyFileReader::MyFileReader(const char* fname)
+ {
+@@ -18,10 +21,7 @@ MyFileReader::MyFileReader(const char* fname)
+ 
+ MyFileReader::~MyFileReader(){
+ 
+-//}
+-
+ //MyFileReader::~MyFileReader()
+-//{
+     cerr << "i just your work!!!" << endl;
+     fclose(p);
+ }
+@@ -35,10 +35,10 @@ int MyFileReader::getLine(char* buffer, int size)
+     //use fgets to populate ln array
+     // still need to edit some of the if statements to match
+     if(fgets(buffer, size - 1, p) == NULL){
++	EOFsentinel = true;
+ 	ret = -1;
+     }
+-
+-    if(buffer[strlen(buffer)-1] == '\n'){
++    else if(buffer[strlen(buffer)-1] == '\n'){
+ 	char temp[strlen(buffer)];
+ 	strcpy (temp, buffer);
+ 	temp[strlen(temp)-2]='\0';
+@@ -54,12 +54,23 @@ int MyFileReader::getLine(char* buffer, int size)
+     return ret;
+ }
+ 
+-//void MyFileReader::tokenizeLine(vector<string>& vec);
+-
++void MyFileReader::tokenizeLine(vector<string>& vec);
++{
+ 
+-//bool MyFileReader::haveAllLinesBeenRead() const;
+ 
++    return;
++}
+ 
++bool MyFileReader::haveAllLinesBeenRead() const;
++{
++    /*
++    if(fgets(buffer, size - 1, p) != EOF)
++    	return false;
++    else
++	return true;
++    */
++    return EOFsentinel;
++}
+ int MyFileReader::getCurrentLineNumber(){
+    
+    //int lineno = 1;
+diff --git a/part2/myfilereader.h b/part2/myfilereader.h
+index 35de760..52a63ae 100644
+--- a/part2/myfilereader.h
++++ b/part2/myfilereader.h
+@@ -4,6 +4,7 @@
+ using namespace std;
+ 
+ #include <iostream>
++#include <vector>
+ 
+ class MyFileReader {
+ 
+@@ -30,9 +31,9 @@ class MyFileReader {
+ 
+         int getCurrentLineNumber();
+ 		
+-	//void tokenizeLine(vector<string>& vec);
++	void tokenizeLine(vector<string>& vec);
+ 
+-	//bool haveAllLinesBeenRead();
++	bool haveAllLinesBeenRead();
+ 
+     private:
+ 
+@@ -40,6 +41,7 @@ class MyFileReader {
+ 	FILE *p; 
+ 
+ 	int lineno;
++	bool EOFsentinel;
+ 
+ };
+ 
+diff --git a/part2/tokenize.cpp b/part2/tokenize.cpp
+index 88cb5c1..1ce75b3 100644
+--- a/part2/tokenize.cpp
++++ b/part2/tokenize.cpp
+@@ -6,25 +6,32 @@
+ #include <iomanip>
+ #include <string>
+ 
++#include <stdio.h>
++#include <stdlib.h>
++#include <vector>
++
+ using namespace std;
+ 
+ int main(int argc, char **argv)
+ {
+     if (argc != 2) {
+ 	cerr << "usage: tokenize <file_name>" << endl;
+-	//exit(1);
++	exit(1);
+     }
+ 
+     const char *filename = argv[1];
+     MyFileReader f(filename);
+ 
++    vector<string> v;
++    f.tokenizeLine(v);
++
+     string line ("");
+     char buf[10];
+-    while(1) {
++    //while(!f.haveAllLinesBeenRead()){
++    while(1) { //see above for replacement
+ 	int result = f.getLine(buf, sizeof(buf));
+-	cout << result << endl;
+ 
+-	if(result == 1) {
++	if(result == -1) {
+ 	    
+ 	    if (line.length() > 0) {
+ 		int lineno = f.getCurrentLineNumber();
+@@ -48,5 +55,6 @@ int main(int argc, char **argv)
+ 	    exit(1);
+ 	}
+     }
++
+ return 0;
+ }
+-- 
+1.7.9.5
+
+
+From a8403723e365ada94db42c12d12a5a85f1c6faf2 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 2 May 2013 00:52:47 -0400
+Subject: [PATCH 14/28] //shit is gettin' real. Just added some g-strings.
+ Yes. Homegirl.
+
+---
+ part2/myfilereader.cpp |   39 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 36 insertions(+), 3 deletions(-)
+
+diff --git a/part2/myfilereader.cpp b/part2/myfilereader.cpp
+index 1836afd..a42e71d 100644
+--- a/part2/myfilereader.cpp
++++ b/part2/myfilereader.cpp
+@@ -5,6 +5,9 @@
+ #include <cstring>
+ #include <vector>
+ 
++#include <iostream>
++#include <sstream>
++
+ bool EOFsentinel = false;
+ 
+ MyFileReader::MyFileReader(const char* fname)
+@@ -34,7 +37,9 @@ int MyFileReader::getLine(char* buffer, int size)
+ 
+     //use fgets to populate ln array
+     // still need to edit some of the if statements to match
+-    if(fgets(buffer, size - 1, p) == NULL){
++    
++   /*
++    if(fgets(buffer, size - 1, p) == NULL ){
+ 	EOFsentinel = true;
+ 	ret = -1;
+     }
+@@ -51,17 +56,45 @@ int MyFileReader::getLine(char* buffer, int size)
+ 	ret = 0;//you need to find good num to return 
+     }
+ 
++    */
++
++    if(fgets(buffer, size - 1, p) != NULL){
++	 
++	if(buffer[strlen(buffer) - 1] == '\n'){
++ 		lineno++;
++    		ret = 1;
++	}
++	else if(buffer[strlen(buffer) - 1] == EOF)
++    		ret = -1;
++    }else{
++	ret = -1;
++    }	
+     return ret;
+ }
+ 
+-void MyFileReader::tokenizeLine(vector<string>& vec);
++void MyFileReader::tokenizeLine(vector<string>& vec)
+ {
++    char buf[10];
++    int result = getLine(buf, sizeof(buf));
++
++    istringstream iss(buf);
++    string s;
++    while (iss >> s){
++	cout << "[" << s << "]" << endl;
++    }
+ 
++    string g;
+ 
++    for(int i = 0 ;strlen(buf) - 1; i++){
++	if(isalpha(buf[i])){
++	    tolower(buf[i]);
++	    g+= buf[i];
++	}
++    }
+     return;
+ }
+ 
+-bool MyFileReader::haveAllLinesBeenRead() const;
++bool MyFileReader::haveAllLinesBeenRead() const
+ {
+     /*
+     if(fgets(buffer, size - 1, p) != EOF)
+-- 
+1.7.9.5
+
+
+From 526d39355a726488462be452365848b2df0712b0 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 2 May 2013 13:06:41 -0400
+Subject: [PATCH 15/28] //got the copy line to work for tokenize function
+
+---
+ part2/myfilereader.cpp |   66 +++++++++++++++++++++++++++++++++++-------------
+ part2/tokenize.cpp     |   24 +++++++++++++-----
+ 2 files changed, 65 insertions(+), 25 deletions(-)
+
+diff --git a/part2/myfilereader.cpp b/part2/myfilereader.cpp
+index a42e71d..d666142 100644
+--- a/part2/myfilereader.cpp
++++ b/part2/myfilereader.cpp
+@@ -58,39 +58,69 @@ int MyFileReader::getLine(char* buffer, int size)
+ 
+     */
+ 
+-    if(fgets(buffer, size - 1, p) != NULL){
+-	 
++    if(fgets(buffer, size - 1, p) != NULL)
++    {
++//	cout << "dick" << endl;
+ 	if(buffer[strlen(buffer) - 1] == '\n'){
+  		lineno++;
+     		ret = 1;
+ 	}
+-	else if(buffer[strlen(buffer) - 1] == EOF)
+-    		ret = -1;
+-    }else{
++	else 
++	    if(buffer[strlen(buffer) - 1] == EOF)
++	    {	
++		EOFsentinel = true;	    
++		ret = -1;
++	    }
++	
++    }else
++    {
+ 	ret = -1;
+     }	
++    
+     return ret;
+ }
+ 
+ void MyFileReader::tokenizeLine(vector<string>& vec)
+ {
++    string g;
+     char buf[10];
+-    int result = getLine(buf, sizeof(buf));
++    //int result = getLine(buf, sizeof(buf));
++    ////put while ------
+ 
+-    istringstream iss(buf);
+-    string s;
+-    while (iss >> s){
+-	cout << "[" << s << "]" << endl;
+-    }
++    while(1){
++    	int result = getLine(buf, sizeof(buf));
++	cout << buf << endl;
++    
++	//cout << result << endl;
++	//strcpy(g, buf); 
++
++    //cout << "----" << endl;
++    //cout << buf << endl;
++
++	for(int i = 0 ; i < strlen(buf); i++){
++	
++	    if(isalpha(buf[i]) || isspace(buf[i])){
++	    	tolower(buf[i]);
++	   	 g += buf[i];
++		}
++	
++	}
++	
++	if(result == 1)
++	    break;
+ 
+-    string g;
++	//v += g;	
++	
++	//	cout << strlen(buf) << endl;
+ 
+-    for(int i = 0 ;strlen(buf) - 1; i++){
+-	if(isalpha(buf[i])){
+-	    tolower(buf[i]);
+-	    g+= buf[i];
+-	}
+-    }
++    } //----------end while 
++    
++    vec.push_back(g); //concatenates vector adding each token
++    cout << g << endl; //prints 
++    istringstream iss(buf); 
++    //string s;
++
++    
+     return;
+ }
+ 
+diff --git a/part2/tokenize.cpp b/part2/tokenize.cpp
+index 1ce75b3..18b3a8b 100644
+--- a/part2/tokenize.cpp
++++ b/part2/tokenize.cpp
+@@ -21,14 +21,24 @@ int main(int argc, char **argv)
+ 
+     const char *filename = argv[1];
+     MyFileReader f(filename);
++    
+ 
+-    vector<string> v;
+-    f.tokenizeLine(v);
++   // while(f.haveAllLinesBeenRead() != true) //loop until EOF reading, tokenize, and printing
++    //{
++	vector<string> v;
++	f.tokenizeLine(v);
++	for(int i = 0; i < v.size(); i++)
++	{
++ 		cout << v[i] << endl;
++	}								
++    //}	
++    
+ 
+-    string line ("");
+-    char buf[10];
++    //string line ("");
++    //char buf[10];
++    
+     //while(!f.haveAllLinesBeenRead()){
+-    while(1) { //see above for replacement
++  /*  while(1) { //see above for replacement
+ 	int result = f.getLine(buf, sizeof(buf));
+ 
+ 	if(result == -1) {
+@@ -36,7 +46,7 @@ int main(int argc, char **argv)
+ 	    if (line.length() > 0) {
+ 		int lineno = f.getCurrentLineNumber();
+ 		cout << "[" << setw(4) << lineno << "]";
+-		cout << line << flush;
++		cout << line << endl;
+ 	    }
+ 	    break;
+ 	}
+@@ -54,7 +64,7 @@ int main(int argc, char **argv)
+ 	    cerr << "ERR: getLine() returned unknown result." << endl;
+ 	    exit(1);
+ 	}
+-    }
++    }*/
+ 
+ return 0;
+ }
+-- 
+1.7.9.5
+
+
+From ee6ce88063853d5489ed2b30706ebe8564b1b643 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 2 May 2013 15:19:21 -0400
+Subject: [PATCH 16/28] //got the part 2 to work correctly
+
+---
+ part2/myfilereader.cpp |  171 +++++++++++++++++++++---------------------------
+ part2/myfilereader.h   |    5 +-
+ part2/tokenize.cpp     |   19 ++----
+ 3 files changed, 82 insertions(+), 113 deletions(-)
+
+diff --git a/part2/myfilereader.cpp b/part2/myfilereader.cpp
+index d666142..2ad2018 100644
+--- a/part2/myfilereader.cpp
++++ b/part2/myfilereader.cpp
+@@ -1,145 +1,120 @@
+-#include <stdio.h>
+-#include <stdlib.h>
++//#include <stdio.h>
++//#include <stdlib.h>
+ #include "myfilereader.h"
+ #include <string>
+ #include <cstring>
++#include <cstdio>
+ #include <vector>
+-
+ #include <iostream>
++#include <iomanip>
+ #include <sstream>
+ 
+-bool EOFsentinel = false;
++bool EOFsentinel;
++FILE *fp;
++int totalTokens;
+ 
+ MyFileReader::MyFileReader(const char* fname)
+ {
+-    FILE *fp = fopen(fname, "r");
++    EOFsentinel = false;
++    fp = fopen(fname, "r");
+     if(fp == NULL) {	//if the file doesn't exist, pointer will be NULL
+ 	perror(fname);	// print error and exits the function
+-	exit(1);
+     }
+-    lineno = 1;
+-    p = fp;
+-   // cerr << "i just your work!!!" << endl;
++    lineno = 0;
++    totalTokens = 0;
+ }
+ 
+ MyFileReader::~MyFileReader(){
+-
+-//MyFileReader::~MyFileReader()
+-    cerr << "i just your work!!!" << endl;
+-    fclose(p);
++    //cerr << "File object closed!" << endl;
++    fclose(fp);
+ }
+ 
+ int MyFileReader::getLine(char* buffer, int size)
+ {  
+-    //create temporary char array (ex: char ln[1000])
+-    //that has enough space for the whole line
+-    int ret = 0;
+-
+     //use fgets to populate ln array
+     // still need to edit some of the if statements to match
+-    
+-   /*
+-    if(fgets(buffer, size - 1, p) == NULL ){
++    if(fgets(buffer, size, fp) == NULL ){//EOF case
+ 	EOFsentinel = true;
+-	ret = -1;
++	//cout << "End of file via getLIne" << endl;
++	return -1;
+     }
+-    else if(buffer[strlen(buffer)-1] == '\n'){
++    else if(buffer[strlen(buffer)-1] == '\n'){//Newline/line completed case
+ 	char temp[strlen(buffer)];
+ 	strcpy (temp, buffer);
+-	temp[strlen(temp)-2]='\0';
++	//cout << "\nOrig buf: " << buffer;
++	temp[strlen(temp)-1]='\0';
+ 	strcpy (buffer, temp);
++	//cout << "Fixed buf: " << buffer << endl;
+ 	lineno++;	    
+-	ret = 1;
++	//cout << "Newline via getLIne" << endl;
++	return 1;
+     }
+ 
+-    else {
+-	ret = 0;//you need to find good num to return 
++    else {//Normal case
++	//cout << ".";
++	return 0;
+     }
+-
+-    */
+-
+-    if(fgets(buffer, size - 1, p) != NULL)
+-    {
+-//	cout << "dick" << endl;
+-	if(buffer[strlen(buffer) - 1] == '\n'){
+- 		lineno++;
+-    		ret = 1;
+-	}
+-	else 
+-	    if(buffer[strlen(buffer) - 1] == EOF)
+-	    {	
+-		EOFsentinel = true;	    
+-		ret = -1;
+-	    }
+-	
+-    }else
+-    {
+-	ret = -1;
+-    }	
+-    
+-    return ret;
+ }
+ 
+-void MyFileReader::tokenizeLine(vector<string>& vec)
+-{
+-    string g;
++void MyFileReader::tokenizeLine(vector<string>& vec){
+     char buf[10];
+-    //int result = getLine(buf, sizeof(buf));
+-    ////put while ------
+-
+-    while(1){
+-    	int result = getLine(buf, sizeof(buf));
+-	cout << buf << endl;
+-    
+-	//cout << result << endl;
+-	//strcpy(g, buf); 
+-
+-    //cout << "----" << endl;
+-    //cout << buf << endl;
+-
+-	for(int i = 0 ; i < strlen(buf); i++){
+-	
+-	    if(isalpha(buf[i]) || isspace(buf[i])){
+-	    	tolower(buf[i]);
+-	   	 g += buf[i];
++    string g = "";
++    bool newLineReached = false;
++    while (!newLineReached){
++	int result = getLine(buf, sizeof(buf));
++	//cout << "\ngetLine succeeded." << endl;
++	if (result == -1){
++	    //g+=buf;
++	    cout << totalTokens << " tokens total" << endl;
++	    newLineReached = true;
++	    EOFsentinel = true;	    
++	}
++	else if (result == 0){
++	    g+=buf;
++	    //cout << ".";
++	}
++	else if (result == 1){
++	    g+=buf;
++	    istringstream iss(g);
++	    string isBuffer;
++	    while (iss >> isBuffer){
++		string outString = "";
++		for (int i = 0; i < (int) isBuffer.length(); i++){
++		    if(isalpha(isBuffer[i])){
++			char temp = tolower(isBuffer[i]);
++			outString += temp;
++		    }
++		}
++		//cout << "isBuffer: " << isBuffer << endl;
++		//cout << "cleaned str for vec: " << outString << endl;
++		if (outString.length()>0){
++		    vec.push_back(outString);
++		    totalTokens++;
+ 		}
+-	
++	    }
++	    if (vec.size() > 0){
++		cout << "[" << setw(4) << getCurrentLineNumber() << "]";
++		cout << "{" << setw(2) << vec.size() << " tokens}";
++		for (int i = 0; i < (int) vec.size(); i++){
++		    cout << " " << vec[i];
++		}
++		cout << endl;
++	    }
++	    g = "";
++	    newLineReached = true;
+ 	}
+-	
+-	if(result == 1)
+-	    break;
+-
+-	//v += g;	
+-	
+-	//	cout << strlen(buf) << endl;
+-
+-    } //----------end while 
+-    
+-    vec.push_back(g); //concatenates vector adding each token
+-    cout << g << endl; //prints 
+-    istringstream iss(buf); 
+-    //string s;
+-
+-    
++	else {
++	    cerr << "GETLINE ERROR!" <<endl;
++	}
++    }
+     return;
+ }
+ 
+ bool MyFileReader::haveAllLinesBeenRead() const
+ {
+-    /*
+-    if(fgets(buffer, size - 1, p) != EOF)
+-    	return false;
+-    else
+-	return true;
+-    */
+     return EOFsentinel;
+ }
+ int MyFileReader::getCurrentLineNumber(){
+-   
+-   //int lineno = 1;
+-   //printf("[%4d]", lineno++);
+-   
+    return lineno;
+-    
+ }
+ 
+diff --git a/part2/myfilereader.h b/part2/myfilereader.h
+index 52a63ae..7cc4981 100644
+--- a/part2/myfilereader.h
++++ b/part2/myfilereader.h
+@@ -33,15 +33,16 @@ class MyFileReader {
+ 		
+ 	void tokenizeLine(vector<string>& vec);
+ 
+-	bool haveAllLinesBeenRead();
++	bool haveAllLinesBeenRead() const;
+ 
+     private:
+ 
+ 	//file pointer
+-	FILE *p; 
++	FILE *fp; 
+ 
+ 	int lineno;
+ 	bool EOFsentinel;
++	int totalTokens;
+ 
+ };
+ 
+diff --git a/part2/tokenize.cpp b/part2/tokenize.cpp
+index 18b3a8b..e6f8b7f 100644
+--- a/part2/tokenize.cpp
++++ b/part2/tokenize.cpp
+@@ -1,13 +1,11 @@
+ #include <iostream>
+ #include <sstream>
+ #include "myfilereader.h"
+-
+ #include <cstdlib>
+ #include <iomanip>
+ #include <string>
+-
+-#include <stdio.h>
+-#include <stdlib.h>
++#include <cstring>
++#include <cstdio>
+ #include <vector>
+ 
+ using namespace std;
+@@ -23,16 +21,11 @@ int main(int argc, char **argv)
+     MyFileReader f(filename);
+     
+ 
+-   // while(f.haveAllLinesBeenRead() != true) //loop until EOF reading, tokenize, and printing
+-    //{
++    while(!f.haveAllLinesBeenRead()) //loop until EOF reading, tokenize, and printing
++    {
+ 	vector<string> v;
+ 	f.tokenizeLine(v);
+-	for(int i = 0; i < v.size(); i++)
+-	{
+- 		cout << v[i] << endl;
+-	}								
+-    //}	
+-    
++    }	
+ 
+     //string line ("");
+     //char buf[10];
+@@ -66,5 +59,5 @@ int main(int argc, char **argv)
+ 	}
+     }*/
+ 
+-return 0;
++    return 0;
+ }
+-- 
+1.7.9.5
+
+
+From 2a390e6bc5018e705e444a64f9c07ae8ffb6bf40 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 2 May 2013 15:42:06 -0400
+Subject: [PATCH 17/28] //my if statements were incorrect so had to adjust
+ them, as in part 2
+
+---
+ part1/myfilereader.cpp |   33 +++++++++++++--------------------
+ 1 file changed, 13 insertions(+), 20 deletions(-)
+
+diff --git a/part1/myfilereader.cpp b/part1/myfilereader.cpp
+index 9bfe89f..54a3577 100644
+--- a/part1/myfilereader.cpp
++++ b/part1/myfilereader.cpp
+@@ -13,16 +13,11 @@ MyFileReader::MyFileReader(const char* fname)
+     }
+     lineno = 1;
+     p = fp;
+-    cerr << "i just your work!!!" << endl;
++   // cerr << "i just your work!!!" << endl;
+ }
+ 
+ MyFileReader::~MyFileReader(){
+ 
+-//}
+-
+-//MyFileReader::~MyFileReader()
+-//{
+-    cerr << "i just your work!!!" << endl;
+     fclose(p);
+ }
+ 
+@@ -33,21 +28,19 @@ int MyFileReader::getLine(char* buffer, int size)
+     int ret = 0;
+ 
+     //use fgets to populate ln array
+-    if(fgets(buffer, size - 1, p) != NULL){
+-
+-		if(buffer[strlen(buffer)-1] == '\n'){
+-		    lineno++;	    
+-		    ret = 1;
+-
+-		}
+-		else if(buffer[strlen(buffer) - 1] == EOF){
+-			ret = -1;
+-		}
+-     }else{
+-         ret = -1; //you need to find good num to return 
+-     }
+-
++    
++    // still need to edit some of the if statements to match
++    if(fgets(buffer, size - 1, p) == NULL)
++	return -1;
+ 
++    if(buffer[strlen(buffer) - 1] == EOF)
++	ret = -1;
++    
++    if(buffer[strlen(buffer)-1] == '\n'){
++	lineno++;	    
++	ret = 1;
++    } else
++	ret = 0;
+     return ret;
+ }
+ 
+-- 
+1.7.9.5
+
+
+From 12fa3cfd630a1e422bf3b5af6c61d4583fa40520 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 2 May 2013 16:14:53 -0400
+Subject: [PATCH 18/28] //Just made Makefile for part3, used old template
+
+---
+ part3/Makefile |   28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 part3/Makefile
+
+diff --git a/part3/Makefile b/part3/Makefile
+new file mode 100644
+index 0000000..2745bbf
+--- /dev/null
++++ b/part3/Makefile
+@@ -0,0 +1,28 @@
++CC  = g++
++CXX = g++ 
++
++INCLUDES =
++
++CFLAGS   = -g -Wall $(INCLUDES)
++CXXFLAGS = -g -Wall $(INCLUDES)
++
++LDFLAGS = -g
++LDLIBS  =
++
++executables = tree-test
++objects = myfilereader.o tree-test.o bst-2.o
++
++.PHONY: default
++default: $(executables)
++
++$(executables): myfilereader.o tree-test.o bst-2.o
++
++$(objects): myfilereader.h bst-2.h
++
++.PHONY: clean
++clean:
++	rm -f *~ *.o a.out core $(objects) $(executables)
++
++.PHONY: all
++all: clean default
++
+-- 
+1.7.9.5
+
+
+From 3764ca53a957bbb36444a090686f0e0aef100539 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 2 May 2013 16:20:30 -0400
+Subject: [PATCH 19/28] //changed the Makefile back to original from Jae's
+
+---
+ part1/Makefile |    8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/part1/Makefile b/part1/Makefile
+index 7316c75..51ad5ce 100644
+--- a/part1/Makefile
++++ b/part1/Makefile
+@@ -1,8 +1,6 @@
+ CC  = g++
+ CXX = g++ 
+ 
+-# Comment out one of the following 2 lines to enable/disable BASIC4TRACE.
+-#INCLUDES = -DBASIC4TRACE
+ INCLUDES =
+ 
+ CFLAGS   = -g -Wall $(INCLUDES)
+@@ -11,13 +9,14 @@ CXXFLAGS = -g -Wall $(INCLUDES)
+ LDFLAGS = -g
+ LDLIBS  =
+ 
+-executables = ncat-main
++executables = ncat
+ objects = myfilereader.o ncat-main.o
+ 
+ .PHONY: default
+ default: $(executables)
+ 
+-$(executables): myfilereader.o
++$(executables): ncat-main.o myfilereader.o
++	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+ 
+ $(objects): myfilereader.h
+ 
+@@ -27,4 +26,3 @@ clean:
+ 
+ .PHONY: all
+ all: clean default
+-
+-- 
+1.7.9.5
+
+
+From 015c24735e8a3d4cb82a5d981d16d4d627aa01cd Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 2 May 2013 22:27:52 -0400
+Subject: [PATCH 20/28] // just converted bst to string type instead of int
+
+---
+ part3/bst-2.cpp     |  222 +++++++++++++++++++++++++++++++++++++++++++++++++++
+ part3/bst-2.h       |   71 ++++++++++++++++
+ part3/tree-test.cpp |   43 ++++++++++
+ 3 files changed, 336 insertions(+)
+ create mode 100644 part3/bst-2.cpp
+ create mode 100644 part3/bst-2.h
+ create mode 100644 part3/tree-test.cpp
+
+diff --git a/part3/bst-2.cpp b/part3/bst-2.cpp
+new file mode 100644
+index 0000000..963918e
+--- /dev/null
++++ b/part3/bst-2.cpp
+@@ -0,0 +1,222 @@
++#include <iostream>
++#include <algorithm>
++using namespace std;
++
++#include "bst-2.h"
++
++BST::~BST()
++{
++    remove_all_nodes(root);
++}
++
++void BST::remove_all_nodes(BST::Node *node)
++{
++    if (node) {
++        remove_all_nodes(node->left);
++        remove_all_nodes(node->right);
++        delete node;
++    }
++}
++
++void BST::insert(int x)
++{
++    root = insert(x, root);
++}
++
++void BST::remove(int x)
++{
++    // Node that, unlike insert(), remove() does not return "Node*".
++    // Instead, it was written to take "Node*&" as a parameter.
++    remove(x, root);
++}
++
++const BST::Node *BST::lookup(int x) const
++{
++    return lookup(x, root);
++}
++
++/*
++ * Insert x into the given binary search tree node.
++ * If node is not NULL, node is again returned after inserting x.
++ * If node is NULL, a new single-node tree is returned.
++ */
++BST::Node *BST::insert(int x, BST::Node *node)
++{
++    if (node == NULL) {
++        node = new Node(x);
++    }
++    else if (x < node->data) {
++        node->left = insert(x, node->left);
++    }
++    else if (x > node->data) {
++        node->right= insert(x, node->right);
++    }
++    else {
++        // x is in the tree already.
++    }
++
++    return node;
++}
++
++/*
++ * Returns the node containing x.
++ * Returns NULL if x is not in the tree rooted at the node.
++ */
++const BST::Node *BST::lookup(int x, const BST::Node *node) const
++{
++    if (node == NULL)
++        return NULL;
++    else if (x == node->data)
++        return node;
++    else if (x < node->data)
++        return lookup(x, node->left);
++    else
++        return lookup(x, node->right);
++}
++
++/*
++ * Draw the BST rotated 90-degree counter-clockwise.
++ */
++void BST::draw()
++{
++    draw(root, 0, "--");
++}
++
++void BST::draw(BST::Node *node, int depth, const char *edge)
++{
++    if (node) {
++        draw(node->right, depth + 1, "/-");
++
++        for (int i = 0; i < depth; i++) {
++            cout << "      ";
++        }
++        cout << edge << " " << node->get() << endl;
++
++        draw(node->left, depth + 1, "\\-");
++    }
++}
++
++/*
++ * In-order traversal.
++ */
++void BST::traverse_inorder(void (*f)(BST::Node *))
++{
++    traverse_inorder(root, f);
++}
++
++void BST::traverse_inorder(BST::Node *node, void (*f)(BST::Node *))
++{
++    if (node) {
++        traverse_inorder(node->left, f);
++        f(node);
++        traverse_inorder(node->right, f);
++    }
++}
++
++int BST::height() const
++{
++    return height(root);
++}
++
++/*
++ * Returns the given node's height, which is defined as the length 
++ * of a longest path from the node to a leaf. (All leaves have height 0.)
++ */
++int BST::height(const BST::Node *node) const
++{
++    if (node == NULL)
++        return -1;
++    else 
++        return max(height(node->left), height(node->right)) + 1;
++}
++
++/*
++ * Find the minimum node. 
++ */
++const BST::Node *BST::find_min() const
++{
++    return find_min(root);
++}
++    
++const BST::Node *BST::find_min(const BST::Node *node) const
++{
++    if (node == NULL)
++        return NULL;
++    else if (node->left == NULL)
++        return node;
++    else 
++        return find_min(node->left);
++}
++
++/*
++ * Find the maximum node.
++ */
++const BST::Node *BST::find_max() const
++{
++    return find_max(root);
++}
++
++const BST::Node *BST::find_max(const BST::Node *node) const
++{
++    if (node != NULL) {
++        while (node->right != NULL)
++            node = node->right;
++    }
++    return node;
++}
++
++// Node that, unlike insert(), remove() does not return "Node*".
++// Instead, it was written to take "Node*&" as a parameter.
++void BST::remove(int x, BST::Node*& t)
++{
++    if (t == NULL) {
++        // x is not found - do nothing.
++        return; 
++    }
++    else if (x < t->data) {
++        remove(x, t->left);
++    }
++    else if (t->data < x) {
++        remove(x, t->right);
++    }
++    else if (t->left != NULL && t->right != NULL) {
++        // Two-children case:
++        // 1. copy over the data from the min node of the right sub-tree
++        // 2. recursively remove the node containg the data from the 
++        //    right sub-tree. 
++        t->data = find_min(t->right)->data;
++        remove(t->data, t->right);
++    }
++    else {
++        // t is either a leaf or has one child.
++        Node *oldNode = t;
++        t = (t->left != NULL) ? t->left : t->right;
++        delete oldNode;
++    }
++}
++
++BST::BST(const BST& t)
++{
++    root = clone(t.root);
++}
++
++BST& BST::operator=(const BST& rhs)
++{
++    if (this != &rhs) {
++        remove_all_nodes(root);
++        root = clone(rhs.root);
++    }
++    return *this;
++}
++
++BST::Node *BST::clone(const BST::Node *t) const
++{
++    if (t == NULL) {
++        return NULL;
++    }
++   
++    Node *node = new Node(t->get());
++    node->left = clone(t->left);
++    node->right = clone(t->right);
++    return node;
++}
+diff --git a/part3/bst-2.h b/part3/bst-2.h
+new file mode 100644
+index 0000000..5af134d
+--- /dev/null
++++ b/part3/bst-2.h
+@@ -0,0 +1,71 @@
++#ifndef __BST_2_H__
++#define __BST_2_H__
++
++#include <iostream>
++#include <string>
++using namespace std;
++
++class BSTNode {
++
++    public:
++        int get() const { return data; }
++
++        friend class BST;
++
++    private:
++        string data;
++        BSTNode *left;
++        BSTNode *right;
++
++        BSTNode(string x) {
++            data = x;
++            left = NULL;
++            right = NULL;
++        }
++
++        // disallow copy ctor & op=()
++        BSTNode(const BSTNode&);
++        BSTNode& operator=(const BSTNode&);
++};
++
++class BST {
++
++    public:
++        BST() : root(NULL) {}
++        ~BST();
++        BST(const BST&);
++        BST& operator=(const BST&);
++
++        void insert(string x);
++        void remove(string x);
++
++        typedef BSTNode Node;
++
++        const Node *lookup(string x) const;
++
++        void draw();
++        void traverse_inorder(void (*f)(Node *));
++
++        int height() const;
++        const Node *find_min() const;
++        const Node *find_max() const;
++
++    private:
++        Node *root;
++
++        Node *insert(string x, Node *node);
++        void remove(string x, Node*& node);
++        const Node *lookup(string x, const Node *node) const;
++
++        void remove_all_nodes(Node *node);
++        void draw(Node *node, int depth, const char *edge);
++        void traverse_inorder(Node *node, void (*f)(Node *));
++
++        int height(const Node *node) const;
++        const Node *find_min(const Node *node) const;
++        const Node *find_max(const Node *node) const;
++
++        Node *clone(const Node *) const;
++};
++
++#endif /* #ifndef __BST_2_H__ */
+diff --git a/part3/tree-test.cpp b/part3/tree-test.cpp
+new file mode 100644
+index 0000000..c617a76
+--- /dev/null
++++ b/part3/tree-test.cpp
+@@ -0,0 +1,43 @@
++#include "myfilereader.h"
++#include "bst-2.h"
++#include <iostream>
++#include <sstream>
++#include <cstdlib>
++#include <iomanip>
++#include <string>
++#include <cstring>
++#include <cstdio>
++#include <vector>
++
++using namespace std;
++
++int main(int argc, char **argv)
++{
++    if (argc != 2) {
++	cerr << "usage: tokenize <file_name>" << endl;
++	exit(1);
++    }
++
++    const char *filename = argv[1];
++    MyFileReader f(filename);
++    
++    //constructs an empty tree
++    BST t;
++
++
++    while(!f.haveAllLinesBeenRead()) //loop until EOF reading, tokenize, and printing
++    {
++	vector<string> v;
++	f.tokenizeLine(v);
++	t.insert(
++    }	
++
++
++return 0;
++
++}
++
++
++
++
++
+-- 
+1.7.9.5
+
+
+From 68d0f05a25c81756918f77ae8b9c291893f6db5d Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 2 May 2013 23:52:34 -0400
+Subject: [PATCH 21/28] // removed prints from pt. 2 and added each token
+
+---
+ part3/myfilereader.cpp |  124 ++++++++++++++++++++++++++++++++++++++++++++++++
+ part3/myfilereader.h   |   49 +++++++++++++++++++
+ part3/tree-test.cpp    |   11 +++--
+ 3 files changed, 179 insertions(+), 5 deletions(-)
+ create mode 100644 part3/myfilereader.cpp
+ create mode 100644 part3/myfilereader.h
+
+diff --git a/part3/myfilereader.cpp b/part3/myfilereader.cpp
+new file mode 100644
+index 0000000..5121da9
+--- /dev/null
++++ b/part3/myfilereader.cpp
+@@ -0,0 +1,124 @@
++//#include <stdio.h>
++//#include <stdlib.h>
++#include "myfilereader.h"
++#include <string>
++#include <cstring>
++#include <cstdio>
++#include <vector>
++#include <iostream>
++#include <iomanip>
++#include <sstream>
++
++bool EOFsentinel;
++FILE *fp;
++int totalTokens;
++
++MyFileReader::MyFileReader(const char* fname)
++{
++    EOFsentinel = false;
++    fp = fopen(fname, "r");
++    if(fp == NULL) {	//if the file doesn't exist, pointer will be NULL
++	perror(fname);	// print error and exits the function
++    }
++    lineno = 0;
++    totalTokens = 0;
++}
++
++MyFileReader::~MyFileReader(){
++    //cerr << "File object closed!" << endl;
++    fclose(fp);
++}
++
++int MyFileReader::getLine(char* buffer, int size)
++{  
++    //use fgets to populate ln array
++    // still need to edit some of the if statements to match
++    if(fgets(buffer, size, fp) == NULL ){//EOF case
++	EOFsentinel = true;
++	//cout << "End of file via getLIne" << endl;
++	return -1;
++    }
++    else if(buffer[strlen(buffer)-1] == '\n'){//Newline/line completed case
++	char temp[strlen(buffer)];
++	strcpy (temp, buffer);
++	//cout << "\nOrig buf: " << buffer;
++	temp[strlen(temp)-1]='\0';
++	strcpy (buffer, temp);
++	//cout << "Fixed buf: " << buffer << endl;
++	lineno++;	    
++	//cout << "Newline via getLIne" << endl;
++	return 1;
++    }
++
++    else {//Normal case
++	//cout << ".";
++	return 0;
++    }
++}
++
++void MyFileReader::tokenizeLine(vector<string>& vec){
++    char buf[10];
++    string g = "";
++    bool newLineReached = false;
++    while (!newLineReached){
++	int result = getLine(buf, sizeof(buf));
++	//cout << "\ngetLine succeeded." << endl;
++	if (result == -1){
++	    //g+=buf;
++	    //cout << totalTokens << " tokens total" << endl;
++	    newLineReached = true;
++	    EOFsentinel = true;	    
++	}
++	else if (result == 0){
++	    g+=buf;
++	    //cout << ".";
++	}
++	else if (result == 1){
++	    g+=buf;
++	    istringstream iss(g);
++	    string isBuffer;
++	    while (iss >> isBuffer){
++		string outString = "";
++		for (int i = 0; i < (int) isBuffer.length(); i++){
++		    if(isalpha(isBuffer[i])){
++			char temp = tolower(isBuffer[i]);
++			outString += temp;
++		    }
++		    //cout << outString << endl;
++		}
++		//cout << "isBuffer: " << isBuffer << endl;
++		//cout << "cleaned str for vec: " << outString << endl;
++		if (outString.length()>0){
++		    vec.push_back(outString);
++		    //cout << vec.back() << endl;
++		    totalTokens++;
++		}
++	    }
++	    if (vec.size() > 0){
++		
++		/*cout << "[" << setw(4) << getCurrentLineNumber() << "]";
++		cout << "{" << setw(2) << vec.size() << " tokens}";
++		for (int i = 0; i < (int) vec.size(); i++){
++		    cout << " " << vec[i];
++		}
++		cout << endl;
++	     */
++	    }
++	    g = "";
++	    newLineReached = true;
++	}
++	else {
++	    cerr << "GETLINE ERROR!" <<endl;
++	}
++    }
++    return;
++}
++
++bool MyFileReader::haveAllLinesBeenRead() const
++{
++    return EOFsentinel;
++}
++int MyFileReader::getCurrentLineNumber(){
++   return lineno;
++}
++
+diff --git a/part3/myfilereader.h b/part3/myfilereader.h
+new file mode 100644
+index 0000000..7cc4981
+--- /dev/null
++++ b/part3/myfilereader.h
+@@ -0,0 +1,49 @@
++#ifndef __MyFileReader_H__
++#define __MyFileReader_H__
++
++using namespace std;
++
++#include <iostream>
++#include <vector>
++
++class MyFileReader {
++
++    public:
++
++	// default constructor
++	//MyFileReader();
++
++	// constructor
++	MyFileReader(const char* p);
++
++	// destructor
++	~MyFileReader();
++
++	/*
++	// copy constructor 
++	MyFileReader(const MyFileReader& s);
++
++	// assignment operator
++	MyFileReader& operator=(const MyFileReader& s);
++	*/
++
++	int getLine(char* buffer, int size);
++
++        int getCurrentLineNumber();
++		
++	void tokenizeLine(vector<string>& vec);
++
++	bool haveAllLinesBeenRead() const;
++
++    private:
++
++	//file pointer
++	FILE *fp; 
++
++	int lineno;
++	bool EOFsentinel;
++	int totalTokens;
++
++};
++
++#endif
+diff --git a/part3/tree-test.cpp b/part3/tree-test.cpp
+index c617a76..70c9c0e 100644
+--- a/part3/tree-test.cpp
++++ b/part3/tree-test.cpp
+@@ -24,17 +24,18 @@ int main(int argc, char **argv)
+     //constructs an empty tree
+     BST t;
+ 
+-
+     while(!f.haveAllLinesBeenRead()) //loop until EOF reading, tokenize, and printing
+     {
+ 	vector<string> v;
+-	f.tokenizeLine(v);
+-	t.insert(
+-    }	
++	f.tokenizeLine(v);	
++	//cout << v.back() << endl;
++	for(int i = 0; i < (int) v.size(); i++)
++	    t.insert(v[i]);
++    }
+ 
++t.draw();
+ 
+ return 0;
+-
+ }
+ 
+ 
+-- 
+1.7.9.5
+
+
+From 15c39145c29c70ad4346ce8f08bf01d66d1993ee Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Fri, 3 May 2013 01:41:50 -0400
+Subject: [PATCH 22/28] //finished! Got the draw and output to work. No
+ valgrind err
+
+---
+ part3/bst-2.cpp     |   34 ++++++++++++++++++++++++++++------
+ part3/bst-2.h       |    6 ++++--
+ part3/tree-test.cpp |    4 +++-
+ 3 files changed, 35 insertions(+), 9 deletions(-)
+
+diff --git a/part3/bst-2.cpp b/part3/bst-2.cpp
+index 963918e..20f842e 100644
+--- a/part3/bst-2.cpp
++++ b/part3/bst-2.cpp
+@@ -1,5 +1,7 @@
+ #include <iostream>
+ #include <algorithm>
++#include <string>
++//#include <string.h>
+ using namespace std;
+ 
+ #include "bst-2.h"
+@@ -18,19 +20,19 @@ void BST::remove_all_nodes(BST::Node *node)
+     }
+ }
+ 
+-void BST::insert(int x)
++void BST::insert(string x)
+ {
+     root = insert(x, root);
+ }
+ 
+-void BST::remove(int x)
++void BST::remove(string x)
+ {
+     // Node that, unlike insert(), remove() does not return "Node*".
+     // Instead, it was written to take "Node*&" as a parameter.
+     remove(x, root);
+ }
+ 
+-const BST::Node *BST::lookup(int x) const
++const BST::Node *BST::lookup(string x) const
+ {
+     return lookup(x, root);
+ }
+@@ -40,7 +42,7 @@ const BST::Node *BST::lookup(int x) const
+  * If node is not NULL, node is again returned after inserting x.
+  * If node is NULL, a new single-node tree is returned.
+  */
+-BST::Node *BST::insert(int x, BST::Node *node)
++BST::Node *BST::insert(string x, BST::Node *node)
+ {
+     if (node == NULL) {
+         node = new Node(x);
+@@ -62,7 +64,7 @@ BST::Node *BST::insert(int x, BST::Node *node)
+  * Returns the node containing x.
+  * Returns NULL if x is not in the tree rooted at the node.
+  */
+-const BST::Node *BST::lookup(int x, const BST::Node *node) const
++const BST::Node *BST::lookup(string x, const BST::Node *node) const
+ {
+     if (node == NULL)
+         return NULL;
+@@ -167,7 +169,7 @@ const BST::Node *BST::find_max(const BST::Node *node) const
+ 
+ // Node that, unlike insert(), remove() does not return "Node*".
+ // Instead, it was written to take "Node*&" as a parameter.
+-void BST::remove(int x, BST::Node*& t)
++void BST::remove(string x, BST::Node*& t)
+ {
+     if (t == NULL) {
+         // x is not found - do nothing.
+@@ -220,3 +222,23 @@ BST::Node *BST::clone(const BST::Node *t) const
+     node->right = clone(t->right);
+     return node;
+ }
++
++void BST::draw2()
++{
++    draw2(root, 0, "--");
++}
++
++void BST::draw2(BST::Node *node, int depth, const char *edge)
++{
++    if (node) {
++	draw2(node->left, depth + 1, "-\\");
++
++	for (int i = 0; i < ((25- node->get().length()) + ((height() - depth)*6)); i++) {
++	    cout << " ";
++		
++	}
++	cout << node->get() << " " << edge << endl;
++        	
++	draw2(node->right, depth + 1, "-/");
++    }
++}
+diff --git a/part3/bst-2.h b/part3/bst-2.h
+index 5af134d..79e34c0 100644
+--- a/part3/bst-2.h
++++ b/part3/bst-2.h
+@@ -8,7 +8,7 @@ using namespace std;
+ class BSTNode {
+ 
+     public:
+-        int get() const { return data; }
++        string get() const { return data; }
+ 
+         friend class BST;
+ 
+@@ -46,6 +46,7 @@ class BST {
+         void draw();
+         void traverse_inorder(void (*f)(Node *));
+ 
++	void draw2();
+         int height() const;
+         const Node *find_min() const;
+         const Node *find_max() const;
+@@ -59,7 +60,8 @@ class BST {
+ 
+         void remove_all_nodes(Node *node);
+         void draw(Node *node, int depth, const char *edge);
+-        void traverse_inorder(Node *node, void (*f)(Node *));
++        void draw2(Node *node, int depth, const char *edge);
++	void traverse_inorder(Node *node, void (*f)(Node *));
+ 
+         int height(const Node *node) const;
+         const Node *find_min(const Node *node) const;
+diff --git a/part3/tree-test.cpp b/part3/tree-test.cpp
+index 70c9c0e..c799f50 100644
+--- a/part3/tree-test.cpp
++++ b/part3/tree-test.cpp
+@@ -32,9 +32,11 @@ int main(int argc, char **argv)
+ 	for(int i = 0; i < (int) v.size(); i++)
+ 	    t.insert(v[i]);
+     }
+-
++cout << "draw():\n" << endl;
+ t.draw();
+ 
++cout << "draw2():\n" << endl;
++t.draw2();
+ return 0;
+ }
+ 
+-- 
+1.7.9.5
+
+
+From 7ea2a0b9c725eb5106f95aefce2e6d7b0244becd Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Fri, 3 May 2013 02:23:12 -0400
+Subject: [PATCH 23/28] //editing part 4 and just finished the output for part
+ 3
+
+---
+ README.txt     |   57 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ part4/Makefile |   28 ++++++++++++++++++++++++++++
+ 2 files changed, 85 insertions(+)
+ create mode 100644 README.txt
+ create mode 100644 part4/Makefile
+
+diff --git a/README.txt b/README.txt
+new file mode 100644
+index 0000000..4fceccf
+--- /dev/null
++++ b/README.txt
+@@ -0,0 +1,57 @@
++
++
++Author: Gentry Tran
++
++
++
++Part 1:
++Works correctly and matches output. No leaks are found.
++
++==4010== HEAP SUMMARY:
++==4010==     in use at exit: 0 bytes in 0 blocks
++==4010==   total heap usage: 5 allocs, 5 frees, 788 bytes allocated
++==4010==
++==4010== All heap blocks were freed -- no leaks are possible
++==4010==
++==4010== For counts of detected and suppressed errors, rerun with: -v
++==4010== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2 from 2)
++
++___________________________________
++
++
++Part 2:
++Works correctly and matches output. No leaks are found.
++
++==28903==
++==28903== HEAP SUMMARY:
++==28903==     in use at exit: 0 bytes in 0 blocks
++==28903==   total heap usage: 176 allocs, 176 frees, 6,137 bytes allocated
++==28903==
++==28903== All heap blocks were freed -- no leaks are possible
++==28903==
++==28903== For counts of detected and suppressed errors, rerun with: -v
++==28903== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2 from 2)
++
++
++___________________________________
++Part 3:
++Works correctly and matches output. No leaks are found.
++
++
++==32251== HEAP SUMMARY:
++==32251==     in use at exit: 0 bytes in 0 blocks
++==32251==   total heap usage: 197 allocs, 197 frees, 6,641 bytes allocated
++==32251==
++==32251== All heap blocks were freed -- no leaks are possible
++==32251==
++==32251== For counts of detected and suppressed errors, rerun with: -v
++==32251== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2 from 2)___________________________________
++Part 4:
++Works correctly and matches output. No leaks are found.
++
++
++
++___________________________________
++Part 5:
++Works correctly and matches output. No leaks are found.
++
+diff --git a/part4/Makefile b/part4/Makefile
+new file mode 100644
+index 0000000..e7b2e6e
+--- /dev/null
++++ b/part4/Makefile
+@@ -0,0 +1,28 @@
++CC  = g++
++CXX = g++ 
++
++INCLUDES =
++
++CFLAGS   = -g -Wall $(INCLUDES)
++CXXFLAGS = -g -Wall $(INCLUDES)
++
++LDFLAGS = -g
++LDLIBS  =
++
++executables = spell-check
++objects = myfilereader.o spell-check.o bst-2.o
++
++.PHONY: default
++default: $(executables)
++
++$(executables): myfilereader.o spell-check.o bst-2.o
++
++$(objects): myfilereader.h bst-2.h
++
++.PHONY: clean
++clean:
++	rm -f *~ *.o a.out core $(objects) $(executables)
++
++.PHONY: all
++all: clean default
++
+-- 
+1.7.9.5
+
+
+From c9af8c0129efd85b3535e8155a43fd4480eb69ea Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Fri, 3 May 2013 13:37:47 -0400
+Subject: [PATCH 24/28] //successfully printed the dictionary information
+
+---
+ part4/bst-2.cpp       |  248 +++++++++++++++++++++++++++++++++++++++++++++++++
+ part4/bst-2.h         |   76 +++++++++++++++
+ part4/spell-check.cpp |   65 +++++++++++++
+ 3 files changed, 389 insertions(+)
+ create mode 100644 part4/bst-2.cpp
+ create mode 100644 part4/bst-2.h
+ create mode 100644 part4/spell-check.cpp
+
+diff --git a/part4/bst-2.cpp b/part4/bst-2.cpp
+new file mode 100644
+index 0000000..76a3ceb
+--- /dev/null
++++ b/part4/bst-2.cpp
+@@ -0,0 +1,248 @@
++#include <iostream>
++#include <algorithm>
++#include <string>
++//#include <string.h>
++using namespace std;
++
++#include "bst-2.h"
++
++
++
++BST::~BST()
++{
++    remove_all_nodes(root);
++}
++
++void BST::remove_all_nodes(BST::Node *node)
++{
++    if (node) {
++        remove_all_nodes(node->left);
++        remove_all_nodes(node->right);
++        delete node;
++    }
++}
++
++void BST::insert(string x)
++{
++    root = insert(x, root);
++}
++
++void BST::remove(string x)
++{
++    // Node that, unlike insert(), remove() does not return "Node*".
++    // Instead, it was written to take "Node*&" as a parameter.
++    remove(x, root);
++}
++
++const BST::Node *BST::lookup(string x) const
++{
++    return lookup(x, root);
++}
++
++/*
++ * Insert x into the given binary search tree node.
++ * If node is not NULL, node is again returned after inserting x.
++ * If node is NULL, a new single-node tree is returned.
++ */
++BST::Node *BST::insert(string x, BST::Node *node)
++{
++    if (node == NULL) {
++        node = new Node(x);
++	NodeTotal++;
++    }
++    else if (x < node->data) {
++        node->left = insert(x, node->left);
++    }
++    else if (x > node->data) {
++        node->right= insert(x, node->right);
++    }
++    else {
++	
++        // x is in the tree already.
++    }
++
++    return node;
++}
++
++/*
++ * Returns the node containing x.
++ * Returns NULL if x is not in the tree rooted at the node.
++ */
++const BST::Node *BST::lookup(string x, const BST::Node *node) const
++{
++    if (node == NULL)
++        return NULL;
++    else if (x == node->data)
++        return node;
++    else if (x < node->data)
++        return lookup(x, node->left);
++    else
++        return lookup(x, node->right);
++}
++
++/*
++ * Draw the BST rotated 90-degree counter-clockwise.
++ */
++void BST::draw()
++{
++    draw(root, 0, "--");
++}
++
++void BST::draw(BST::Node *node, int depth, const char *edge)
++{
++    if (node) {
++        draw(node->right, depth + 1, "/-");
++
++        for (int i = 0; i < depth; i++) {
++            cout << "      ";
++        }
++        cout << edge << " " << node->get() << endl;
++
++        draw(node->left, depth + 1, "\\-");
++    }
++}
++
++/*
++ * In-order traversal.
++ */
++void BST::traverse_inorder(void (*f)(BST::Node *))
++{
++    traverse_inorder(root, f);
++}
++
++void BST::traverse_inorder(BST::Node *node, void (*f)(BST::Node *))
++{
++    if (node) {
++        traverse_inorder(node->left, f);
++        f(node);
++        traverse_inorder(node->right, f);
++    }
++}
++
++int BST::height() const
++{
++    return height(root);
++}
++
++/*
++ * Returns the given node's height, which is defined as the length 
++ * of a longest path from the node to a leaf. (All leaves have height 0.)
++ */
++int BST::height(const BST::Node *node) const
++{
++    if (node == NULL)
++        return -1;
++    else 
++        return max(height(node->left), height(node->right)) + 1;
++}
++
++/*
++ * Find the minimum node. 
++ */
++const BST::Node *BST::find_min() const
++{
++    return find_min(root);
++}
++    
++const BST::Node *BST::find_min(const BST::Node *node) const
++{
++    if (node == NULL)
++        return NULL;
++    else if (node->left == NULL)
++        return node;
++    else 
++        return find_min(node->left);
++}
++
++/*
++ * Find the maximum node.
++ */
++const BST::Node *BST::find_max() const
++{
++    return find_max(root);
++}
++
++const BST::Node *BST::find_max(const BST::Node *node) const
++{
++    if (node != NULL) {
++        while (node->right != NULL)
++            node = node->right;
++    }
++    return node;
++}
++
++// Node that, unlike insert(), remove() does not return "Node*".
++// Instead, it was written to take "Node*&" as a parameter.
++void BST::remove(string x, BST::Node*& t)
++{
++    if (t == NULL) {
++        // x is not found - do nothing.
++        return; 
++    }
++    else if (x < t->data) {
++        remove(x, t->left);
++    }
++    else if (t->data < x) {
++        remove(x, t->right);
++    }
++    else if (t->left != NULL && t->right != NULL) {
++        // Two-children case:
++        // 1. copy over the data from the min node of the right sub-tree
++        // 2. recursively remove the node containg the data from the 
++        //    right sub-tree. 
++        t->data = find_min(t->right)->data;
++        remove(t->data, t->right);
++    }
++    else {
++        // t is either a leaf or has one child.
++        Node *oldNode = t;
++        t = (t->left != NULL) ? t->left : t->right;
++        delete oldNode;
++    }
++}
++
++BST::BST(const BST& t)
++{
++    root = clone(t.root);
++}
++
++BST& BST::operator=(const BST& rhs)
++{
++    if (this != &rhs) {
++        remove_all_nodes(root);
++        root = clone(rhs.root);
++    }
++    return *this;
++}
++
++BST::Node *BST::clone(const BST::Node *t) const
++{
++    if (t == NULL) {
++        return NULL;
++    }
++   
++    Node *node = new Node(t->get());
++    node->left = clone(t->left);
++    node->right = clone(t->right);
++    return node;
++}
++
++void BST::draw2()
++{
++    draw2(root, 0, "--");
++}
++
++void BST::draw2(BST::Node *node, int depth, const char *edge)
++{
++    if (node) {
++	draw2(node->left, depth + 1, "-\\");
++
++	for (int i = 0; i < ((25- node->get().length()) + ((height() - depth)*6)); i++) {
++	    cout << " ";
++		
++	}
++	cout << node->get() << " " << edge << endl;
++        	
++	draw2(node->right, depth + 1, "-/");
++    }
++}
+diff --git a/part4/bst-2.h b/part4/bst-2.h
+new file mode 100644
+index 0000000..207b822
+--- /dev/null
++++ b/part4/bst-2.h
+@@ -0,0 +1,76 @@
++#ifndef __BST_2_H__
++#define __BST_2_H__
++
++#include <iostream>
++#include <string>
++using namespace std;
++
++class BSTNode {
++
++    public:
++        string get() const { return data; }
++
++        friend class BST;
++
++    private:
++        string data;
++        BSTNode *left;
++        BSTNode *right;
++
++        BSTNode(string x) {
++            data = x;
++            left = NULL;
++            right = NULL;
++        }
++
++        // disallow copy ctor & op=()
++        BSTNode(const BSTNode&);
++        BSTNode& operator=(const BSTNode&);
++};
++
++class BST {
++
++    public:
++        BST() : root(NULL) {}
++        ~BST();
++        BST(const BST&);
++        BST& operator=(const BST&);
++	
++        void insert(string x);
++        void remove(string x);
++
++        typedef BSTNode Node;
++
++        const Node *lookup(string x) const;
++
++        void draw();
++        void traverse_inorder(void (*f)(Node *));
++
++	void draw2();
++        int height() const;
++        const Node *find_min() const;
++        const Node *find_max() const;
++
++	int GetNodeTotal() const{return NodeTotal;}
++	void SetNodeTotal(int n) {NodeTotal = n;}
++	
++    private:
++        Node *root;
++	Node *insert(string x, Node *node);
++        void remove(string x, Node*& node);
++        const Node *lookup(string x, const Node *node) const;
++
++        int NodeTotal;
++        void remove_all_nodes(Node *node);
++        void draw(Node *node, int depth, const char *edge);
++        void draw2(Node *node, int depth, const char *edge);
++	void traverse_inorder(Node *node, void (*f)(Node *));
++
++        int height(const Node *node) const;
++        const Node *find_min(const Node *node) const;
++        const Node *find_max(const Node *node) const;
++
++        Node *clone(const Node *) const;
++};
++
++#endif /* #ifndef __BST_2_H__ */
+diff --git a/part4/spell-check.cpp b/part4/spell-check.cpp
+new file mode 100644
+index 0000000..b4f9884
+--- /dev/null
++++ b/part4/spell-check.cpp
+@@ -0,0 +1,65 @@
++#include "myfilereader.h"
++#include "bst-2.h"
++#include <iostream>
++#include <sstream>
++#include <cstdlib>
++#include <iomanip>
++#include <string>
++#include <cstring>
++#include <cstdio>
++#include <vector>
++#include <math.h>
++
++using namespace std;
++
++int main(int argc, char **argv)
++{
++    if (argc != 2) {
++	cerr << "usage: tokenize <file_name>" << endl;
++	exit(1);
++    }
++
++    const char *filename = argv[1];
++    MyFileReader f(filename);
++    
++    //constructs an empty tree
++    BST t;
++
++    cout << "Dictionary info:" << endl;
++
++    t.SetNodeTotal(0);
++
++    while(!f.haveAllLinesBeenRead()) //loop until EOF reading, tokenize, and printing
++    {
++	vector<string> v;
++	f.tokenizeLine(v);	
++	//cout << v.back() << endl;
++	for(int i = 0; i < (int) v.size(); i++){
++	    t.insert(v[i]);	    
++	}
++    }
++	
++    cout << "  Tree size:      " << t.GetNodeTotal() << endl;
++
++    cout << "  Tree height:    " << t.height() << endl;
++
++    cout << "  Balance index:  " << (t.height() +1) / (ceil(log2(t.GetNodeTotal()+1))) << endl;
++    
++    cout << "Misspelled tokens in istringstream-test.cpp:" << endl;
++    
++    const char *filename = argv[2];
++    MyFileReader f(filename);
++
++    while(!f.haveAllLinesBeenRead()){
++
++
++
++
++
++    return 0;
++}
++
++
++
++
++
+-- 
+1.7.9.5
+
+
+From d5906b89a0857d4de7d375d79cc4a4e775ec3ead Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Fri, 3 May 2013 14:54:35 -0400
+Subject: [PATCH 25/28] //finished the part 4 and prints all statements
+ correctly!
+
+---
+ part4/myfilereader.cpp |  129 ++++++++++++++++++++++++++++++++++++++++++++++++
+ part4/myfilereader.h   |   50 +++++++++++++++++++
+ part4/spell-check.cpp  |   39 ++++++++++-----
+ 3 files changed, 207 insertions(+), 11 deletions(-)
+ create mode 100644 part4/myfilereader.cpp
+ create mode 100644 part4/myfilereader.h
+
+diff --git a/part4/myfilereader.cpp b/part4/myfilereader.cpp
+new file mode 100644
+index 0000000..8d1a376
+--- /dev/null
++++ b/part4/myfilereader.cpp
+@@ -0,0 +1,129 @@
++//#include <stdio.h>
++//#include <stdlib.h>
++#include "myfilereader.h"
++#include <string>
++#include <cstring>
++#include <cstdio>
++#include <vector>
++#include <iostream>
++#include <iomanip>
++#include <sstream>
++
++bool EOFsentinel;
++FILE *fp;
++int totalTokens;
++
++MyFileReader::MyFileReader(const char* fname)
++{
++    EOFsentinel = false;
++    fp = fopen(fname, "r");
++    if(fp == NULL) {	//if the file doesn't exist, pointer will be NULL
++	perror(fname);	// print error and exits the function
++    }
++    lineno = 0;
++    totalTokens = 0;
++}
++
++MyFileReader::~MyFileReader(){
++    //cerr << "File object closed!" << endl;
++    fclose(fp);
++}
++
++int MyFileReader::getLine(char* buffer, int size)
++{  
++    //use fgets to populate ln array
++    // still need to edit some of the if statements to match
++    if(fgets(buffer, size, fp) == NULL ){//EOF case
++	EOFsentinel = true;
++	//cout << "End of file via getLIne" << endl;
++	return -1;
++    }
++    else if(buffer[strlen(buffer)-1] == '\n'){//Newline/line completed case
++	char temp[strlen(buffer)];
++	strcpy (temp, buffer);
++	//cout << "\nOrig buf: " << buffer;
++	temp[strlen(temp)-1]='\0';
++	strcpy (buffer, temp);
++	//cout << "Fixed buf: " << buffer << endl;
++	lineno++;	    
++	//cout << "Newline via getLIne" << endl;
++	return 1;
++    }
++
++    else {//Normal case
++	//cout << ".";
++	return 0;
++    }
++}
++
++void MyFileReader::tokenizeLine(vector<string>& vec){
++    char buf[10];
++    string g = "";
++    bool newLineReached = false;
++    while (!newLineReached){
++	int result = getLine(buf, sizeof(buf));
++	//cout << "\ngetLine succeeded." << endl;
++	if (result == -1){
++	    //g+=buf;
++	    //cout << "  Tokens read:    " << totalTokens << endl;
++	    newLineReached = true;
++	    EOFsentinel = true;	    
++	}
++	else if (result == 0){
++	    g+=buf;
++	    //cout << ".";
++	}
++	else if (result == 1){
++	    g+=buf;
++	    istringstream iss(g);
++	    string isBuffer;
++	    while (iss >> isBuffer){
++		string outString = "";
++		for (int i = 0; i < (int) isBuffer.length(); i++){
++		    if(isalpha(isBuffer[i])){
++			char temp = tolower(isBuffer[i]);
++			outString += temp;
++		    }
++		    //cout << outString << endl;
++		}
++		//cout << "isBuffer: " << isBuffer << endl;
++		//cout << "cleaned str for vec: " << outString << endl;
++		if (outString.length()>0){
++		    vec.push_back(outString);
++		    //cout << vec.back() << endl;
++		    totalTokens++;
++		}
++	    }
++	    if (vec.size() > 0){
++		
++		/*cout << "[" << setw(4) << getCurrentLineNumber() << "]";
++		cout << "{" << setw(2) << vec.size() << " tokens}";
++		for (int i = 0; i < (int) vec.size(); i++){
++		    cout << " " << vec[i];
++		}
++		cout << endl;
++	     */
++	    }
++	    g = "";
++	    newLineReached = true;
++	}
++	else {
++	    cerr << "GETLINE ERROR!" <<endl;
++	}
++    }
++    return;
++}
++
++int MyFileReader::getTokenCount()
++{
++	return totalTokens;
++}
++
++bool MyFileReader::haveAllLinesBeenRead() const
++{
++    return EOFsentinel;
++}
++int MyFileReader::getCurrentLineNumber(){
++   return lineno;
++}
++
+diff --git a/part4/myfilereader.h b/part4/myfilereader.h
+new file mode 100644
+index 0000000..c02e721
+--- /dev/null
++++ b/part4/myfilereader.h
+@@ -0,0 +1,50 @@
++#ifndef __MyFileReader_H__
++#define __MyFileReader_H__
++
++using namespace std;
++
++#include <iostream>
++#include <vector>
++
++class MyFileReader {
++
++    public:
++
++	// default constructor
++	//MyFileReader();
++
++	// constructor
++	MyFileReader(const char* p);
++
++	// destructor
++	~MyFileReader();
++
++	/*
++	// copy constructor 
++	MyFileReader(const MyFileReader& s);
++
++	// assignment operator
++	MyFileReader& operator=(const MyFileReader& s);
++	*/
++	int getTokenCount();
++
++	int getLine(char* buffer, int size);
++
++        int getCurrentLineNumber();
++		
++	void tokenizeLine(vector<string>& vec);
++
++	bool haveAllLinesBeenRead() const;
++
++    private:
++
++	//file pointer
++	FILE *fp; 
++
++	int lineno;
++	bool EOFsentinel;
++	int totalTokens;
++
++};
++
++#endif
+diff --git a/part4/spell-check.cpp b/part4/spell-check.cpp
+index b4f9884..d6a95de 100644
+--- a/part4/spell-check.cpp
++++ b/part4/spell-check.cpp
+@@ -14,7 +14,7 @@ using namespace std;
+ 
+ int main(int argc, char **argv)
+ {
+-    if (argc != 2) {
++    if (argc != 3) {
+ 	cerr << "usage: tokenize <file_name>" << endl;
+ 	exit(1);
+     }
+@@ -38,24 +38,41 @@ int main(int argc, char **argv)
+ 	    t.insert(v[i]);	    
+ 	}
+     }
+-	
++    cout << "  Tokens read:    " << f.getTokenCount() << endl;
+     cout << "  Tree size:      " << t.GetNodeTotal() << endl;
+ 
+     cout << "  Tree height:    " << t.height() << endl;
+ 
+-    cout << "  Balance index:  " << (t.height() +1) / (ceil(log2(t.GetNodeTotal()+1))) << endl;
+-    
+-    cout << "Misspelled tokens in istringstream-test.cpp:" << endl;
++    cout << "  Balance index:  " << (t.height() +1) / (ceil(log2(t.GetNodeTotal()+1))) << endl << endl;
+     
+-    const char *filename = argv[2];
+-    MyFileReader f(filename);
+-
+-    while(!f.haveAllLinesBeenRead()){
+-
+-
++    cout << "Misspelled tokens in istringstream-test.cpp:";
+ 
++    const char *filename2 = argv[2];
++    MyFileReader arg2(filename2);
++	
++    int flag = 0;
++    while(!arg2.haveAllLinesBeenRead()){
+ 
++	vector<string> a;
++	arg2.tokenizeLine(a);
+ 
++	for(int i = 0; i < (int) a.size(); i++){
++	    const BST::Node *node = t.lookup(a[i]);
++	    if(!node){
++		//if not in dictionary print line number and token
++	
++		
++		if(flag == 0)
++		cout << endl << "[" << setw(4) << arg2.getCurrentLineNumber() << "] ";
++		flag = 1;
++		cout << a[i] << " ";
++
++	    }
++	} 
++	flag = 0;;
++    }
++	
++    cout << endl;
+     return 0;
+ }
+ 
+-- 
+1.7.9.5
+
+
+From ab620680a4866f68834abfcafcea2bdcac994d63 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Fri, 3 May 2013 16:54:57 -0400
+Subject: [PATCH 26/28] //only added while loop with random seed and removed
+ for loop
+
+---
+ part5/spell-check.cpp |   95 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 95 insertions(+)
+ create mode 100644 part5/spell-check.cpp
+
+diff --git a/part5/spell-check.cpp b/part5/spell-check.cpp
+new file mode 100644
+index 0000000..8751b4d
+--- /dev/null
++++ b/part5/spell-check.cpp
+@@ -0,0 +1,95 @@
++#include "myfilereader.h"
++#include "bst-2.h"
++#include <iostream>
++#include <sstream>
++#include <cstdlib>
++#include <iomanip>
++#include <string>
++#include <cstring>
++#include <cstdio>
++#include <vector>
++#include <math.h>
++#include <time.h>
++
++using namespace std;
++
++int main(int argc, char **argv)
++{
++    if (argc != 3) {
++	cerr << "usage: tokenize <file_name>" << endl;
++	exit(1);
++    }
++
++    const char *filename = argv[1];
++    MyFileReader f(filename);
++    
++    //constructs an empty tree
++    BST t;
++
++    cout << "Dictionary info:" << endl;
++
++    t.SetNodeTotal(0);
++
++    vector<string> v;
++
++    while(!f.haveAllLinesBeenRead()) //loop until EOF reading, tokenize, and printing
++    {
++	f.tokenizeLine(v);	
++	//cout << v.back() << endl;
++	//for(int i = 0; i < (int) v.size(); i++){
++	  //  t.insert(v[i]);	    
++	//}
++    }
++    while((int) v.size() != 1){
++	srand (time(NULL)); //seeds the pseudo rand generator
++	unsigned int R = rand() % v.size(); //mods by total token list size
++
++	t.insert(v[R]);
++	//if  (R > 0)
++	v.erase(v.begin()+R);
++	
++    }
++    t.insert(v[0]);
++
++    cout << "  Tokens read:    " << f.getTokenCount() << endl;
++    cout << "  Tree size:      " << t.GetNodeTotal() << endl;
++
++    cout << "  Tree height:    " << t.height() << endl;
++
++    cout << "  Balance index:  " << (t.height() +1) / (ceil(log2(t.GetNodeTotal()+1))) << endl << endl;
++    
++    cout << "Misspelled tokens in istringstream-test.cpp:";
++
++    const char *filename2 = argv[2];
++    MyFileReader arg2(filename2);
++	
++    int flag = 0;
++    while(!arg2.haveAllLinesBeenRead()){
++
++	vector<string> a;
++	arg2.tokenizeLine(a);
++
++	for(int i = 0; i < (int) a.size(); i++){
++	    const BST::Node *node = t.lookup(a[i]);
++	    if(!node){
++		//if not in dictionary print line number and token
++	
++		
++		if(flag == 0)
++		cout << endl << "[" << setw(4) << arg2.getCurrentLineNumber() << "] ";
++		flag = 1;
++		cout << a[i] << " ";
++
++	    }
++	} 
++	flag = 0;;
++    }
++	
++    cout << endl;
++    return 0;
++}
++
++
++
++
++
+-- 
+1.7.9.5
+
+
+From 43306532aec720375b30e74b4551e3d9d514ae42 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 4 May 2013 02:42:06 -0400
+Subject: [PATCH 27/28] //just finished writing the parts of d and e for part5
+
+---
+ README.txt             |  329 ++++++++++++++++++++++++++++++++++++++++++++++++
+ part5/myfilereader.cpp |  129 +++++++++++++++++++
+ part5/myfilereader.h   |   50 ++++++++
+ 3 files changed, 508 insertions(+)
+ create mode 100644 part5/myfilereader.cpp
+ create mode 100644 part5/myfilereader.h
+
+diff --git a/README.txt b/README.txt
+index 4fceccf..2be60d2 100644
+--- a/README.txt
++++ b/README.txt
+@@ -49,9 +49,338 @@ Works correctly and matches output. No leaks are found.
+ Part 4:
+ Works correctly and matches output. No leaks are found.
+ 
++glt2109@jerusalem:~/cs3136/lab4/part4$ valgrind --leak-check=yes
++./spell-check words istringstream-test.cpp
++==16139== Memcheck, a memory error detector
++==16139== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
++==16139== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
++==16139== Command: ./spell-check words istringstream-test.cpp
++==16139==
++Dictionary info:
++  Tokens read:    98568
++    Tree size:      85896
++      Tree height:    1885
++        Balance index:  110.941
+ 
++        Misspelled tokens in istringstream-test.cpp:
++        [   1] iostream
++        [   2] sstream
++        [   3] namespace std
++        [   5] int
++        [   7] str stringtwithnspaces
++        [   9] istringstream issstr
++        [  12] iss
++        [  13] cout endl
++        ==16139==
++        ==16139== HEAP SUMMARY:
++        ==16139==     in use at exit: 0 bytes in 0 blocks
++        ==16139==   total heap usage: 942,789 allocs, 942,789 frees,
++        26,914,495 bytes allocated
++        ==16139==
++        ==16139== All heap blocks were freed -- no leaks are possible
++        ==16139==
++        ==16139== For counts of detected and suppressed errors, rerun with:
++        -v
++        ==16139== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2
++        from 2)
++        glt2109@jerusalem:~/cs3136/lab4/part4$ 
+ 
+ ___________________________________
+ Part 5:
+ Works correctly and matches output. No leaks are found.
+ 
++
++part a)
++
++The performance problem in part4 version of the spell-check having a high
++balance index is due the way in which the method adds the tokens to the
++binary tree. Starting at the top of the alphabet, which causes a
++bias because the elements in the tree are basically increasing
++lexigraphically, meaning the right side will be heavily weighted since the
++alphabet characters are basically only increasing. This will basically only
++add right branches. The high balance index is caused by a large difference
++in the symmetry of the tree due to the presorting or method in which
++the values are added to the tree.
++
++part b) 
++
++The maximum balance index will occur if the tree_height = tree_size, this
++means that every element of the tree either became all right children or all
++left children which is a full bias.
++
++max = (tree_size + 1) / ceil(log2(tree_size + 1))
++
++
++part c)
++
++Since the random generating function uses the same seed depending on the
++computer, my solution seeds the srand function with the current time, so the
++generated values are always different. The list of tokens were basically
++already sorted, so I used the random function to pull a sample from the
++token list and added it to the binary tree. This process was repeated until
++the list of tokens was depleted and the tree was completed filled with the
++tokens from the dictionary. The balance index is around ~2.0 and varies each
++execution. I used the hint (provided in the handout) which suggested the
++use of randomness, this would ensure low balance index. I used the srand
++function by looking it up from the C++ library of functions to use to
++generate a random value. Mathematically, this is a psuedorandom number
++generator. This provides a consistent balance index value because of the
++disstribution of the random values. Depending on the modulus of the random
++seed, the values can widely vary such as gaussian distribution, lorentzian
++or other types. This would yield various indexes based on the sample size,
++but in this generated value is log distribution which ensures approximately
++consistent values with each run. The solution was not very creative, but it
++was the natural way I understood this problem from my computational methods
++course. We learned about the biases of distributions and how the psuedo
++random number generated values have a bias and what they are.
++
++Sample run:
++
++ Tokens read:    98568
++   Tree size:      85896
++     Tree height:    40
++       Balance index:  2.41176
++
++       Misspelled tokens in istringstream-test.cpp:
++       [   1] iostream
++       [   2] sstream
++       [   3] namespace std
++       [   5] int
++       [   7] str stringtwithnspaces
++       [   9] istringstream issstr
++       [  12] iss
++       [  13] cout endl
++       ==24307==
++       ==24307== HEAP SUMMARY:
++       ==24307==     in use at exit: 0 bytes in 0 blocks
++       ==24307==   total heap usage: 844,239 allocs, 844,239 frees,
++       28,223,095 bytes allocated
++       ==24307==
++       ==24307== All heap blocks were freed -- no leaks are possible
++       ==24307==
++       ==24307== For counts of detected and suppressed errors, rerun with:
++       -v
++       ==24307== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2 from
++       2)
++
++
++
++
++part d)
++
++First outputs are for part 5 algorithm and the latter are from part4
++algorithm.
++
++
++Small input (istringstream-test.cpp):
++
++
++alem:~/cs3136/lab4/part5$ /usr/bin/time ~/cs3136/lab4/part5/./spell-check
++~/cs3136/lab4/part5/words ~/cs3136/lab4/part5/istringstream-test.cpp
++Dictionary info:
++  Tokens read:    98568
++    Tree size:      85896
++      Tree height:    39
++        Balance index:  2.35294
++        
++27.87user 0.00system 0:27.95elapsed 99%CPU (0avgtext+0avgdata
++        38496maxresident)k
++        0inputs+0outputs (0major+2693minor)pagefaults 0swaps
++
++user time = 6.9675 seconds, elapsed = 6.9875 seconds
++
++
++
++(part 4 algorithm run time)
++glt2109@athens:~/cs3136/lab4/part5$ /usr/bin/time
++~/cs3136/lab4/part4/./spell-check ~/cs3136/lab4/part5/words
++~/cs3136/lab4/part5/istringstream-test.cpp
++Dictionary info:
++  Tokens read:    98568
++    Tree size:      85896
++      Tree height:    1885
++        Balance index:  110.941
++
++        Misspelled tokens in istringstream-test.cpp:
++        [   1] iostream
++        [   2] sstream
++        [   3] namespace std
++        [   5] int
++        [   7] str stringtwithnspaces
++        [   9] istringstream issstr
++        [  12] iss
++        [  13] cout endl
++        5.76user 0.01system 0:05.94elapsed 97%CPU (0avgtext+0avgdata
++        35648maxresident)k
++        2224inputs+0outputs (4major+2283minor)pagefaults 0swaps
++        glt2109@athens:~/cs3136/lab4/part5$
++
++user time = 1.44 seconds,   elapsed time = 1.485 seconds
++
++
++
++
++_________________________________________________________________
++Medium input (bst-2.cpp):
++
++Dictionaralem:~/cs3136/lab4/part5$ /usr/bin/time
++~/cs3136/lab4/part5/./spell-check ~/cs3136/lab4/part5/words
++~/cs3136/lab4/part5/bst-2.cpp
++
++Dictionary info:
++  Tokens read:    98568
++    Tree size:      85896
++      Tree height:    39
++        Balance index:  2.35294
++
++
++
++27.82 user 0.00system 0:27.89elapsed 99%CPU (0avgtext+0avgdata 38496maxresident)kseer 0.00system 0:27.89elapsed 99%CPU (0avgtext+0avgdata 38496maxresident)k
++
++user time = 6.955 seconds , elapsed time = 6.9725 seconds
++
++
++
++
++
++(part 4 algorithm run time)
++~/cs3136/lab4/part4/./spell-check ~/cs3136/lab4/part5/words
++~/cs3136/lab4/part5/bst-2.cpp
++Dictionary info:
++  Tokens read:    98568
++    Tree size:      85896
++      Tree height:    1885
++        Balance index:  110.941
++
++5.72user 0.01system 0:05.81elapsed 98%CPU (0avgtext+0avgdata
++35664maxresident)k
++16inputs+0outputs (0major+2289minor)pagefaults 0swaps
++
++user time = 1.43 seconds,  elapsed time = 1.4525 seconds
++
++
++
++
++___________________________________________________________
++Large input (words file):
++
++
++alem:~/cs3136/lab4/part5$ /usr/bin/time ~/cs3136/lab4/part5/./spell-check
++~/cs3136/lab4/part5/words ~/cs3136/lab4/part5/words
++Dictionary info:
++  Tokens read:    98568
++    Tree size:      85896
++      Tree height:    64
++        Balance index:  3.82353
++
++        28.26user 0.01system 0:28.35elapsed 99%CPU (0avgtext+0avgdata
++        38496maxresident)k
++        0inputs+0outputs (0major+2708minor)pagefaults 0swaps
++
++
++user time = 7.065 seconds , elapsed time = 7.0875 seconds
++
++
++(part 4 algorithm runtime)
++
++glt2109@athens:~/cs3136/lab4/part5$ /usr/bin/time
++~/cs3136/lab4/part4/./spell-check ~/cs3136/lab4/part5/words
++~/cs3136/lab4/part5/words
++Dictionary info:
++  Tokens read:    98568
++    Tree size:      85896
++      Tree height:    1885
++        Balance index:  110.941
++
++10.59user 0.00system 0:10.67elapsed 99%CPU (0avgtext+0avgdata
++35632maxresident)k
++0inputs+0outputs (0major+2301minor)pagefaults 0swaps
++
++user time = 2.6475 seconds,   elapsed time = 2.6675 seconds
++
++
++
++part5 d summary)
++
++The results show that the times for the unbalanced tree are much faster than
++the times for the balanced tree. This happened because in the biased tree it
++is much easier to compare cases while inserting the tokens into the tree.
++The lexigraphic comparison is much faster when most there are fewer choices
++to compare to instead of having to search through a well-balanced tree in
++where to put the particular token. 
++
++
++__________________________________________________________________________
++
++
++part e)
++
++From the outputs from part d, we can see that the algorithm from part4 takes
++more memory usage by 712 maxresident. This makes sense because although the 
++naive part4 is faster for building a tree since it has such a high bias or
++balance index. This means the rate limiting step for time usage is heavily
++weighted for the draw method. In part5, the draw takes more time, but the
++spell-check method is much faster because it can search the tree in log2 time
++like what we discussed in class. The well-balanced tree makes it run most
++efficiently for searching because it can eliminate half of the amount of
++tokens with each depth increment. The sacrifice here is a little bit of
++runtime for memory usage. The random seeding solution I used was not very
++creative, but it was the best way I naturally understood the best way to
++build a balanced tree because any other types of distribution would lead to
++some biased on the tree, and I wasn't sure if it would lead to a value that
++was too high for the balance index. So, I made sure that the balance index
++was seeded by an even distribution probability, which I learned from my
++computational methods course. 
++
++
++_____________________________________________________
++
++
++small input part5 vs. part4
++
++38496 maxresident / 4  vs.  35648 maxresident / 4
++
++9624 maxresident    vs.     8912 maxresident
++
++
++______________________________________________________
++
++
++
++medium input part5 vs. part4
++
++38496 maxresident / 4  vs.  35648 maxresident / 4
++
++
++9624 maxresident    vs.     8912 maxresident
++
++
++____________________________________________________
++
++
++large input part5 vs. part4
++
++
++38496 maxresident / 4  vs.  35648 maxresident / 4
++
++
++9624 maxresident    vs.     8912 maxresident
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+diff --git a/part5/myfilereader.cpp b/part5/myfilereader.cpp
+new file mode 100644
+index 0000000..8d1a376
+--- /dev/null
++++ b/part5/myfilereader.cpp
+@@ -0,0 +1,129 @@
++//#include <stdio.h>
++//#include <stdlib.h>
++#include "myfilereader.h"
++#include <string>
++#include <cstring>
++#include <cstdio>
++#include <vector>
++#include <iostream>
++#include <iomanip>
++#include <sstream>
++
++bool EOFsentinel;
++FILE *fp;
++int totalTokens;
++
++MyFileReader::MyFileReader(const char* fname)
++{
++    EOFsentinel = false;
++    fp = fopen(fname, "r");
++    if(fp == NULL) {	//if the file doesn't exist, pointer will be NULL
++	perror(fname);	// print error and exits the function
++    }
++    lineno = 0;
++    totalTokens = 0;
++}
++
++MyFileReader::~MyFileReader(){
++    //cerr << "File object closed!" << endl;
++    fclose(fp);
++}
++
++int MyFileReader::getLine(char* buffer, int size)
++{  
++    //use fgets to populate ln array
++    // still need to edit some of the if statements to match
++    if(fgets(buffer, size, fp) == NULL ){//EOF case
++	EOFsentinel = true;
++	//cout << "End of file via getLIne" << endl;
++	return -1;
++    }
++    else if(buffer[strlen(buffer)-1] == '\n'){//Newline/line completed case
++	char temp[strlen(buffer)];
++	strcpy (temp, buffer);
++	//cout << "\nOrig buf: " << buffer;
++	temp[strlen(temp)-1]='\0';
++	strcpy (buffer, temp);
++	//cout << "Fixed buf: " << buffer << endl;
++	lineno++;	    
++	//cout << "Newline via getLIne" << endl;
++	return 1;
++    }
++
++    else {//Normal case
++	//cout << ".";
++	return 0;
++    }
++}
++
++void MyFileReader::tokenizeLine(vector<string>& vec){
++    char buf[10];
++    string g = "";
++    bool newLineReached = false;
++    while (!newLineReached){
++	int result = getLine(buf, sizeof(buf));
++	//cout << "\ngetLine succeeded." << endl;
++	if (result == -1){
++	    //g+=buf;
++	    //cout << "  Tokens read:    " << totalTokens << endl;
++	    newLineReached = true;
++	    EOFsentinel = true;	    
++	}
++	else if (result == 0){
++	    g+=buf;
++	    //cout << ".";
++	}
++	else if (result == 1){
++	    g+=buf;
++	    istringstream iss(g);
++	    string isBuffer;
++	    while (iss >> isBuffer){
++		string outString = "";
++		for (int i = 0; i < (int) isBuffer.length(); i++){
++		    if(isalpha(isBuffer[i])){
++			char temp = tolower(isBuffer[i]);
++			outString += temp;
++		    }
++		    //cout << outString << endl;
++		}
++		//cout << "isBuffer: " << isBuffer << endl;
++		//cout << "cleaned str for vec: " << outString << endl;
++		if (outString.length()>0){
++		    vec.push_back(outString);
++		    //cout << vec.back() << endl;
++		    totalTokens++;
++		}
++	    }
++	    if (vec.size() > 0){
++		
++		/*cout << "[" << setw(4) << getCurrentLineNumber() << "]";
++		cout << "{" << setw(2) << vec.size() << " tokens}";
++		for (int i = 0; i < (int) vec.size(); i++){
++		    cout << " " << vec[i];
++		}
++		cout << endl;
++	     */
++	    }
++	    g = "";
++	    newLineReached = true;
++	}
++	else {
++	    cerr << "GETLINE ERROR!" <<endl;
++	}
++    }
++    return;
++}
++
++int MyFileReader::getTokenCount()
++{
++	return totalTokens;
++}
++
++bool MyFileReader::haveAllLinesBeenRead() const
++{
++    return EOFsentinel;
++}
++int MyFileReader::getCurrentLineNumber(){
++   return lineno;
++}
++
+diff --git a/part5/myfilereader.h b/part5/myfilereader.h
+new file mode 100644
+index 0000000..c02e721
+--- /dev/null
++++ b/part5/myfilereader.h
+@@ -0,0 +1,50 @@
++#ifndef __MyFileReader_H__
++#define __MyFileReader_H__
++
++using namespace std;
++
++#include <iostream>
++#include <vector>
++
++class MyFileReader {
++
++    public:
++
++	// default constructor
++	//MyFileReader();
++
++	// constructor
++	MyFileReader(const char* p);
++
++	// destructor
++	~MyFileReader();
++
++	/*
++	// copy constructor 
++	MyFileReader(const MyFileReader& s);
++
++	// assignment operator
++	MyFileReader& operator=(const MyFileReader& s);
++	*/
++	int getTokenCount();
++
++	int getLine(char* buffer, int size);
++
++        int getCurrentLineNumber();
++		
++	void tokenizeLine(vector<string>& vec);
++
++	bool haveAllLinesBeenRead() const;
++
++    private:
++
++	//file pointer
++	FILE *fp; 
++
++	int lineno;
++	bool EOFsentinel;
++	int totalTokens;
++
++};
++
++#endif
+-- 
+1.7.9.5
+
+
+From 5a9a546ec76d7c072ed3056cb9501d3cf35710ba Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 4 May 2013 02:46:22 -0400
+Subject: [PATCH 28/28] // Just finished all git commits and added Makefile
+ from part5
+
+---
+ part5/Makefile |   28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 part5/Makefile
+
+diff --git a/part5/Makefile b/part5/Makefile
+new file mode 100644
+index 0000000..e7b2e6e
+--- /dev/null
++++ b/part5/Makefile
+@@ -0,0 +1,28 @@
++CC  = g++
++CXX = g++ 
++
++INCLUDES =
++
++CFLAGS   = -g -Wall $(INCLUDES)
++CXXFLAGS = -g -Wall $(INCLUDES)
++
++LDFLAGS = -g
++LDLIBS  =
++
++executables = spell-check
++objects = myfilereader.o spell-check.o bst-2.o
++
++.PHONY: default
++default: $(executables)
++
++$(executables): myfilereader.o spell-check.o bst-2.o
++
++$(objects): myfilereader.h bst-2.h
++
++.PHONY: clean
++clean:
++	rm -f *~ *.o a.out core $(objects) $(executables)
++
++.PHONY: all
++all: clean default
++
+-- 
+1.7.9.5
+

@@ -1,0 +1,816 @@
+From 79772eb4a03c3b363196573f8d9fc505d4e8d848 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 17 Apr 2013 01:25:13 -0400
+Subject: [PATCH 1/8] // just started writing some code and started the README
+ file
+
+---
+ README.txt |   74 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ test4.cpp  |   17 +++++++++++++-
+ 2 files changed, 90 insertions(+), 1 deletion(-)
+ create mode 100644 README.txt
+
+diff --git a/README.txt b/README.txt
+new file mode 100644
+index 0000000..e1722de
+--- /dev/null
++++ b/README.txt
+@@ -0,0 +1,74 @@
++Author: Gentry Tran (sexiest asian around town)
++Date: 04/16/12
++Started @ 1:08AM
++
++
++
++Part 1
++
++a)
++
++
++
++BASIC4TRACE: (0xbffff9a0)->MyString(const char *)
++BASIC4TRACE: (0xbffff998)->MyString(const char *)
++-These two lines are called in test4.cpp by the lines  
++MyString s1("one");
++MyString s2("two");
++
++variables s1, and s2 are strings which calls the constructor.
++
++
++
++BASIC4TRACE: (0xbffff9b0)->MyString(const MyString&)
++BASIC4TRACE: (0xbffff9b8)->MyString(const MyString&)
++-These two lines are called in test4.cpp by the line
++MyString s3 = add(s1, s2);
++
++
++BASIC4TRACE: (0xbffff948)->MyString(const char *)
++
++BASIC4TRACE: op+(const MyString&, const MyString&)
++
++BASIC4TRACE: (0xbffff8f8)->MyString()
++
++BASIC4TRACE: (0xbffff958)->MyString(const MyString&)
++
++BASIC4TRACE: (0xbffff8f8)->˜MyString()
++
++BASIC4TRACE: op+(const MyString&, const MyString&)
++
++BASIC4TRACE: (0xbffff8f8)->MyString()
++
++BASIC4TRACE: (0xbffff950)->MyString(const MyString&)
++
++BASIC4TRACE: (0xbffff8f8)->˜MyString()
++
++BASIC4TRACE: (0xbffff9a8)->MyString(const MyString&)
++
++BASIC4TRACE: (0xbffff950)->˜MyString()
++
++BASIC4TRACE: (0xbffff958)->˜MyString()
++
++BASIC4TRACE: (0xbffff948)->˜MyString()
++
++BASIC4TRACE: (0xbffff990)->MyString(const MyString&)
++
++BASIC4TRACE: (0xbffff9a8)->˜MyString()
++
++BASIC4TRACE: (0xbffff9b8)->˜MyString()
++
++BASIC4TRACE: (0xbffff9b0)->˜MyString()
++
++one and two
++
++BASIC4TRACE: (0xbffff990)->˜MyString()
++
++BASIC4TRACE: (0xbffff998)->˜MyString()
++
++BASIC4TRACE: (0xbffff9a0)->˜MyString()
++
++
++
++
++
+diff --git a/test4.cpp b/test4.cpp
+index b0c9e44..ca59879 100644
+--- a/test4.cpp
++++ b/test4.cpp
+@@ -1,6 +1,10 @@
+ #include "mystring.h"
++#include <stdio.h>      /* printf */
++#include <assert.h>
+ 
+-static MyString add(MyString s1, MyString s2)
++
++
++static MyString add(const MyString& s1, const MyString& s2)
+ {
+     MyString temp(" and ");
+     return s1 + temp + s2;
+@@ -8,6 +12,17 @@ static MyString add(MyString s1, MyString s2)
+ 
+ int main()
+ {
++/*    int length = 1;
++    assert(length >= 0&& "length should be greater than zero"); 
++    
++    MyString apple("apple");
++    MyString bat("bat");
++    int result = apple < bat;
++    assert(result == 1 && "Apple comes before bat lexographically."); 
++    result = bat > apple;
++    assert(result == 1 && "Bat comes after apple lexographically.");
++*/
++
+     MyString s1("one");
+     MyString s2("two");
+ 
+-- 
+1.7.9.5
+
+
+From 6171584f95795d0a75f758c0315b40816aef1c68 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 18 Apr 2013 14:18:49 -0400
+Subject: [PATCH 2/8] //finished part a of question 1
+
+---
+ README.txt |   49 ++++++++++++++++++++++++++++++++++++++-----------
+ 1 file changed, 38 insertions(+), 11 deletions(-)
+
+diff --git a/README.txt b/README.txt
+index e1722de..6fb0443 100644
+--- a/README.txt
++++ b/README.txt
+@@ -15,60 +15,87 @@ BASIC4TRACE: (0xbffff998)->MyString(const char *)
+ -These two lines are called in test4.cpp by the lines  
+ MyString s1("one");
+ MyString s2("two");
+-
+-variables s1, and s2 are strings which calls the constructor.
+-
+-
++-variables s1 and s2 are of type MyString, and a char* implicit in the
++format "string" is passed to the specific MyString constructor that takes
++data of the type char*.
+ 
+ BASIC4TRACE: (0xbffff9b0)->MyString(const MyString&)
+ BASIC4TRACE: (0xbffff9b8)->MyString(const MyString&)
+ -These two lines are called in test4.cpp by the line
+-MyString s3 = add(s1, s2);
+-
++MyString s3 = add(s1, s2); a copy constructor is called because the objects
++s1 and s2 are being passed to a new function.
++//-The MyString operator+ is called by add since it needs to
++copy the values of the given parameters s1 and s2.
++//add is not really called yet...main is just getting ready to call it by
++//compying the objects into new objects for modification by add
+ 
+ BASIC4TRACE: (0xbffff948)->MyString(const char *)
++-The add function then creates a temp object of type MyString initialized to
++the string " and ", which is hard-coded in the main function
+ 
+ BASIC4TRACE: op+(const MyString&, const MyString&)
++-Concatenates the " and " + "two" char* (strings) passed into the + operator
++by calling the op+ function
+ 
+ BASIC4TRACE: (0xbffff8f8)->MyString()
++-MyString temp null-initialized from op+ (see line 36 for similar
++but not identical initialization from add)
+ 
+ BASIC4TRACE: (0xbffff958)->MyString(const MyString&)
++-copy constructor makes a temporary object used by the compiler for a return
++value(created at runtime)
+ 
+ BASIC4TRACE: (0xbffff8f8)->˜MyString()
++-destructor deletes MyString temp called by the op+ function
+ 
+ BASIC4TRACE: op+(const MyString&, const MyString&)
++-Concatenates the  "one" + " and two" char* (strings) passed into the +
++operator by calling the op+ function
+ 
+ BASIC4TRACE: (0xbffff8f8)->MyString()
++-MyString temp NULL-initialized from op+ as above
+ 
+ BASIC4TRACE: (0xbffff950)->MyString(const MyString&)
++-copy constructor creates a temporary object used by the compiler as a
++return object (created
++at runtime)
+ 
+ BASIC4TRACE: (0xbffff8f8)->˜MyString()
++-destructor deletes MyString temp called by the op+ function
+ 
+ BASIC4TRACE: (0xbffff9a8)->MyString(const MyString&)
++-Creation of s3 by initialized with a copy constructor from the output of
++the add function
+ 
+ BASIC4TRACE: (0xbffff950)->˜MyString()
++-Destructor called to delete the second temporary object "one and two" which was used by the compiler
++as a return object
+ 
+ BASIC4TRACE: (0xbffff958)->˜MyString()
++-Destructor called to first temporary object " and two"
+ 
+ BASIC4TRACE: (0xbffff948)->˜MyString()
++-Destructor called to delete the temporary object " and "
+ 
+ BASIC4TRACE: (0xbffff990)->MyString(const MyString&)
++-copy constructor called to copy the add output to s3 variable 
+ 
+ BASIC4TRACE: (0xbffff9a8)->˜MyString()
++-destructor called to delete the output string (second temporary object) "one and two" 
++since the information has been copied
+ 
+ BASIC4TRACE: (0xbffff9b8)->˜MyString()
+-
+ BASIC4TRACE: (0xbffff9b0)->˜MyString()
++-destructor called to delete the temporary copies of s1 and s2 char* strings
+ 
+ one and two
++-print executed by line cout << s3 << endl from main()
+ 
+ BASIC4TRACE: (0xbffff990)->˜MyString()
++-destructor called to delete s3 after it has been printed
+ 
+ BASIC4TRACE: (0xbffff998)->˜MyString()
+-
+ BASIC4TRACE: (0xbffff9a0)->˜MyString()
+-
+-
+-
++-destructor deletes s2 and then s1 after the main() is finished
+ 
+ 
+-- 
+1.7.9.5
+
+
+From 4783886703463ce333d6e16bc843c1185432cc33 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 18 Apr 2013 14:21:25 -0400
+Subject: [PATCH 3/8] // just started part b of question two, and modified add
+ function
+
+---
+ mystring.cpp |   28 +++++++++++++++++++++++++++-
+ mystring.h   |    6 ++++++
+ 2 files changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/mystring.cpp b/mystring.cpp
+index 4ab4941..b159260 100644
+--- a/mystring.cpp
++++ b/mystring.cpp
+@@ -1,6 +1,6 @@
+ #include <cstring>
+ #include <cstdio>
+-
++#include <string.h>
+ #include "mystring.h"
+ 
+ // default constructor
+@@ -151,3 +151,29 @@ const char& MyString::operator[](int i) const
+     return ((MyString&)*this)[i];
+ }
+ 
++int operator<(const MyString& s1,const MyString& s2)
++{
++    int result = strcmp(s1.data,s2.data);
++    if(result < 0){
++	return 1;
++    }else
++	return 0;
++}
++
++int operator>(const MyString& s1, const MyString& s2)
++{
++    int result = strcmp(s1.data,s2.data);
++    if(result > 0 ){
++	return 1;
++    }else
++	return 0;
++}
++
++
++
++
++
++
++
++
++
+diff --git a/mystring.h b/mystring.h
+index 43f66cf..8f0d4b2 100644
+--- a/mystring.h
++++ b/mystring.h
+@@ -30,6 +30,12 @@ class MyString {
+ 	// operator+
+ 	friend MyString operator+(const MyString& s1, const MyString& s2);
+ 
++	// operator<
++	friend int operator<(const MyString& s1,const MyString& s2);
++
++	// operator>
++	friend int operator>(const MyString& s1, const MyString& s2);	
++	
+ 	// put-to operator
+ 	friend ostream& operator<<(ostream& os, const MyString& s);
+ 
+-- 
+1.7.9.5
+
+
+From 0462f9ca47e31c5c8fd7be5a40aadc43418ce8e0 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 18 Apr 2013 15:02:14 -0400
+Subject: [PATCH 4/8] // just finished partb in question 1
+
+---
+ README.txt |   64 +++++++++++++++++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 59 insertions(+), 5 deletions(-)
+
+diff --git a/README.txt b/README.txt
+index 6fb0443..5b97eab 100644
+--- a/README.txt
++++ b/README.txt
+@@ -4,9 +4,9 @@ Started @ 1:08AM
+ 
+ 
+ 
+-Part 1
++Question 1
+ 
+-a)
++part a)
+ 
+ 
+ 
+@@ -43,7 +43,7 @@ but not identical initialization from add)
+ 
+ BASIC4TRACE: (0xbffff958)->MyString(const MyString&)
+ -copy constructor makes a temporary object used by the compiler for a return
+-value(created at runtime)
++value "and two"
+ 
+ BASIC4TRACE: (0xbffff8f8)->˜MyString()
+ -destructor deletes MyString temp called by the op+ function
+@@ -57,8 +57,7 @@ BASIC4TRACE: (0xbffff8f8)->MyString()
+ 
+ BASIC4TRACE: (0xbffff950)->MyString(const MyString&)
+ -copy constructor creates a temporary object used by the compiler as a
+-return object (created
+-at runtime)
++return object "one and two"
+ 
+ BASIC4TRACE: (0xbffff8f8)->˜MyString()
+ -destructor deletes MyString temp called by the op+ function
+@@ -99,3 +98,58 @@ BASIC4TRACE: (0xbffff9a0)->˜MyString()
+ -destructor deletes s2 and then s1 after the main() is finished
+ 
+ 
++
++
++
++part b)
++
++
++
++glt2109@algiers:~/cs3136/lab3$ ./test4
++BASIC4TRACE: (0x7fff1355ac30)->MyString(const char *)
++BASIC4TRACE: (0x7fff1355ac40)->MyString(const char *)
++-The two lines which call the copy constructor for s1 and s2 are skipped. Instead of
++passing objects as parameters, it passes addresses or references.
++
++BASIC4TRACE: (0x7fff1355abe0)->MyString(const char *)
++BASIC4TRACE: op+(const MyString&, const MyString&)
++BASIC4TRACE: (0x7fff1355ab90)->MyString()
++BASIC4TRACE: (0x7fff1355abf0)->MyString(const MyString&)
++BASIC4TRACE: (0x7fff1355ab90)->~MyString()
++BASIC4TRACE: op+(const MyString&, const MyString&)
++BASIC4TRACE: (0x7fff1355ab90)->MyString()
++BASIC4TRACE: (0x7fff1355ac00)->MyString(const MyString&)
++BASIC4TRACE: (0x7fff1355ab90)->~MyString()
++BASIC4TRACE: (0x7fff1355ac60)->MyString(const MyString&)
++BASIC4TRACE: (0x7fff1355ac00)->~MyString()
++BASIC4TRACE: (0x7fff1355abf0)->~MyString()
++BASIC4TRACE: (0x7fff1355abe0)->~MyString()
++BASIC4TRACE: (0x7fff1355ac50)->MyString(const MyString&)
++BASIC4TRACE: (0x7fff1355ac60)->~MyString()
++-The two lines that used to be here were for the destructor to delete the copies
++of the s1 and s2 temporary objects. They are no longer needed because the
++temporary objects (copies) of s1 and s2 were not created.
++
++one and two
++BASIC4TRACE: (0x7fff1355ac50)->~MyString()
++BASIC4TRACE: (0x7fff1355ac40)->~MyString()
++BASIC4TRACE: (0x7fff1355ac30)->~MyString()
++
++
++
++
++part c)
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+-- 
+1.7.9.5
+
+
+From 616c8283f97f34b1015e475f1bea970115855c49 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 18 Apr 2013 15:54:52 -0400
+Subject: [PATCH 5/8] // finished part c for question 1.
+
+---
+ README.txt |   48 +++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 45 insertions(+), 3 deletions(-)
+
+diff --git a/README.txt b/README.txt
+index 5b97eab..e30c98b 100644
+--- a/README.txt
++++ b/README.txt
+@@ -140,15 +140,57 @@ BASIC4TRACE: (0x7fff1355ac30)->~MyString()
+ 
+ part c)
+ 
++Before:
+ 
++glt2109@algiers:~/cs3136/lab3$ ./test4
++BASIC4TRACE: (0x7fff235e34b0)->MyString(const char *)
++BASIC4TRACE: (0x7fff235e34c0)->MyString(const char *)
++BASIC4TRACE: (0x7fff235e3460)->MyString(const char *)
++BASIC4TRACE: op+(const MyString&, const MyString&)
++BASIC4TRACE: (0x7fff235e3410)->MyString()
++BASIC4TRACE: (0x7fff235e3470)->MyString(const MyString&)
++BASIC4TRACE: (0x7fff235e3410)->~MyString()
++BASIC4TRACE: op+(const MyString&, const MyString&)
++BASIC4TRACE: (0x7fff235e3410)->MyString()
++-Two lines here are skiped. The compiler creates a temporary object for the return
++value and the calling of the destructor to delete the MyString temp.
++BASIC4TRACE: (0x7fff235e3480)->MyString(const MyString&)
++BASIC4TRACE: (0x7fff235e3410)->~MyString()
++BASIC4TRACE: (0x7fff235e34e0)->MyString(const MyString&)
++BASIC4TRACE: (0x7fff235e3480)->~MyString()
++BASIC4TRACE: (0x7fff235e3470)->~MyString()
++BASIC4TRACE: (0x7fff235e3460)->~MyString()
++BASIC4TRACE: (0x7fff235e34d0)->MyString(const MyString&)
++BASIC4TRACE: (0x7fff235e34e0)->~MyString()
++one and two
++BASIC4TRACE: (0x7fff235e34d0)->~MyString()
++BASIC4TRACE: (0x7fff235e34c0)->~MyString()
++BASIC4TRACE: (0x7fff235e34b0)->~MyString()
+ 
+ 
++After:
+ 
++glt2109@algiers:~/cs3136/lab3$ ./test4
++BASIC4TRACE: (0x7fffb6bb0110)->MyString(const char *)
++BASIC4TRACE: (0x7fffb6bb0120)->MyString(const char *)
++BASIC4TRACE: (0x7fffb6bb00d0)->MyString(const char *)
++BASIC4TRACE: op+(const MyString&, const MyString&)
++BASIC4TRACE: (0x7fffb6bb00e0)->MyString()
++-These two lines where the compiler creates the temporary object
++BASIC4TRACE: op+(const MyString&, const MyString&)
++BASIC4TRACE: (0x7fffb6bb0130)->MyString()
++-
++BASIC4TRACE: (0x7fffb6bb00e0)->~MyString()
++BASIC4TRACE: (0x7fffb6bb00d0)->~MyString()
++one and two
++BASIC4TRACE: (0x7fffb6bb0130)->~MyString()
++BASIC4TRACE: (0x7fffb6bb0120)->~MyString()
++BASIC4TRACE: (0x7fffb6bb0110)->~MyString()
+ 
+ 
+-
+-
+-
++This flag allows us to disable the creating of a temporary object, which is
++only used to initialize another object of the same type. G++ calls the copy
++constructor for all cases. 
+ 
+ 
+ 
+-- 
+1.7.9.5
+
+
+From a2e8ac2ff6b70e0109c285f2a8c1b1343fc51e45 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 18 Apr 2013 17:32:55 -0400
+Subject: [PATCH 6/8] // finished the < , > , and == operators
+
+---
+ mystring.cpp |   26 +++++++++++++++++++-------
+ test4.cpp    |   20 ++++++++++++++------
+ 2 files changed, 33 insertions(+), 13 deletions(-)
+
+diff --git a/mystring.cpp b/mystring.cpp
+index b159260..d465d73 100644
+--- a/mystring.cpp
++++ b/mystring.cpp
+@@ -169,11 +169,23 @@ int operator>(const MyString& s1, const MyString& s2)
+ 	return 0;
+ }
+ 
++int operator==(const MyString& s1, const MyString& s2)
++{
++    int result = strcmp(s1.data, s2.data);
++    if(result == 0){
++	return 1;
++    }else
++	return 0;
++}
++/*
++int operator !=(const MyString& s1, const MyString& s2)
++{
++    int result = strcmp(s1.data, s2.data);
++    if(result != 0){
++	return 1;
++    }else
++	return 0;
++}
++*/
+ 
+-
+-
+-
+-
+-
+-
+-
++//int operator <=(const MyString& s1, const MyString& s2)
+diff --git a/test4.cpp b/test4.cpp
+index ca59879..37163a9 100644
+--- a/test4.cpp
++++ b/test4.cpp
+@@ -3,7 +3,6 @@
+ #include <assert.h>
+ 
+ 
+-
+ static MyString add(const MyString& s1, const MyString& s2)
+ {
+     MyString temp(" and ");
+@@ -12,22 +11,31 @@ static MyString add(const MyString& s1, const MyString& s2)
+ 
+ int main()
+ {
+-/*    int length = 1;
+-    assert(length >= 0&& "length should be greater than zero"); 
++    int length = 1;
++    assert(length >= 0 && "length should be greater than zero"); 
+     
+     MyString apple("apple");
+-    MyString bat("bat");
++    MyString bpple("bpple");
++/*
+     int result = apple < bat;
+     assert(result == 1 && "Apple comes before bat lexographically."); 
++    
+     result = bat > apple;
+-    assert(result == 1 && "Bat comes after apple lexographically.");
++    assert(result == 1  && "Bat comes after apple lexographically.");
+ */
+ 
++    int result = apple == bpple;
++    assert(result == 1 && "apple == bpple"); 
++
++	
++    /*
+     MyString s1("one");
+     MyString s2("two");
+ 
+     MyString s3 = add(s1, s2);
+ 
+     cout << s3 << endl;
+-    return 0;
++    */
++    
++return 0;    
+ }
+-- 
+1.7.9.5
+
+
+From 4ff04ddda23fe7e61af4e1c90b3d80396d7b9e67 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 18 Apr 2013 22:26:59 -0400
+Subject: [PATCH 7/8] // just started part b of question 2
+
+---
+ mystring.cpp |   24 ++++++++++++++++++++----
+ test4.cpp    |    5 ++++-
+ 2 files changed, 24 insertions(+), 5 deletions(-)
+
+diff --git a/mystring.cpp b/mystring.cpp
+index d465d73..0016b95 100644
+--- a/mystring.cpp
++++ b/mystring.cpp
+@@ -158,6 +158,7 @@ int operator<(const MyString& s1,const MyString& s2)
+ 	return 1;
+     }else
+ 	return 0;
++    //return (strcmp(s1.data, s2.data) < 0 ? 1 : 0;
+ }
+ 
+ int operator>(const MyString& s1, const MyString& s2)
+@@ -177,15 +178,30 @@ int operator==(const MyString& s1, const MyString& s2)
+     }else
+ 	return 0;
+ }
+-/*
++
+ int operator !=(const MyString& s1, const MyString& s2)
+ {
+-    int result = strcmp(s1.data, s2.data);
++   /* int result = strcmp(s1.data, s2.data);
+     if(result != 0){
+ 	return 1;
+     }else
++\
++*/
++
++return !(s1==s2);
++}
++
++int operator <=(const MyString& s1, const MyString& s2)
++{	
++   return ((s1 < s2) || (s1 == s2));
++}
++
++int operator >=(const MyString& s1, const MyString& s2)
++{
++    if((s1 > s2) || (s1 == s2))
++	return 1;
++    else
+ 	return 0;
+ }
+-*/
+ 
+-//int operator <=(const MyString& s1, const MyString& s2)
++int operator +=(const MyString& s1, const MyString& s2)
+diff --git a/test4.cpp b/test4.cpp
+index 37163a9..a5e0320 100644
+--- a/test4.cpp
++++ b/test4.cpp
+@@ -24,11 +24,13 @@ int main()
+     assert(result == 1  && "Bat comes after apple lexographically.");
+ */
+ 
+-    int result = apple == bpple;
++    int result = apple <= bpple;
+     assert(result == 1 && "apple == bpple"); 
++    
+ 
+ 	
+     /*
++
+     MyString s1("one");
+     MyString s2("two");
+ 
+@@ -39,3 +41,4 @@ int main()
+     
+ return 0;    
+ }
++
+-- 
+1.7.9.5
+
+
+From 34240dc74e5618826b657d91444f066826996d5d Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Thu, 18 Apr 2013 23:46:58 -0400
+Subject: [PATCH 8/8] // almost done with question 2 partb
+
+---
+ Makefile     |    6 +++---
+ mystring.cpp |   30 ++++++++++++++++++++++++++++--
+ test4.cpp    |   27 +++++++++++++++++++++------
+ 3 files changed, 52 insertions(+), 11 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 48455fd..e94a539 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,9 +1,9 @@
+ CC  = g++
+-CXX = g++ -O0 -fno-elide-constructors
++CXX = g++ -O0  -fno-elide-constructors
+ 
+ # Comment out one of the following 2 lines to enable/disable BASIC4TRACE.
+-INCLUDES = -DBASIC4TRACE
+-#INCLUDES =
++#INCLUDES = -DBASIC4TRACE
++INCLUDES =
+ 
+ CFLAGS   = -g -Wall $(INCLUDES)
+ CXXFLAGS = -g -Wall $(INCLUDES)
+diff --git a/mystring.cpp b/mystring.cpp
+index 0016b95..b20e704 100644
+--- a/mystring.cpp
++++ b/mystring.cpp
+@@ -96,7 +96,13 @@ MyString operator+(const MyString& s1, const MyString& s2)
+ 	    "BASIC4TRACE: op+(const MyString&, const MyString&)\n");
+ #endif
+ 
+-    MyString temp;
++   
++    MyString tmp;
++    tmp += s1;
++    tmp += s2;
++    return tmp;
++/*
++MyString temp;
+ 
+     delete[] temp.data;
+ 
+@@ -107,6 +113,7 @@ MyString operator+(const MyString& s1, const MyString& s2)
+     strcat(temp.data, s2.data);
+ 
+     return temp;
++*/
+ }
+ 
+ // put-to operator
+@@ -204,4 +211,23 @@ int operator >=(const MyString& s1, const MyString& s2)
+ 	return 0;
+ }
+ 
+-int operator +=(const MyString& s1, const MyString& s2)
++void operator +=(MyString& s1, const  MyString& s2)
++{
++
++    MyString temp;
++
++    delete[] temp.data;
++
++    temp.len = s1.len + s2.len;
++
++    temp.data = new char[temp.len+1];
++    strcpy(temp.data, s1.data);
++    strcat(temp.data, s2.data);
++
++    s1 = temp;
++}
++
++
++
++
++
+diff --git a/test4.cpp b/test4.cpp
+index a5e0320..6d0ff46 100644
+--- a/test4.cpp
++++ b/test4.cpp
+@@ -26,19 +26,34 @@ int main()
+ 
+     int result = apple <= bpple;
+     assert(result == 1 && "apple == bpple"); 
+-    
+-
+ 	
+-    /*
++    MyString s("hello");
++    s += " world";
++    s += " yyyyy";
++    cout << s << endl;
++    
+ 
+     MyString s1("one");
+     MyString s2("two");
+ 
+-    MyString s3 = add(s1, s2);
+-
++    MyString s3;
++    s3  +=   "jkkjk" + s1 += "hi";
+     cout << s3 << endl;
+-    */
+     
++
++    // test op+=() and op+()
++/*
++    MyString sp(" ");
++    MyString period(".");
++    MyString str;
++
++    str += "This" + sp + "should" + sp
++	+= "work" + sp + "without"
++	+= sp + "any" + sp + "memory"
++	+= sp + "leak"
++	+= period;
++
++    cout << str << endl; */
+ return 0;    
+ }
+ 
+-- 
+1.7.9.5
+

@@ -1,0 +1,4497 @@
+From 6f05ec6f0c9bd97f55782307c741770cd63ffbc1 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Mon, 25 Mar 2013 13:35:10 -0400
+Subject: [PATCH 01/53] // Just started writing the programs for test1.c
+
+---
+ part1/test1.c |   18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+ create mode 100644 part1/list1.c
+ create mode 100644 part1/test1.c
+
+diff --git a/part1/list1.c b/part1/list1.c
+new file mode 100644
+index 0000000..e69de29
+diff --git a/part1/test1.c b/part1/test1.c
+new file mode 100644
+index 0000000..9521f50
+--- /dev/null
++++ b/part1/test1.c
+@@ -0,0 +1,18 @@
++
++/* By:Gentry Tran
++ * starting part 1 for lab 2
++ *
++ * Started: 03-24-13
++ *
++ * */
++
++main()
++{
++
++
++
++
++
++
++
++}    
+-- 
+1.7.9.5
+
+
+From 4c9484f8d6586e13efb1862f2a4cc8063c2d656b Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Mon, 25 Mar 2013 13:37:03 -0400
+Subject: [PATCH 02/53] // Started creating the Makefile
+
+---
+ part1/Makefile |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
+ create mode 100644 part1/Makefile
+
+diff --git a/part1/Makefile b/part1/Makefile
+new file mode 100644
+index 0000000..9b9de46
+--- /dev/null
++++ b/part1/Makefile
+@@ -0,0 +1,10 @@
++C  = gcc
++CXX = g++
++INCLUDES =
++CFLAGS   = -g -Wall $(INCLUDES)
++CXXFLAGS = -g -Wall $(INCLUDES)
++LDFLAGS = -g
++LDLIBS =
++	      
++EXECUTABLE = test1
++
+-- 
+1.7.9.5
+
+
+From 77c7905c77a72e6ab64e8151607e019f5ec98b6d Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Mon, 25 Mar 2013 15:08:56 -0400
+Subject: [PATCH 03/53] // Added print and stirlen functions
+
+---
+ part1/list1.c |   54 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ part1/test1.c |    8 +++++++-
+ 2 files changed, 61 insertions(+), 1 deletion(-)
+
+diff --git a/part1/list1.c b/part1/list1.c
+index e69de29..eb0cfc7 100644
+--- a/part1/list1.c
++++ b/part1/list1.c
+@@ -0,0 +1,54 @@
++
++#include <stdio.h>
++
++#include <string.h>
++
++#include <list1.h>
++
++int
++char
++struct Node *prepend(struct Node *list, char *s);
++{
++    struct Node *node = (struct Node *)malloc(sizeof(struct Node));
++    if (node == NULL)
++	return NULL;
++	
++    node->data = x;
++    node->next = list;
++
++    return node;
++
++}
++
++void print(struct Node *list)
++{
++    struct Node *node = list;
++    while (node) 
++    {
++	printf("-> %s", node->data);
++	node = node->next;
++    }
++    printf("\n:);
++
++}
++
++
++
++/* strlen: returns the length of the string s */
++
++int strlen(char *s)
++{
++    int n;
++
++    for (n = 0; *s != '/0' || n <= 5; s++)
++	n++;
++
++    return n;
++
++}
++
++
++    
++
++
++
+diff --git a/part1/test1.c b/part1/test1.c
+index 9521f50..9ef7b53 100644
+--- a/part1/test1.c
++++ b/part1/test1.c
+@@ -6,7 +6,11 @@
+  *
+  * */
+ 
+-main()
++#include <stdio.h>
++#include <string.h>
++
++
++main(arg:
+ {
+ 
+ 
+@@ -14,5 +18,7 @@ main()
+ 
+ 
+ 
++while(*argv)
++    printf("%s\n:, *argv++);
+ 
+ }    
+-- 
+1.7.9.5
+
+
+From e9a67d736e0b8b11b122532bba3f80dd04885e67 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 26 Mar 2013 00:36:02 -0400
+Subject: [PATCH 04/53] // created Makefile, started implementation of .c
+ files
+
+---
+ part1/Makefile |   22 ++++++++++++++++++++--
+ part1/list1.c  |   19 +++++++++++++++----
+ part1/test1.c  |   19 +++++++++++++++----
+ 3 files changed, 50 insertions(+), 10 deletions(-)
+
+diff --git a/part1/Makefile b/part1/Makefile
+index 9b9de46..8114f5b 100644
+--- a/part1/Makefile
++++ b/part1/Makefile
+@@ -1,10 +1,28 @@
+ C  = gcc
+ CXX = g++
++
++
+ INCLUDES =
++
++
+ CFLAGS   = -g -Wall $(INCLUDES)
+ CXXFLAGS = -g -Wall $(INCLUDES)
++
+ LDFLAGS = -g
++
+ LDLIBS =
+-	      
+-EXECUTABLE = test1
+ 
++
++test1: test1.o list1.o 
++
++test1.o: test1.c list1.h
++
++list1.o: list1.c list1.h
++
++
++.PHONY: clean
++clean:
++	rm -f *.o a.out core test1
++
++.PHONY: all
++all: clean test1
+diff --git a/part1/list1.c b/part1/list1.c
+index eb0cfc7..2aab812 100644
+--- a/part1/list1.c
++++ b/part1/list1.c
+@@ -1,25 +1,36 @@
+ 
++
++
++
+ #include <stdio.h>
+ 
+ #include <string.h>
+ 
+ #include <list1.h>
+ 
++
++
+ int
+ char
+ struct Node *prepend(struct Node *list, char *s);
+ {
+-    struct Node *node = (struct Node *)malloc(sizeof(struct Node));
+-    if (node == NULL)
+-	return NULL;
+-	
++
++struct Node *node = (struct Node *)malloc(sizeof(struct Node));
++
+     node->data = x;
+     node->next = list;
+ 
++	
++    strlen(s) <= 5 //ifelse statment to check
++
++	strncpy(t,s, 5) // only takes first five values
++
+     return node;
+ 
+ }
+ 
++
++
+ void print(struct Node *list)
+ {
+     struct Node *node = list;
+diff --git a/part1/test1.c b/part1/test1.c
+index 9ef7b53..6fc307b 100644
+--- a/part1/test1.c
++++ b/part1/test1.c
+@@ -10,15 +10,26 @@
+ #include <string.h>
+ 
+ 
+-main(arg:
+-{
++main(int argc, char *argv[])
++{ 
++    struct Node *node = (struct Node *)malloc(sizeof(struct Node));
+ 
++	for (i = 0; i < argc-1; i++)
++	{
++		    
++	    
++	    prepend();
++	    deallocate_list()
+ 
+ 
++	
++	printf("\n");
+ 
+ 
+ 
+-while(*argv)
+-    printf("%s\n:, *argv++);
++
++
++
++return 0;
+ 
+ }    
+-- 
+1.7.9.5
+
+
+From 4432397d839ae65b7bfaf6edec031f0099f5c9d9 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 30 Mar 2013 17:08:22 -0400
+Subject: [PATCH 05/53] // Just started working on list1.c and list1.c again
+
+---
+ part1/list1.c |    2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/part1/list1.c b/part1/list1.c
+index 2aab812..4083d07 100644
+--- a/part1/list1.c
++++ b/part1/list1.c
+@@ -10,8 +10,6 @@
+ 
+ 
+ 
+-int
+-char
+ struct Node *prepend(struct Node *list, char *s);
+ {
+ 
+-- 
+1.7.9.5
+
+
+From f31812314e6b7a768d34676f763bd13da76ff594 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 30 Mar 2013 18:50:16 -0400
+Subject: [PATCH 06/53] // Just wrote the prepend() function
+
+---
+ part1/list1.c |   31 ++++++++++++++++++++-----------
+ 1 file changed, 20 insertions(+), 11 deletions(-)
+
+diff --git a/part1/list1.c b/part1/list1.c
+index 4083d07..8a13a65 100644
+--- a/part1/list1.c
++++ b/part1/list1.c
+@@ -10,20 +10,29 @@
+ 
+ 
+ 
+-struct Node *prepend(struct Node *list, char *s);
++struct Node* prepend(struct Node* list, char* s);
+ {
+-
+-struct Node *node = (struct Node *)malloc(sizeof(struct Node));
+-
+-    node->data = x;
+-    node->next = list;
+-
++	struct Node* newNode = malloc(sizeof(struct Node));
++	if (newNode == NULL)
++    		return NULL;
++	if(s == NULL)
++	    char empt_st[] = "";
++		s = empt_str;
++
++	if(strlen(s) <= 5);
++	{	
++	    newNode->len = strlen(s);
++	    strcpy(newNode->data),s);	
++	}else
++	{    
++	    newNode->len = 5;
++	    strncpy(newNode->data, s, 5);
++	}
+ 	
+-    strlen(s) <= 5 //ifelse statment to check
+-
+-	strncpy(t,s, 5) // only takes first five values
++	// newNode is now the head of the list
++	newNode->next = list;
+ 
+-    return node;
++    return newNode;
+ 
+ }
+ 
+-- 
+1.7.9.5
+
+
+From 4d9a71d1fc7c519133057dc4d5964141ca55fd68 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 30 Mar 2013 22:13:05 -0400
+Subject: [PATCH 07/53] // finished all the functions, just need to finish
+ deallocate
+
+---
+ part1/list1.c |   74 ++++++++++++++++++++++-------------
+ part1/test1.c |  120 +++++++++++++++++++++++++++++++++++++++++++++++++++------
+ 2 files changed, 157 insertions(+), 37 deletions(-)
+
+diff --git a/part1/list1.c b/part1/list1.c
+index 8a13a65..939b443 100644
+--- a/part1/list1.c
++++ b/part1/list1.c
+@@ -1,28 +1,35 @@
+-
++/*
++ * Author: Gentry Tran
++ * Date: 03/29/13
++ *
++ * This is the file where all of the functions
++ * are implemented
++ *
++ * */
+ 
+ 
+ 
+ #include <stdio.h>
+-
+ #include <string.h>
+-
+-#include <list1.h>
++#include <stdlib.h>
++#include "list1.h"
+ 
+ 
+-
+-struct Node* prepend(struct Node* list, char* s);
++struct Node* prepend(struct Node* list, char* s)
+ {
+ 	struct Node* newNode = malloc(sizeof(struct Node));
++	
+ 	if (newNode == NULL)
+     		return NULL;
+ 	if(s == NULL)
+-	    char empt_st[] = "";
++	{    char empt_str[] = "";
+ 		s = empt_str;
++	}
+ 
+-	if(strlen(s) <= 5);
++	if(strlen(s) <= 5)
+ 	{	
+ 	    newNode->len = strlen(s);
+-	    strcpy(newNode->data),s);	
++	    strcpy(newNode->data,s);	
+ 	}else
+ 	{    
+ 	    newNode->len = 5;
+@@ -36,37 +43,52 @@ struct Node* prepend(struct Node* list, char* s);
+ 
+ }
+ 
+-
+-
+-void print(struct Node *list)
++void print(struct Node* list)
+ {
+-    struct Node *node = list;
+-    while (node) 
++    struct Node* current = list;
++   
++    while (current != NULL) 
+     {
+-	printf("-> %s", node->data);
+-	node = node->next;
++	printf("->[%u:%s]", current->len, current->data);
++	current = current->next;
+     }
+-    printf("\n:);
++    printf("\n:");
+ 
+ }
+ 
++void strcpy_upto(char* t, const char *s, int n)
++{
++    if( strlen(s) > n ) 
++	
++    {
++//	t = (char*)malloc(n+1*sizeof(char));
++	strncpy(t, s, n);
++
++	printf("t: %s s: %s  n: %i", t, s, n);
++    	printf("\n");
++	
++	}
++    else
++    {
++	strcpy(t, s);
++	
++	printf("t: %s s: %s  n: %i", t, s, n);
++	       	printf("\n");
++
++}
+ 
++}
+ 
+-/* strlen: returns the length of the string s */
+ 
+-int strlen(char *s)
+-{
+-    int n;
+ 
+-    for (n = 0; *s != '/0' || n <= 5; s++)
+-	n++;
+ 
+-    return n;
+ 
+-}
+ 
+ 
+-    
+ 
+ 
++void deallocate_list(struct Node* list)
++{
++	
++}
+ 
+diff --git a/part1/test1.c b/part1/test1.c
+index 6fc307b..049b7a7 100644
+--- a/part1/test1.c
++++ b/part1/test1.c
+@@ -8,28 +8,126 @@
+ 
+ #include <stdio.h>
+ #include <string.h>
++#include <stdlib.h>
++#include "list1.h"
++
++
++struct Node* BuildOneTwoThree() {
++
++    struct Node* head = NULL;
++    struct Node* second = NULL;
++    struct Node* third = NULL;
++
++    char base_str_1[]= "a";
++    char base_str_2[]= "ab";
++    char base_str_3[]= "abc";
++
++	
++    head = malloc(sizeof(struct Node));
++    second = malloc(sizeof(struct Node));
++    third = malloc(sizeof(struct Node));
++    strcpy(head->data, base_str_1);
++    head->len = (short)strlen(base_str_1);
++    head->next = second;
++    strcpy(second->data, base_str_2);
++    second->len = (short)strlen(base_str_2);
++    second->next = third;
++    strcpy(third->data, base_str_3);
++    third->len = (short)strlen(base_str_3);
++    third->next = NULL;
++	return head;
++
++}
+ 
+ 
+-main(int argc, char *argv[])
+-{ 
+-    struct Node *node = (struct Node *)malloc(sizeof(struct Node));
+ 
+-	for (i = 0; i < argc-1; i++)
+-	{
+-		    
+-	    
+-	    prepend();
+-	    deallocate_list()
+ 
+ 
++int main(int argc, char* argv[])
++{
++    
++ char base_case_str[]= "Gentry was here";
++
++ char *cpy_str = (char*)malloc(strlen(base_case_str) + 1 * sizeof(char));
++
++ if(cpy_str == NULL) {
++     fprintf(stderr, "could not allocate memory for our ctrcpy.\n"); 
++     return -1;
++ }
++ 
++ 	size_t lenth = strlen(base_case_str);
++	strcpy(cpy_str,base_case_str);
++	fprintf(stdout, "Base_case_str	: -%s-\n", base_case_str);
++	fprintf(stdout, "Copied str  : -%s-\n", cpy_str);
++	//free(cpy_str);
++	char* test= (char*)malloc(3 + 1 * sizeof(char));
++	char* test2= (char*)malloc(2 + 1 * sizeof(char));
+ 	
+-	printf("\n");
++strcpy_upto(test, cpy_str, 30);
++	printf("test: %s \n", test);
++
++	strcpy_upto(test2, cpy_str, 20);
++
++
++
++
++
++
++	printf("test: %s \n", test2);
++
+ 
++struct Node* list = BuildOneTwoThree();
+ 
++print(list);
+ 
+ 
++list = prepend(list, "apple");
+ 
++print(list);
+ 
++
++list = prepend(list, "banana");
++ 
++      print(list);
++
++ list = prepend(list, "");
++ 
++ print(list);
++     
++
++
++
++
++
++
++ /*   int i;
++    for(i = 0; i < argc; i++)
++    {
++	printf("%s", argv[i]);
++    	printf("\n");
++    }
++*/
+ return 0;
++}
++
++
++
++/*
++    struct Node* data;
++    for(i = 0; (i < argc-1); i++)
++    {
++    	prepend() 
++	
++	print(list)
++
++	for (i = 0; i < argc-1; i++)
++	{
++	    deallocate_list()
++	}
++
++	return 0;
++
++}
++*/
++
+ 
+-}    
+-- 
+1.7.9.5
+
+
+From 62287766390b551234f0a683624bf362b4c3b7d5 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 30 Mar 2013 23:49:37 -0400
+Subject: [PATCH 08/53] // finished writing all of part 1, now testing
+ valgrind
+
+---
+ part1/list1.c |   24 ++++++++++--------------
+ part1/test1.c |   10 ++--------
+ 2 files changed, 12 insertions(+), 22 deletions(-)
+
+diff --git a/part1/list1.c b/part1/list1.c
+index 939b443..c689598 100644
+--- a/part1/list1.c
++++ b/part1/list1.c
+@@ -71,24 +71,20 @@ void strcpy_upto(char* t, const char *s, int n)
+     else
+     {
+ 	strcpy(t, s);
+-	
+ 	printf("t: %s s: %s  n: %i", t, s, n);
+-	       	printf("\n");
+-
+-}
++	printf("\n");
++    }
+ 
+ }
+ 
+-
+-
+-
+-
+-
+-
+-
+-
+ void deallocate_list(struct Node* list)
+ {
+-	
++   struct Node* tmp = list;
++
++   while(list != NULL)
++   {	
++	tmp = list;
++	list = list->next;
++	free(tmp);	
++   }
+ }
+-
+diff --git a/part1/test1.c b/part1/test1.c
+index 049b7a7..926ab0e 100644
+--- a/part1/test1.c
++++ b/part1/test1.c
+@@ -68,11 +68,6 @@ strcpy_upto(test, cpy_str, 30);
+ 
+ 	strcpy_upto(test2, cpy_str, 20);
+ 
+-
+-
+-
+-
+-
+ 	printf("test: %s \n", test2);
+ 
+ 
+@@ -93,11 +88,10 @@ list = prepend(list, "banana");
+  list = prepend(list, "");
+  
+  print(list);
+-     
+-
+-
+ 
++deallocate_list(list);
+ 
++print(list);
+ 
+ 
+  /*   int i;
+-- 
+1.7.9.5
+
+
+From 97777f7adfd2845e2ab356e2b77cf52fe8f3a28a Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sat, 30 Mar 2013 23:54:57 -0400
+Subject: [PATCH 09/53] // Just finished part 1 to test valgrind and Makefile
+
+---
+ part1/Makefile |    6 +++---
+ part1/list1.c  |    2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/part1/Makefile b/part1/Makefile
+index 8114f5b..0a309f9 100644
+--- a/part1/Makefile
++++ b/part1/Makefile
+@@ -12,13 +12,13 @@ LDFLAGS = -g
+ 
+ LDLIBS =
+ 
+-
+-test1: test1.o list1.o 
++test1: test1.o list1.o
+ 
+ test1.o: test1.c list1.h
+ 
+-list1.o: list1.c list1.h
++list1.o: list1.c list1.h 
+ 
++default: test1
+ 
+ .PHONY: clean
+ clean:
+diff --git a/part1/list1.c b/part1/list1.c
+index c689598..22e74ae 100644
+--- a/part1/list1.c
++++ b/part1/list1.c
+@@ -79,7 +79,7 @@ void strcpy_upto(char* t, const char *s, int n)
+ 
+ void deallocate_list(struct Node* list)
+ {
+-   struct Node* tmp = list;
++   struct Node* tmp;
+ 
+    while(list != NULL)
+    {	
+-- 
+1.7.9.5
+
+
+From eddcc284d2f2383c1e3bb873643f8b000e9bca65 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 31 Mar 2013 01:37:36 -0400
+Subject: [PATCH 10/53] // just finished main implementation, now valgrind fix
+
+---
+ part1/list1.c |    2 --
+ part1/test1.c |   31 +++++++++++++++++++------------
+ 2 files changed, 19 insertions(+), 14 deletions(-)
+
+diff --git a/part1/list1.c b/part1/list1.c
+index 22e74ae..4af0160 100644
+--- a/part1/list1.c
++++ b/part1/list1.c
+@@ -59,11 +59,9 @@ void print(struct Node* list)
+ void strcpy_upto(char* t, const char *s, int n)
+ {
+     if( strlen(s) > n ) 
+-	
+     {
+ //	t = (char*)malloc(n+1*sizeof(char));
+ 	strncpy(t, s, n);
+-
+ 	printf("t: %s s: %s  n: %i", t, s, n);
+     	printf("\n");
+ 	
+diff --git a/part1/test1.c b/part1/test1.c
+index 926ab0e..ac106f0 100644
+--- a/part1/test1.c
++++ b/part1/test1.c
+@@ -11,8 +11,10 @@
+ #include <stdlib.h>
+ #include "list1.h"
+ 
++/*
++testing stuff
+ 
+-struct Node* BuildOneTwoThree() {
++   struct Node* BuildOneTwoThree() {
+ 
+     struct Node* head = NULL;
+     struct Node* second = NULL;
+@@ -41,20 +43,28 @@ struct Node* BuildOneTwoThree() {
+ 
+ 
+ 
++*/
++
+ 
+ 
+ int main(int argc, char* argv[])
+ {
+-    
+- char base_case_str[]= "Gentry was here";
++    struct Node* list = NULL;
++    int i;
+ 
+- char *cpy_str = (char*)malloc(strlen(base_case_str) + 1 * sizeof(char));
++    for(i = 1; i <argc; i++)
++    {
++	list =  prepend(list, argv[i]);
++    }
++    
++    print(list);
++    
++    return 0;
+ 
+- if(cpy_str == NULL) {
+-     fprintf(stderr, "could not allocate memory for our ctrcpy.\n"); 
+-     return -1;
+  }
+- 
++
++
++/*
+  	size_t lenth = strlen(base_case_str);
+ 	strcpy(cpy_str,base_case_str);
+ 	fprintf(stdout, "Base_case_str	: -%s-\n", base_case_str);
+@@ -94,16 +104,13 @@ deallocate_list(list);
+ print(list);
+ 
+ 
+- /*   int i;
++*   int i;
+     for(i = 0; i < argc; i++)
+     {
+ 	printf("%s", argv[i]);
+     	printf("\n");
+     }
+ */
+-return 0;
+-}
+-
+ 
+ 
+ /*
+-- 
+1.7.9.5
+
+
+From 2c9f0768a296a9e202ae6e576b2c37a719bc0f2c Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 31 Mar 2013 01:41:17 -0400
+Subject: [PATCH 11/53] // VALGRIND RUNSS CLLEEAANNN BOIIIIII
+ YEASHFDHSLDFKJHSDF:LK POOP!
+
+---
+ part1/test1.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/part1/test1.c b/part1/test1.c
+index ac106f0..be2b4a5 100644
+--- a/part1/test1.c
++++ b/part1/test1.c
+@@ -58,7 +58,8 @@ int main(int argc, char* argv[])
+     }
+     
+     print(list);
+-    
++
++    deallocate_list(list);
+     return 0;
+ 
+  }
+-- 
+1.7.9.5
+
+
+From e95c05773ebaecf1ac0ab6a2e79bf409c7e71de1 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 31 Mar 2013 03:41:24 -0400
+Subject: [PATCH 12/53] // just started on part two
+
+---
+ part2/Makefile |   26 ++++++++++++++++++++++++++
+ part2/list2.h  |   22 ++++++++++++++++++++++
+ part2/test2.c  |   19 +++++++++++++++++++
+ 3 files changed, 67 insertions(+)
+ create mode 100644 part2/Makefile
+ create mode 100644 part2/list2.c
+ create mode 100644 part2/list2.h
+ create mode 100644 part2/test2.c
+
+diff --git a/part2/Makefile b/part2/Makefile
+new file mode 100644
+index 0000000..9226405
+--- /dev/null
++++ b/part2/Makefile
+@@ -0,0 +1,26 @@
++C  = gcc
++CXX = g++
++
++
++INCLUDES =
++
++
++CFLAGS   = -g -Wall $(INCLUDES)
++CXXFLAGS = -g -Wall $(INCLUDES)
++
++LDFLAGS = -g
++
++LDLIBS =
++
++test2: test2.o list1.o list2.o
++
++test2.o: test2.c list1.c list1.h list2.h
++
++list2.o: test2.c list2.c list1.h list2.h 
++
++.PHONY: clean
++clean:
++	rm -f *.o a.out core test2
++
++.PHONY: all
++all: clean test2
+diff --git a/part2/list2.c b/part2/list2.c
+new file mode 100644
+index 0000000..e69de29
+diff --git a/part2/list2.h b/part2/list2.h
+new file mode 100644
+index 0000000..c8ce965
+--- /dev/null
++++ b/part2/list2.h
+@@ -0,0 +1,22 @@
++
++
++
++/* 
++ *
++ *
++ * Author: Gentry Tran
++ *
++ * 
++ * Started: 03/31/13 @ 2:07am
++ *
++ *
++ * list2.h
++ *
++ * */
++
++
++#include <list1.h>
++
++
++
++
+diff --git a/part2/test2.c b/part2/test2.c
+new file mode 100644
+index 0000000..a2650f2
+--- /dev/null
++++ b/part2/test2.c
+@@ -0,0 +1,19 @@
++
++
++
++/*
++ *
++ * Author: Gentry Tran
++ *
++ * Started: 03/31/13 @ 1:46am
++ *
++ * Test2.c file
++ *
++ * */
++
++
++
++
++i/
++
++i/
+-- 
+1.7.9.5
+
+
+From b6c49c6b83786633ed370801454b42bde7c54aca Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 31 Mar 2013 04:33:08 -0400
+Subject: [PATCH 13/53] // got the first line to work of part 2, now I go to
+ sleep.
+
+---
+ part2/list2.c |   27 ++++++++++++++++++++++++
+ part2/list2.h |    4 +++-
+ part2/test2.c |   64 +++++++++++++++++++++++++++++++++++++++++++++++----------
+ 3 files changed, 83 insertions(+), 12 deletions(-)
+
+diff --git a/part2/list2.c b/part2/list2.c
+index e69de29..2adfb37 100644
+--- a/part2/list2.c
++++ b/part2/list2.c
+@@ -0,0 +1,27 @@
++
++
++
++/*
++ *
++ * Author: Gentry Tran
++ *
++ * Started: 03/31/13 @ 2:05am
++ *
++ *
++ * list2.c file
++ *
++ *
++ * */
++
++/*
++selection sort (int (*compare data)(function point, function point)
++	    void (swap data) (function ptr, f(x)ptr)
++	    struct Node *list 
++	    compare data (list, list -> next)
++
++
++
++
++	    */
++
++
+diff --git a/part2/list2.h b/part2/list2.h
+index c8ce965..d1756e8 100644
+--- a/part2/list2.h
++++ b/part2/list2.h
+@@ -15,7 +15,9 @@
+  * */
+ 
+ 
+-#include <list1.h>
++#include "list1.h"
++
++
+ 
+ 
+ 
+diff --git a/part2/test2.c b/part2/test2.c
+index a2650f2..cbd26f3 100644
+--- a/part2/test2.c
++++ b/part2/test2.c
+@@ -1,19 +1,61 @@
++/*
++*
++* Author: Gentry Tran
++*
++* Started: 03/31/13 @ 1:46am
++*
++* Test2.c file
++*
++* */
++
++
++#include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
++#include "list1.h"
+ 
+ 
+ 
+-/*
+- *
+- * Author: Gentry Tran
+- *
+- * Started: 03/31/13 @ 1:46am
+- *
+- * Test2.c file
+- *
+- * */
+ 
+ 
++int main(int argc, char* argv[])
++{
++    struct Node* list = NULL;
++    int i;
++    printf("prepended: ");
+ 
++    for(i = 1; i <argc; i++)
++    {
++	list =  prepend(list, argv[i]);
++    }
++    
++    print(list);
++    //deallocate_list(list);
+ 
+-i/
++    return 0;
+ 
+-i/
++
++}
++
++/*
++selection_sort(char A[], int n) 
++{
++   // initializes values
++			      
++      int i, j, small, temp;
++    
++      for (i = 0; i < n - 1; i++) {
++     
++      // find minimum
++     small = i;
++      for(j = i + 1; j < n; j++)
++	      if (A[j] < A[small]) 
++	 small = j;
++      // swap
++      temp = A[small]; 
++      A[small] = A[i]; 
++      A[i] = temp; 
++    }
++  }
++
++*/
+-- 
+1.7.9.5
+
+
+From 6a1e967209cfae880b42dfa7b9440594627965d8 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Mon, 1 Apr 2013 18:02:12 -0400
+Subject: [PATCH 14/53] //using the test file, I created understanding of
+ problem.
+
+---
+ part2/test2.c |   45 +++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 43 insertions(+), 2 deletions(-)
+
+diff --git a/part2/test2.c b/part2/test2.c
+index cbd26f3..b047551 100644
+--- a/part2/test2.c
++++ b/part2/test2.c
+@@ -32,12 +32,36 @@ int main(int argc, char* argv[])
+     print(list);
+     //deallocate_list(list);
+ 
+-    return 0;
++/*
++    struct Node* s1 = NULL;
++    struct Node* s2 = NULL;
++    
++    void swapData(s1, s2)
++	{ 
++	    s1->argv[1] = argv[1]; // s1 saves data	    
++	    printf("%s \n", s1);
++	}
+ 
++*/
+ 
+-}
+ 
+ /*
++    
++    char str1[] = "garden";
++
++    if (strcmp(str1, "apple") == 0)
++    	printf("Not equal, \n");
++    else 
++    if(strcmp(str1, "apple") <= 0)
++    	printf("less than \n");
++    else
++	printf("greater than, \n");	
++
++//	print("%d \n", strcmp);
++*/
++
++   
++/*
+ selection_sort(char A[], int n) 
+ {
+    // initializes values
+@@ -59,3 +83,20 @@ selection_sort(char A[], int n)
+   }
+ 
+ */
++   	
++
++struct Node* small;
++struct Node* head = list;
++struct Node* n;
++	
++// int compareData(struct Node*, struct Node*)
++
++n = head;
++n = head->next;
++
++if(strcmp(small->data, n->data) > 0)
++    printf("Yes.");
++
++return 0;
++
++}
+-- 
+1.7.9.5
+
+
+From 5b8d00359408db7cde0e2cfd9629b38d8e7c33fe Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Mon, 1 Apr 2013 18:03:15 -0400
+Subject: [PATCH 15/53] // just added the three function prototypes
+
+---
+ part2/list2.h |    4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/part2/list2.h b/part2/list2.h
+index d1756e8..211bfa0 100644
+--- a/part2/list2.h
++++ b/part2/list2.h
+@@ -17,7 +17,11 @@
+ 
+ #include "list1.h"
+ 
++selectionsort(struct Node* list);
+ 
++void swapData(struct Node*, struct Node*);
++
++int compareData(struct Node*, struct Node*);
+ 
+ 
+ 
+-- 
+1.7.9.5
+
+
+From df95d159eaa6cf624d04fdf35b3a6913e6c5512e Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Mon, 1 Apr 2013 21:58:04 -0400
+Subject: [PATCH 16/53] // Almost done with part two now.
+
+---
+ part2/list2.c |   50 +++++++++++++++++++++++++++++++++-----
+ part2/test2.c |   75 +++++++--------------------------------------------------
+ 2 files changed, 53 insertions(+), 72 deletions(-)
+
+diff --git a/part2/list2.c b/part2/list2.c
+index 2adfb37..63f4d4e 100644
+--- a/part2/list2.c
++++ b/part2/list2.c
+@@ -12,16 +12,54 @@
+  *
+  *
+  * */
++    
++void selectionsort (struct Node* list)
++{
++    struct Node* small;
++    struct Node* head = list;
++    struct Node* n;
++    
++    f1 = &compareData;
++    f2 = &swapData;
++
++if (list != NULL)
++{   head = list;
++    small = head; //points to top of list
++    n = head; //points to top of list
++    }
++else
++    return NULL;
++
++while(head->next != NULL)
++{   
++
++n = head->next; //points to next node
++
++    if((f1)(small->data)(n->next) > 0)
++	small = n;
++    else
++	n = n->next;
++
++}
+ 
+-/*
+-selection sort (int (*compare data)(function point, function point)
+-	    void (swap data) (function ptr, f(x)ptr)
+-	    struct Node *list 
+-	    compare data (list, list -> next)
+ 
++int compareData (struct Node*, struct Node*)
++{
++return int strcmp(small->data, n->data);
++}
+ 
++void swapData(struct Node*, struct Node*)
++{
++    char* datatmp;
++    datatmp = small->data;
++    small->data = n->data;
++    n->data = datatmp;
+ 
++    short* lentmp;
++    lentmp = small->data;
++    small->data = n->data;
++    n->data = lentmp;
+ 
+-	    */
++}
+ 
+ 
+diff --git a/part2/test2.c b/part2/test2.c
+index b047551..3713236 100644
+--- a/part2/test2.c
++++ b/part2/test2.c
+@@ -14,9 +14,8 @@
+ #include <stdlib.h>
+ #include "list1.h"
+ 
+-
+-
+-
++int (*f1)(struct Node*, struct Node*);
++void (*f2)(struct Node*, struct Node*);
+ 
+ int main(int argc, char* argv[])
+ {
+@@ -28,74 +27,18 @@ int main(int argc, char* argv[])
+     {
+ 	list =  prepend(list, argv[i]);
+     }
+-    
+     print(list);
+-    //deallocate_list(list);
+-
+-/*
+-    struct Node* s1 = NULL;
+-    struct Node* s2 = NULL;
+-    
+-    void swapData(s1, s2)
+-	{ 
+-	    s1->argv[1] = argv[1]; // s1 saves data	    
+-	    printf("%s \n", s1);
+-	}
+-
+-*/
+-
+-
+-/*
+     
+-    char str1[] = "garden";
+-
+-    if (strcmp(str1, "apple") == 0)
+-    	printf("Not equal, \n");
+-    else 
+-    if(strcmp(str1, "apple") <= 0)
+-    	printf("less than \n");
+-    else
+-	printf("greater than, \n");	
+-
+-//	print("%d \n", strcmp);
+-*/
+-
+-   
+-/*
+-selection_sort(char A[], int n) 
+-{
+-   // initializes values
+-			      
+-      int i, j, small, temp;
++    list = selectionsort(list, compareData, swapData);
++    print("   sorted: ");
++    print(list);
+     
+-      for (i = 0; i < n - 1; i++) {
+-     
+-      // find minimum
+-     small = i;
+-      for(j = i + 1; j < n; j++)
+-	      if (A[j] < A[small]) 
+-	 small = j;
+-      // swap
+-      temp = A[small]; 
+-      A[small] = A[i]; 
+-      A[i] = temp; 
+-    }
+-  }
+-
+-*/
+-   	
++    // list = reverse(list);
++    // printf(" reversed: ");
++    // print(list);
+ 
+-struct Node* small;
+-struct Node* head = list;
+-struct Node* n;
+-	
+-// int compareData(struct Node*, struct Node*)
+-
+-n = head;
+-n = head->next;
++    //deallocate_list(list);
+ 
+-if(strcmp(small->data, n->data) > 0)
+-    printf("Yes.");
+ 
+ return 0;
+ 
+-- 
+1.7.9.5
+
+
+From e1965d503e6c60c1dafcc5a61a3f384db6fd9500 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Mon, 1 Apr 2013 22:17:07 -0400
+Subject: [PATCH 17/53] // Finished the list2.h file, and almost done with
+ list2.c
+
+---
+ part2/list2.c |   12 +++++-------
+ part2/list2.h |    7 ++++---
+ 2 files changed, 9 insertions(+), 10 deletions(-)
+
+diff --git a/part2/list2.c b/part2/list2.c
+index 63f4d4e..2783a48 100644
+--- a/part2/list2.c
++++ b/part2/list2.c
+@@ -13,17 +13,15 @@
+  *
+  * */
+     
+-void selectionsort (struct Node* list)
++void selectionsort (struct Node* list, int(*compareData)(struct Node*, struct Node*), void(*swapData)(struct Node*, struct Node*))
+ {
+     struct Node* small;
+     struct Node* head = list;
+     struct Node* n;
+-    
+-    f1 = &compareData;
+-    f2 = &swapData;
+ 
+ if (list != NULL)
+-{   head = list;
++{   
++    head = list;
+     small = head; //points to top of list
+     n = head; //points to top of list
+     }
+@@ -43,9 +41,9 @@ n = head->next; //points to next node
+ }
+ 
+ 
+-int compareData (struct Node*, struct Node*)
++int compareData (struct Node* small, struct Node* n)
+ {
+-return int strcmp(small->data, n->data);
++return strcmp(small->data, n->data);
+ }
+ 
+ void swapData(struct Node*, struct Node*)
+diff --git a/part2/list2.h b/part2/list2.h
+index 211bfa0..7dbb8e8 100644
+--- a/part2/list2.h
++++ b/part2/list2.h
+@@ -13,11 +13,12 @@
+  * list2.h
+  *
+  * */
+-
++#ifndef _LIST@_H_
++#define _LIST@_H_
+ 
+ #include "list1.h"
+ 
+-selectionsort(struct Node* list);
++struct Node* selectionsort(struct Node *list, int (*compareData)(struct Node*, struct Node *), void (*swapData)(struct Node*, struct Node *));
+ 
+ void swapData(struct Node*, struct Node*);
+ 
+@@ -25,4 +26,4 @@ int compareData(struct Node*, struct Node*);
+ 
+ 
+ 
+-
++#endif
+-- 
+1.7.9.5
+
+
+From 8e4de13cf04643ab0d56de62b936bfabdc82afa0 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 00:33:57 -0400
+Subject: [PATCH 18/53] //finished writing program, fix bug: infinite loop.
+
+---
+ part2/list2.c |   57 ++++++++++++++++++++++++++++++++++-----------------------
+ part2/list2.h |    9 +++------
+ part2/test2.c |    7 +++----
+ 3 files changed, 40 insertions(+), 33 deletions(-)
+
+diff --git a/part2/list2.c b/part2/list2.c
+index 2783a48..a426327 100644
+--- a/part2/list2.c
++++ b/part2/list2.c
+@@ -12,52 +12,63 @@
+  *
+  *
+  * */
+-    
+-void selectionsort (struct Node* list, int(*compareData)(struct Node*, struct Node*), void(*swapData)(struct Node*, struct Node*))
++   
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include "list1.h"
++#include "list2.h"
++
++struct Node* selectionsort(struct Node* list, int(*f1)(struct Node*, struct Node*), void(*f2)(struct Node*, struct Node*))
+ {
+     struct Node* small;
+-    struct Node* head = list;
++    struct Node* head;
+     struct Node* n;
+-
+-if (list != NULL)
++head = list;
++if ( list != NULL)
+ {   
+-    head = list;
+     small = head; //points to top of list
+     n = head; //points to top of list
+     }
+-else
+-    return NULL;
+-
+ while(head->next != NULL)
+ {   
+ 
+ n = head->next; //points to next node
+ 
+-    if((f1)(small->data)(n->next) > 0)
++    if( ((*f1)(small, n) > 0))
+ 	small = n;
+     else
++    {
+ 	n = n->next;
++    }
+ 
++    (*f2)(small, n);
++}
++return NULL;
+ }
+ 
+-
+-int compareData (struct Node* small, struct Node* n)
++int compareData (struct Node* ss1, struct Node* ss2)
+ {
+-return strcmp(small->data, n->data);
++return strcmp(ss1->data, ss2->data);
+ }
+ 
+-void swapData(struct Node*, struct Node*)
++void swapData (struct Node* ss1, struct Node* ss2)
+ {
+-    char* datatmp;
+-    datatmp = small->data;
+-    small->data = n->data;
+-    n->data = datatmp;
++struct Node* tmp = (struct Node *)(malloc(sizeof(struct Node)));
+ 
+-    short* lentmp;
+-    lentmp = small->data;
+-    small->data = n->data;
+-    n->data = lentmp;
++//Malloc a new node ss3
++    //char* datatmp;
++    //datatmp = small->data;
++    //small->data = n->data;
++    //n->data = datatmp;
++    strcpy_upto(tmp->data, ss1->data, ss1->len);
++    strcpy_upto(ss1->data, ss2->data, ss2->len);
++    strcpy_upto(ss2->data, tmp->data, tmp->len);
++    free(tmp);
+ 
++    //short* lentmp;
++    //lentmp = small->len;
++    //small->len = n->len;
++    //n->len = lentmp;
+ }
+ 
+-
+diff --git a/part2/list2.h b/part2/list2.h
+index 7dbb8e8..b352150 100644
+--- a/part2/list2.h
++++ b/part2/list2.h
+@@ -13,17 +13,14 @@
+  * list2.h
+  *
+  * */
+-#ifndef _LIST@_H_
+-#define _LIST@_H_
++#ifndef _LIST2_H_
++#define _LIST2_H_
+ 
+-#include "list1.h"
+ 
+ struct Node* selectionsort(struct Node *list, int (*compareData)(struct Node*, struct Node *), void (*swapData)(struct Node*, struct Node *));
+ 
+ void swapData(struct Node*, struct Node*);
+ 
+-int compareData(struct Node*, struct Node*);
+-
+-
++ int compareData(struct Node*, struct Node*);
+ 
+ #endif
+diff --git a/part2/test2.c b/part2/test2.c
+index 3713236..4120aa8 100644
+--- a/part2/test2.c
++++ b/part2/test2.c
+@@ -13,9 +13,8 @@
+ #include <string.h>
+ #include <stdlib.h>
+ #include "list1.h"
++#include "list2.h"
+ 
+-int (*f1)(struct Node*, struct Node*);
+-void (*f2)(struct Node*, struct Node*);
+ 
+ int main(int argc, char* argv[])
+ {
+@@ -29,8 +28,8 @@ int main(int argc, char* argv[])
+     }
+     print(list);
+     
+-    list = selectionsort(list, compareData, swapData);
+-    print("   sorted: ");
++    list = selectionsort(list, &compareData,  &swapData);
++    printf("   sorted: ");
+     print(list);
+     
+     // list = reverse(list);
+-- 
+1.7.9.5
+
+
+From 1a752c0a5661633ffbc0e31a108931ddc48b4732 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 10:51:45 -0400
+Subject: [PATCH 19/53] // almost done debugging code
+
+---
+ part2/list2.c |   81 +++++++++++++++++++++++++++++++++++++++------------------
+ part2/list2.h |    4 ++-
+ 2 files changed, 59 insertions(+), 26 deletions(-)
+
+diff --git a/part2/list2.c b/part2/list2.c
+index a426327..4b1c2c2 100644
+--- a/part2/list2.c
++++ b/part2/list2.c
+@@ -21,30 +21,50 @@
+ 
+ struct Node* selectionsort(struct Node* list, int(*f1)(struct Node*, struct Node*), void(*f2)(struct Node*, struct Node*))
+ {
++
++    struct Node* temph = malloc(sizeof(struct Node*));
++    struct Node* temps,*t;
+     struct Node* small;
+-    struct Node* head;
++    struct Node* head = NULL;
+     struct Node* n;
+ head = list;
+-if ( list != NULL)
+-{   
+-    small = head; //points to top of list
+-    n = head; //points to top of list
++small = list;
++if ( list == NULL)
++{  
++    return NULL;
++    //small = head; //points to top of list
++    //n = head->next; //points to top of list
+     }
+-while(head->next != NULL)
++do
+ {   
+-
+-n = head->next; //points to next node
+-
+-    if( ((*f1)(small, n) > 0))
+-	small = n;
+-    else
++    small = head;
++    temps = small;
++    printf("2nd-while \n");
++    
++    n = head; //points to next node
++while(n->next != NULL)
++{
++    if( ((*f1)(small, n->next) > 0))
+     {
+-	n = n->next;
++	small = n->next;
++        temps = n;
+     }
+-
+-    (*f2)(small, n);
++	n = n->next;
+ }
+-return NULL;
++   
++   if(temph->next == NULL)
++      t = head;
++
++     temph->next = head;
++     (*f2)(temps, temph);
++     temph = temps;
++    head = small;
++
++    printf("\n");	
++print(list);
++   
++}while(n != NULL);
++  return  t;
+ }
+ 
+ int compareData (struct Node* ss1, struct Node* ss2)
+@@ -54,17 +74,28 @@ return strcmp(ss1->data, ss2->data);
+ 
+ void swapData (struct Node* ss1, struct Node* ss2)
+ {
+-struct Node* tmp = (struct Node *)(malloc(sizeof(struct Node)));
++//struct Node* tmp = (struct Node *)(malloc(sizeof(struct Node)));
+ 
+ //Malloc a new node ss3
+-    //char* datatmp;
+-    //datatmp = small->data;
+-    //small->data = n->data;
+-    //n->data = datatmp;
+-    strcpy_upto(tmp->data, ss1->data, ss1->len);
+-    strcpy_upto(ss1->data, ss2->data, ss2->len);
+-    strcpy_upto(ss2->data, tmp->data, tmp->len);
+-    free(tmp);
++    struct Node* tmp2;
++    tmp2 = ss1->next->next; //this is small->next
++    ss1->next->next = ss2->next->next; //head->next
++    ss2->next->next = tmp2;
++
++    //fix prev pointers
++  //  struct Node* tmp2;
++    tmp2 = ss1->next;
++    ss1->next = ss2->next;
++    ss2->next = tmp2;
++   // strcpy_upto(tmp->data, ss1->data, ss1->len);
++   // strcpy_upto(ss1->data, ss2->data, ss2->len);
++    //strcpy_upto(ss2->data, tmp->data, tmp->len);
++    
++    
++    //strcpy(tmp->data, ss1->data);
++    //strcpy(ss1->data, ss2->data);
++    //strcpy(ss2->data, tmp->data);
++  
+ 
+     //short* lentmp;
+     //lentmp = small->len;
+diff --git a/part2/list2.h b/part2/list2.h
+index b352150..62dd741 100644
+--- a/part2/list2.h
++++ b/part2/list2.h
+@@ -21,6 +21,8 @@ struct Node* selectionsort(struct Node *list, int (*compareData)(struct Node*, s
+ 
+ void swapData(struct Node*, struct Node*);
+ 
+- int compareData(struct Node*, struct Node*);
++int compareData(struct Node*, struct Node*);
++
++struct Node* reverse(struct Node* list);
+ 
+ #endif
+-- 
+1.7.9.5
+
+
+From 9a8cc500e776afc3f2b30e74f8e309f05db6a9b7 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 11:00:35 -0400
+Subject: [PATCH 20/53] // changed iteration so the loop was not infinite
+
+---
+ part2/list2.c |   60 ++++++++++++++++++++-------------------------------------
+ 1 file changed, 21 insertions(+), 39 deletions(-)
+
+diff --git a/part2/list2.c b/part2/list2.c
+index 4b1c2c2..62c4133 100644
+--- a/part2/list2.c
++++ b/part2/list2.c
+@@ -21,51 +21,33 @@
+ 
+ struct Node* selectionsort(struct Node* list, int(*f1)(struct Node*, struct Node*), void(*f2)(struct Node*, struct Node*))
+ {
+-
+-    struct Node* temph = malloc(sizeof(struct Node*));
+-    struct Node* temps,*t;
++	
++    //set small to first element
++    struct Node* head;
+     struct Node* small;
+-    struct Node* head = NULL;
+-    struct Node* n;
+-head = list;
+-small = list;
+-if ( list == NULL)
+-{  
+-    return NULL;
+-    //small = head; //points to top of list
+-    //n = head->next; //points to top of list
+-    }
+-do
+-{   
+-    small = head;
+-    temps = small;
+-    printf("2nd-while \n");
+-    
+-    n = head; //points to next node
+-while(n->next != NULL)
+-{
+-    if( ((*f1)(small, n->next) > 0))
++    struct Node* front;
++    head = NULL;
++
++    for(head = list; head != NULL; head = head->next)
+     {
+-	small = n->next;
+-        temps = n;
++	small = head;
++
++	// find the smallest value alphabetically
++	for(front = small); front != NULL; front = front->)
++	{
++	    if((*f1)(small, front) > 0 )
++		small = front;
++	}
++
++	//place data in correct position
++	(*f2)(small, head);
++
+     }
+-	n = n->next;
++
++return list;
+ }
+-   
+-   if(temph->next == NULL)
+-      t = head;
+ 
+-     temph->next = head;
+-     (*f2)(temps, temph);
+-     temph = temps;
+-    head = small;
+ 
+-    printf("\n");	
+-print(list);
+-   
+-}while(n != NULL);
+-  return  t;
+-}
+ 
+ int compareData (struct Node* ss1, struct Node* ss2)
+ {
+-- 
+1.7.9.5
+
+
+From 7ebd82cd0b9e42f1f8208af6782bde98279ddbdf Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 12:04:42 -0400
+Subject: [PATCH 21/53] // finally got the program to work correctly for sort
+
+---
+ part2/list1.c |   88 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ part2/list2.c |   47 +++++++++++-------------------
+ part2/test2.c |   12 +++++---
+ 3 files changed, 112 insertions(+), 35 deletions(-)
+ create mode 100644 part2/list1.c
+
+diff --git a/part2/list1.c b/part2/list1.c
+new file mode 100644
+index 0000000..4546f5f
+--- /dev/null
++++ b/part2/list1.c
+@@ -0,0 +1,88 @@
++/*
++ * Author: Gentry Tran
++ * Date: 03/29/13
++ *
++ * This is the file where all of the functions
++ * are implemented
++ *
++ * */
++
++
++
++#include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
++#include "list1.h"
++
++
++struct Node* prepend(struct Node* list, char* s)
++{
++	struct Node* newNode = malloc(sizeof(struct Node));
++	
++	if (newNode == NULL)
++    		return NULL;
++	if(s == NULL)
++	{    char empt_str[] = "";
++		s = empt_str;
++	}
++
++	if(strlen(s) <= 5)
++	{	
++	    newNode->len = strlen(s);
++	    strcpy(newNode->data,s);	
++	}else
++	{    
++	    newNode->len = 5;
++	    strncpy(newNode->data, s, 5);
++	}
++	
++	// newNode is now the head of the list
++	newNode->next = list;
++
++    return newNode;
++
++}
++
++void print(struct Node* list)
++{
++    struct Node* current = list;
++   
++    while (current != NULL) 
++    {
++	printf("->[%u:%s]", current->len, current->data);
++	current = current->next;
++    }
++    //printf("\n:");
++
++}
++
++void strcpy_upto(char* t, const char *s, int n)
++{
++    if( strlen(s) > n ) 
++    {
++//	t = (char*)malloc(n+1*sizeof(char));
++	strncpy(t, s, n);
++	//printf("t: %s s: %s  n: %i", t, s, n);
++    	//printf("\n");
++	
++	}
++    else
++    {
++	strcpy(t, s);
++	//printf("t: %s s: %s  n: %i", t, s, n);
++	//printf("\n");
++    }
++
++}
++
++void deallocate_list(struct Node* list)
++{
++   struct Node* tmp;
++
++   while(list != NULL)
++   {	
++	tmp = list;
++	list = list->next;
++	free(tmp);	
++   }
++}
+diff --git a/part2/list2.c b/part2/list2.c
+index 62c4133..bab1f68 100644
+--- a/part2/list2.c
++++ b/part2/list2.c
+@@ -23,17 +23,17 @@ struct Node* selectionsort(struct Node* list, int(*f1)(struct Node*, struct Node
+ {
+ 	
+     //set small to first element
+-    struct Node* head;
++    
++    struct Node* head = list;
+     struct Node* small;
+     struct Node* front;
+-    head = NULL;
+ 
+     for(head = list; head != NULL; head = head->next)
+     {
+ 	small = head;
+ 
+ 	// find the smallest value alphabetically
+-	for(front = small); front != NULL; front = front->)
++	for(front = small; front != NULL; front = front->next)
+ 	{
+ 	    if((*f1)(small, front) > 0 )
+ 		small = front;
+@@ -48,40 +48,25 @@ return list;
+ }
+ 
+ 
+-
+ int compareData (struct Node* ss1, struct Node* ss2)
+ {
+ return strcmp(ss1->data, ss2->data);
+ }
+ 
++
+ void swapData (struct Node* ss1, struct Node* ss2)
+ {
+-//struct Node* tmp = (struct Node *)(malloc(sizeof(struct Node)));
+-
+-//Malloc a new node ss3
+-    struct Node* tmp2;
+-    tmp2 = ss1->next->next; //this is small->next
+-    ss1->next->next = ss2->next->next; //head->next
+-    ss2->next->next = tmp2;
+-
+-    //fix prev pointers
+-  //  struct Node* tmp2;
+-    tmp2 = ss1->next;
+-    ss1->next = ss2->next;
+-    ss2->next = tmp2;
+-   // strcpy_upto(tmp->data, ss1->data, ss1->len);
+-   // strcpy_upto(ss1->data, ss2->data, ss2->len);
+-    //strcpy_upto(ss2->data, tmp->data, tmp->len);
+-    
+-    
+-    //strcpy(tmp->data, ss1->data);
+-    //strcpy(ss1->data, ss2->data);
+-    //strcpy(ss2->data, tmp->data);
+-  
+-
+-    //short* lentmp;
+-    //lentmp = small->len;
+-    //small->len = n->len;
+-    //n->len = lentmp;
++    if(ss1 == NULL || ss2 ==NULL) //don't allow for empty
++	return;
++
++    struct Node* tmp = (struct Node*)(malloc(sizeof(struct Node*)));
++	    strcpy_upto(tmp->data, ss1->data, ss1->len);
++	    tmp->len = ss1->len;
++	    strcpy_upto(ss1->data, ss2->data, ss2->len);
++	    ss1->len = ss2->len;
++	    strcpy_upto(ss2->data,tmp->data, tmp->len);
++	    ss2->len = tmp->len;
++free(tmp);
++
+ }
+ 
+diff --git a/part2/test2.c b/part2/test2.c
+index 4120aa8..d49db98 100644
+--- a/part2/test2.c
++++ b/part2/test2.c
+@@ -29,12 +29,16 @@ int main(int argc, char* argv[])
+     print(list);
+     
+     list = selectionsort(list, &compareData,  &swapData);
++    printf("\n");
+     printf("   sorted: ");
+     print(list);
+-    
+-    // list = reverse(list);
+-    // printf(" reversed: ");
+-    // print(list);
++    printf("\n");
++
++    list = reverse(list);
++    printf("\n");
++    printf("  reversed: ");
++    printf("\n");
++    print(list);
+ 
+     //deallocate_list(list);
+ 
+-- 
+1.7.9.5
+
+
+From 9cb44fac09c59c1069467036f6bef74340a182f3 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 13:39:49 -0400
+Subject: [PATCH 22/53] // just about to finish reverse. Rewrote function with
+ help from TA
+
+---
+ part2/list2.c |   15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/part2/list2.c b/part2/list2.c
+index bab1f68..3b4f13c 100644
+--- a/part2/list2.c
++++ b/part2/list2.c
+@@ -70,3 +70,18 @@ free(tmp);
+ 
+ }
+ 
++struct Node reverse(struct Node *list)
++{
++    struct Node* tail;
++    struct Node* head;
++    struct Node* nex;
++
++
++
++
++
++
++
++
++}
++
+-- 
+1.7.9.5
+
+
+From 7e7234d293404c296dd968716fa303d6b7c6a8a5 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 13:44:43 -0400
+Subject: [PATCH 23/53] // finished the reverse function on paper from Jae's
+ lecture note
+
+---
+ part2/list2.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/part2/list2.c b/part2/list2.c
+index 3b4f13c..923ae06 100644
+--- a/part2/list2.c
++++ b/part2/list2.c
+@@ -72,9 +72,13 @@ free(tmp);
+ 
+ struct Node reverse(struct Node *list)
+ {
+-    struct Node* tail;
++    // pointers temporary storage
+     struct Node* head;
+-    struct Node* nex;
++    struct Node* body = NULL;
++    while(list != NULL)
++    {
++	
++	list = ;
+ 
+ 
+ 
+-- 
+1.7.9.5
+
+
+From bc33c1b1bab9345b12da9641c70dc08140c0c87a Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 14:01:08 -0400
+Subject: [PATCH 24/53] // Have yet to find an error, but will check valgrind
+ now
+
+---
+ part2/list2.c |   23 ++++++++++++-----------
+ part2/test2.c |    3 ++-
+ 2 files changed, 14 insertions(+), 12 deletions(-)
+
+diff --git a/part2/list2.c b/part2/list2.c
+index 923ae06..599d7a0 100644
+--- a/part2/list2.c
++++ b/part2/list2.c
+@@ -70,22 +70,23 @@ free(tmp);
+ 
+ }
+ 
+-struct Node reverse(struct Node *list)
++
++// Used Jae's lecture note, similar to swap function w/pointers
++struct Node* reverse(struct Node *list)
+ {
+     // pointers temporary storage
+     struct Node* head;
+     struct Node* body = NULL;
+-    while(list != NULL)
++    while(list != NULL) //changed from the if statement before
+     {
+-	
+-	list = ;
+-
+-
+-
+-
+-
+-
+-
++	//head points to the 2nd node
++	head = list->next;
++	list->next = body;
++        //follows same as int x,y storage	
++	body = list;
++	list = head;
++	}
++return body;
+ 
+ }
+ 
+diff --git a/part2/test2.c b/part2/test2.c
+index d49db98..bf2df69 100644
+--- a/part2/test2.c
++++ b/part2/test2.c
+@@ -39,8 +39,9 @@ int main(int argc, char* argv[])
+     printf("  reversed: ");
+     printf("\n");
+     print(list);
++    printf("\n");
+ 
+-    //deallocate_list(list);
++    deallocate_list(list);
+ 
+ 
+ return 0;
+-- 
+1.7.9.5
+
+
+From 37bccd56136e812eeb8e6c2cda313469f3f8505a Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 14:11:39 -0400
+Subject: [PATCH 25/53] // works perfectly fine with no valgrind errors
+
+---
+ part2/test2.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/part2/test2.c b/part2/test2.c
+index bf2df69..ec0e0a8 100644
+--- a/part2/test2.c
++++ b/part2/test2.c
+@@ -35,9 +35,7 @@ int main(int argc, char* argv[])
+     printf("\n");
+ 
+     list = reverse(list);
+-    printf("\n");
+-    printf("  reversed: ");
+-    printf("\n");
++    printf(" reversed: ");
+     print(list);
+     printf("\n");
+ 
+-- 
+1.7.9.5
+
+
+From 2f87a9a1482d7593343a5a80f35c627152408cfe Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 17:42:03 -0400
+Subject: [PATCH 26/53] // Just made Makefile for part3
+
+---
+ part3/Makefile |   32 ++++++++++++++++++++++++++++++++
+ part3/list3.h  |   15 +++++++++++++++
+ 2 files changed, 47 insertions(+)
+ create mode 100644 part3/Makefile
+ create mode 100644 part3/list3.h
+
+diff --git a/part3/Makefile b/part3/Makefile
+new file mode 100644
+index 0000000..8bd8bc1
+--- /dev/null
++++ b/part3/Makefile
+@@ -0,0 +1,32 @@
++C  = gcc
++CXX = g++
++
++
++INCLUDES =
++
++
++CFLAGS   = -g -Wall $(INCLUDES)
++CXXFLAGS = -g -Wall $(INCLUDES)
++
++LDFLAGS = -g
++
++LDLIBS =
++
++test3: test3.o list3.o list2.o list1.o
++
++test3.o: test3.c list3.h
++
++list3.o: list3.c list3.h
++
++list2.o: list2.c list1.h 
++
++list1.o: list1.c list1.h
++
++
++
++.PHONY: clean
++clean:
++	rm -f *.o a.out core test3
++
++.PHONY: all
++all: clean test3
+diff --git a/part3/list3.h b/part3/list3.h
+new file mode 100644
+index 0000000..3c60a26
+--- /dev/null
++++ b/part3/list3.h
+@@ -0,0 +1,15 @@
++
++
++
++/*
++ *
++ * Author: Gentry Tran
++ * 
++ * 04/02/13
++ *
++ * Started part 3 @5:34
++ *
++ * */
++
++
++
+-- 
+1.7.9.5
+
+
+From 59cd87419b9e18b285bb2bd7cd311d5da32413a1 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 18:07:58 -0400
+Subject: [PATCH 27/53] // defined first two needed functions
+
+---
+ part3/list3.h |   10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/part3/list3.h b/part3/list3.h
+index 3c60a26..99b749e 100644
+--- a/part3/list3.h
++++ b/part3/list3.h
+@@ -12,4 +12,14 @@
+  * */
+ 
+ 
++#include "list1.h"
++#include "list2.h"
++
++struct Node* createPermutedLinkedList(
++	struct Node* list,
++	int* recipe,
++	int size);
++
++int sameContents(struct Node* list1, struct Node* list2);
++
+ 
+-- 
+1.7.9.5
+
+
+From ee2ec21fc77e287c5ea1cf295809bfbea652d728 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 18:12:10 -0400
+Subject: [PATCH 28/53] // just created the list3.c file adding include
+ statements
+
+---
+ part3/list3.c |   22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+ create mode 100644 part3/list3.c
+
+diff --git a/part3/list3.c b/part3/list3.c
+new file mode 100644
+index 0000000..a177120
+--- /dev/null
++++ b/part3/list3.c
+@@ -0,0 +1,22 @@
++
++
++
++/* 
++ *
++ * Author: Gentry Tran
++ *
++ *
++ * Started @ 6:09pm
++ *
++ *
++ * 04/02/13
++ *
++ * list3.c file
++ *
++ * */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include "list1.h"
++#include "list2.h"
++#include "list3.h"
+-- 
+1.7.9.5
+
+
+From 7c7d051ec9b6711afa661e45ae264651b42f1a7f Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 18:23:18 -0400
+Subject: [PATCH 29/53] // about to write the input for scan, but need man
+ scanf first
+
+---
+ part3/test3.c |   35 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 part3/test3.c
+
+diff --git a/part3/test3.c b/part3/test3.c
+new file mode 100644
+index 0000000..84b5e1a
+--- /dev/null
++++ b/part3/test3.c
+@@ -0,0 +1,35 @@
++
++
++/*
++ *
++ * Author: Gentry Tran
++ *
++ * Date: 04/02/13
++ *
++ * Started @ 6:13pm
++ *
++ *
++ * */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include "list1.h"
++#include "list2.h"
++#include "list3.h"
++
++
++
++int main (int argc, char* argv)
++{
++
++    // Use scanf to get user input first
++    int i;
++    for(i = 0; i < MAX; i++)
++    if(
++
++    struct Node* 
++
++
++
++
++}
+-- 
+1.7.9.5
+
+
+From 9c5e7df2293cd18e2ad6b66dcff396883bfa5039 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 18:32:15 -0400
+Subject: [PATCH 30/53] // started to define input functions in test
+
+---
+ part3/test3.c |   12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/part3/test3.c b/part3/test3.c
+index 84b5e1a..b826b9e 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -22,6 +22,18 @@
+ int main (int argc, char* argv)
+ {
+ 
++    struct Node* original;
++    //creates first list like test1 and test2 from command line arguments
++    for(i = 1; i < argc; i++)
++    {
++       original = prepend(original, argv[i]);
++    }
++
++    //use previous reverse function to read arg in order passed in (notes)
++    original = reverse(original);
++
++
++
+     // Use scanf to get user input first
+     int i;
+     for(i = 0; i < MAX; i++)
+-- 
+1.7.9.5
+
+
+From 8a3572d1fa7b6d8bc755b4be7f7416b7505a84ee Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 18:40:31 -0400
+Subject: [PATCH 31/53] // trying to figure out the input with scanf
+
+---
+ part3/test3.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/part3/test3.c b/part3/test3.c
+index b826b9e..631f0fc 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -24,6 +24,7 @@ int main (int argc, char* argv)
+ 
+     struct Node* original;
+     //creates first list like test1 and test2 from command line arguments
++    int i;
+     for(i = 1; i < argc; i++)
+     {
+        original = prepend(original, argv[i]);
+@@ -35,9 +36,10 @@ int main (int argc, char* argv)
+ 
+ 
+     // Use scanf to get user input first
+-    int i;
+-    for(i = 0; i < MAX; i++)
+-    if(
++    
++    for(i = 0; i < MAX; i++) //max 100 values
++    if(scanf("%d", &n) == 1)
++
+ 
+     struct Node* 
+ 
+-- 
+1.7.9.5
+
+
+From 592c54b0ce11d31cbdcb85f0d44d83f783538da6 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 18:43:43 -0400
+Subject: [PATCH 32/53] // still trying to understand manual for scanf...
+
+---
+ part3/test3.c |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/part3/test3.c b/part3/test3.c
+index 631f0fc..1361e0f 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -39,6 +39,8 @@ int main (int argc, char* argv)
+     
+     for(i = 0; i < MAX; i++) //max 100 values
+     if(scanf("%d", &n) == 1)
++    {
++	array[i] = count
+ 
+ 
+     struct Node* 
+-- 
+1.7.9.5
+
+
+From 96c681fdec6f752201c0280a256aaf62b311de07 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 18:45:13 -0400
+Subject: [PATCH 33/53] // Don't understand...
+
+---
+ part3/test3.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/part3/test3.c b/part3/test3.c
+index 1361e0f..b66211b 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -36,7 +36,9 @@ int main (int argc, char* argv)
+ 
+ 
+     // Use scanf to get user input first
+-    
++
++    int count;
++
+     for(i = 0; i < MAX; i++) //max 100 values
+     if(scanf("%d", &n) == 1)
+     {
+-- 
+1.7.9.5
+
+
+From f2ff3c418b91033591df2cd40a2324af286e98a3 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 18:55:48 -0400
+Subject: [PATCH 34/53] // messing around with input/output
+
+---
+ part3/test3.c |   26 ++++++++++++++++++++++----
+ 1 file changed, 22 insertions(+), 4 deletions(-)
+
+diff --git a/part3/test3.c b/part3/test3.c
+index b66211b..41b2d54 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -32,17 +32,35 @@ int main (int argc, char* argv)
+ 
+     //use previous reverse function to read arg in order passed in (notes)
+     original = reverse(original);
+-
+-
++    printf("original: \n");
++    print(original);
+ 
+     // Use scanf to get user input first
+ 
+     int count;
++    int array[count];
++    int MAX = 100; //max 100 integer input
+ 
+     for(i = 0; i < MAX; i++) //max 100 values
+-    if(scanf("%d", &n) == 1)
+     {
+-	array[i] = count
++	if(scanf("%d", &n) == 1)
++	{
++	array[i] = n; //stores values in array from input
++	}
++	else
++	{ 
++	    count = i;
++	    break;
++	}
++    }
++
++
++
++
++
++
++
++
+ 
+ 
+     struct Node* 
+-- 
+1.7.9.5
+
+
+From bbc175801a720f951673238e3503e986fc3584d1 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 19:04:11 -0400
+Subject: [PATCH 35/53] // about to start putting in the definitions for
+ functions
+
+---
+ part3/test3.c |    5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/part3/test3.c b/part3/test3.c
+index 41b2d54..460ba4f 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -63,9 +63,12 @@ int main (int argc, char* argv)
+ 
+ 
+ 
+-    struct Node* 
++  
+ 
+ 
+ 
++deallocate_list(original);
++deallocate_list(permuted);
+ 
++return 0;
+ }
+-- 
+1.7.9.5
+
+
+From f0f00965830ece5e5c35a54c7d47028e421eeb3d Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 19:19:40 -0400
+Subject: [PATCH 36/53] // still writing basic functions, received help from
+ TA
+
+---
+ part3/list3.c |   31 +++++++++++++++++++++++++++++++
+ part3/test3.c |    4 +++-
+ 2 files changed, 34 insertions(+), 1 deletion(-)
+
+diff --git a/part3/list3.c b/part3/list3.c
+index a177120..6d1619b 100644
+--- a/part3/list3.c
++++ b/part3/list3.c
+@@ -20,3 +20,34 @@
+ #include "list1.h"
+ #include "list2.h"
+ #include "list3.h"
++
++
++int different(struct Node* old, struct Node* new)
++    if(old == NULL && new == NULL)
++    {
++
++
++	
++	    }
++
++struct Node* createPermutedLinkedList(struct Node* list, int* recipe, int size)
++{
++    struct Node* 
++
++
++
++	
++char* strptr(struct Node* stringy, int k)
++{
++	int i
++	for(i = 0; i < k; i++)
++	{
++	    stringy = stringy->next;
++	}
++
++return stringy->data;
++}
++
++
++
++
+diff --git a/part3/test3.c b/part3/test3.c
+index 460ba4f..16f6234 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -59,11 +59,13 @@ int main (int argc, char* argv)
+ 
+ 
+ 
++struct Node* permuted = createPermutedLinkedList(original,
+ 
++printf("permuted: ");
++printf("SAME\n");
+ 
+ 
+ 
+-  
+ 
+ 
+ 
+-- 
+1.7.9.5
+
+
+From f0242f55aae5c79d869facf5f3a138f2d33a47fc Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 19:59:48 -0400
+Subject: [PATCH 37/53] // added partial functions until create full
+ understanding
+
+---
+ part3/list3.c |   19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/part3/list3.c b/part3/list3.c
+index 6d1619b..352c89a 100644
+--- a/part3/list3.c
++++ b/part3/list3.c
+@@ -21,15 +21,24 @@
+ #include "list2.h"
+ #include "list3.h"
+ 
+-
+-int different(struct Node* old, struct Node* new)
++// TA helped me with this function
++int sameContents(struct Node* old, struct Node* new)
++{
++    // nested if statement to check if 
+     if(old == NULL && new == NULL)
+     {
++	returns 1;
++    }
++    else
++    if(strcmp(old->data, new->data))
++    {
++    	return 0;
++    }    
++    else
++    return sameContents(old->next, new->next);
++}
+ 
+ 
+-	
+-	    }
+-
+ struct Node* createPermutedLinkedList(struct Node* list, int* recipe, int size)
+ {
+     struct Node* 
+-- 
+1.7.9.5
+
+
+From 84c2fe2ef64cfa798d366829d74f18b99cba4760 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 20:39:08 -0400
+Subject: [PATCH 38/53] // adding loop configurations to calculate length
+
+---
+ part3/list3.c |    4 ++--
+ part3/list3.h |    9 +++++++++
+ part3/test3.c |   39 ++++++++++++++++++++++++---------------
+ 3 files changed, 35 insertions(+), 17 deletions(-)
+
+diff --git a/part3/list3.c b/part3/list3.c
+index 352c89a..1a49483 100644
+--- a/part3/list3.c
++++ b/part3/list3.c
+@@ -41,8 +41,8 @@ int sameContents(struct Node* old, struct Node* new)
+ 
+ struct Node* createPermutedLinkedList(struct Node* list, int* recipe, int size)
+ {
+-    struct Node* 
+-
++    struct Node* new = NULL;
++    for(i = 
+ 
+ 
+ 	
+diff --git a/part3/list3.h b/part3/list3.h
+index 99b749e..58890c4 100644
+--- a/part3/list3.h
++++ b/part3/list3.h
+@@ -23,3 +23,12 @@ struct Node* createPermutedLinkedList(
+ int sameContents(struct Node* list1, struct Node* list2);
+ 
+ 
++
++char* strptr(struct Node* stringy, int k)
++
++
++
++
++
++
++
+diff --git a/part3/test3.c b/part3/test3.c
+index 16f6234..5aedc15 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -19,17 +19,23 @@
+ 
+ 
+ 
+-int main (int argc, char* argv)
++int main (int argc, char** argv)
+ {
+ 
+-    struct Node* original;
++
++
++    struct Node* original = NULL;
++    
++    
+     //creates first list like test1 and test2 from command line arguments
++    //minus the ./test3 argument
+     int i;
+     for(i = 1; i < argc; i++)
+     {
+        original = prepend(original, argv[i]);
+     }
+ 
++
+     //use previous reverse function to read arg in order passed in (notes)
+     original = reverse(original);
+     printf("original: \n");
+@@ -37,26 +43,32 @@ int main (int argc, char* argv)
+ 
+     // Use scanf to get user input first
+ 
+-    int count;
+-    int array[count];
+-    int MAX = 100; //max 100 integer input
++    int n;
++    int howlong;
++    int tmp[howlong];
++    int lessThan = 100; //max 100 integer input
+ 
+-    for(i = 0; i < MAX; i++) //max 100 values
++    for(i = 0; i < lessThan; i++) //max 100 values
+     {
+ 	if(scanf("%d", &n) == 1)
+ 	{
+-	array[i] = n; //stores values in array from input
++	tmp[i] = n; //stores values in array from input
+ 	}
+ 	else
+ 	{ 
+-	    count = i;
++	    howlong = i;
+ 	    break;
+ 	}
+     }
+ 
++    int inputarray[howlong];
++    for (i = 0; i < howlong; i++)
++    {
++	inputarray[i] = tmp[i];
++    }
+ 
+-
+-
++printf("creating a new list of %d nodes: ", howlong);
++for(
+ 
+ 
+ struct Node* permuted = createPermutedLinkedList(original,
+@@ -64,13 +76,10 @@ struct Node* permuted = createPermutedLinkedList(original,
+ printf("permuted: ");
+ printf("SAME\n");
+ 
+-
+-
+-
+-
+-
+ deallocate_list(original);
+ deallocate_list(permuted);
+ 
++*/
++
+ return 0;
+ }
+-- 
+1.7.9.5
+
+
+From 7ad588062d5f8fc12e7cb48880d35cf608c024f9 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 20:50:36 -0400
+Subject: [PATCH 39/53] // almost finished with part3. finished testing parts
+ of code
+
+---
+ part3/test3.c |   16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/part3/test3.c b/part3/test3.c
+index 5aedc15..948f00b 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -67,19 +67,29 @@ int main (int argc, char** argv)
+ 	inputarray[i] = tmp[i];
+     }
+ 
++
+ printf("creating a new list of %d nodes: ", howlong);
+-for(
++for(i = 0; i < howlong; i++)
++{
++    printf("%d", inputarray[i]);
++}
++
+ 
++struct Node* permuted = createPermutedLinkedList(original, inputarray, howlong);
+ 
+-struct Node* permuted = createPermutedLinkedList(original,
+ 
++printf("\n");
+ printf("permuted: ");
+ printf("SAME\n");
+ 
++
++
++if(sameContents(
++
++
+ deallocate_list(original);
+ deallocate_list(permuted);
+ 
+-*/
+ 
+ return 0;
+ }
+-- 
+1.7.9.5
+
+
+From dca80702e663d9f94c124de71e20bcada45693fc Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 21:35:27 -0400
+Subject: [PATCH 40/53] // wrote all the functions, mostly debugging now
+
+---
+ part3/list3.c |   24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/part3/list3.c b/part3/list3.c
+index 1a49483..8fd799a 100644
+--- a/part3/list3.c
++++ b/part3/list3.c
+@@ -35,20 +35,32 @@ int sameContents(struct Node* old, struct Node* new)
+     	return 0;
+     }    
+     else
+-    return sameContents(old->next, new->next);
++
++return sameContents(old->next, new->next);
+ }
+ 
+ 
+ struct Node* createPermutedLinkedList(struct Node* list, int* recipe, int size)
+-{
++{	
+     struct Node* new = NULL;
+-    for(i = 
+-
++    while( size-- > 0)
++    {
++	struct Node* tmpptr = list;
++	while(*recipe > 0)
++	{	
++	    tmpptr = tmpptr->next;
++	    *recipe = *recipe--;
++	}
+ 
+-	
++	new = prepend(new, tmpptr->data);
++	recipe = recipe++;
++    }
++    return new;
++}
++			    	
+ char* strptr(struct Node* stringy, int k)
+ {
+-	int i
++	int i;
+ 	for(i = 0; i < k; i++)
+ 	{
+ 	    stringy = stringy->next;
+-- 
+1.7.9.5
+
+
+From 02a0308ff8c8836182a9c09863ee59c9e76622cb Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 22:01:19 -0400
+Subject: [PATCH 41/53] //currently debugging
+
+---
+ part3/Makefile |    5 +++--
+ part3/list3.c  |    4 ----
+ part3/test3.c  |   47 +++++++++++++++++++++++++++++++++++------------
+ 3 files changed, 38 insertions(+), 18 deletions(-)
+
+diff --git a/part3/Makefile b/part3/Makefile
+index 8bd8bc1..d131146 100644
+--- a/part3/Makefile
++++ b/part3/Makefile
+@@ -12,13 +12,14 @@ LDFLAGS = -g
+ 
+ LDLIBS =
+ 
+-test3: test3.o list3.o list2.o list1.o
++test3: test3.o list1.o list2.o list3.o
+ 
+ test3.o: test3.c list3.h
+ 
++
+ list3.o: list3.c list3.h
+ 
+-list2.o: list2.c list1.h 
++list2.o: list2.c list2.h 
+ 
+ list1.o: list1.c list1.h
+ 
+diff --git a/part3/list3.c b/part3/list3.c
+index 8fd799a..36b9da4 100644
+--- a/part3/list3.c
++++ b/part3/list3.c
+@@ -68,7 +68,3 @@ char* strptr(struct Node* stringy, int k)
+ 
+ return stringy->data;
+ }
+-
+-
+-
+-
+diff --git a/part3/test3.c b/part3/test3.c
+index 948f00b..72c6e05 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -21,12 +21,8 @@
+ 
+ int main (int argc, char** argv)
+ {
+-
+-
+-
+     struct Node* original = NULL;
+-    
+-    
++        
+     //creates first list like test1 and test2 from command line arguments
+     //minus the ./test3 argument
+     int i;
+@@ -41,8 +37,11 @@ int main (int argc, char** argv)
+     printf("original: \n");
+     print(original);
+ 
++return 0;
++}
+     // Use scanf to get user input first
+ 
++  /*  
+     int n;
+     int howlong;
+     int tmp[howlong];
+@@ -61,35 +60,59 @@ int main (int argc, char** argv)
+ 	}
+     }
+ 
+-    int inputarray[howlong];
+-    for (i = 0; i < howlong; i++)
++    if(howlong != argc-1)
+     {
+-	inputarray[i] = tmp[i];
++	printf("undefined");
++	printf("\n");
++    }
++    else
++    {
++	int input[howlong];
++	for (i = 0; i < howlong; i++)
++	{
++	    input[i] = tmp[i];
++    	}
+     }
+ 
+ 
+ printf("creating a new list of %d nodes: ", howlong);
+ for(i = 0; i < howlong; i++)
+ {
+-    printf("%d", inputarray[i]);
++    printf("%d", input[i]);
+ }
+ 
+ 
+-struct Node* permuted = createPermutedLinkedList(original, inputarray, howlong);
++
++
++
++struct Node* permuted = createPermutedLinkedList(original, input, howlong);
+ 
+ 
+ printf("\n");
+ printf("permuted: ");
+-printf("SAME\n");
+ 
+ 
+ 
+-if(sameContents(
+ 
+ 
++if(sameContents(original, permuted))
++{
++    printf("SAME");
++    printf("\n");
++}
++else
++{
++    printf("DIFFERENT");
++    printf("\n");
++
++}
++
+ deallocate_list(original);
+ deallocate_list(permuted);
+ 
+ 
+ return 0;
+ }
++
++
++*/
+-- 
+1.7.9.5
+
+
+From 9bec2b03ad8d30e7a3c3f39acb576b3926e6e7eb Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 22:27:50 -0400
+Subject: [PATCH 42/53] // most of the bugs are gone. now running through
+ simulations
+
+---
+ part3/Makefile |    2 +-
+ part3/list3.c  |   27 ++++++++++++---------------
+ part3/list3.h  |   12 +++++-------
+ part3/test3.c  |    1 +
+ 4 files changed, 19 insertions(+), 23 deletions(-)
+
+diff --git a/part3/Makefile b/part3/Makefile
+index d131146..8afa933 100644
+--- a/part3/Makefile
++++ b/part3/Makefile
+@@ -27,7 +27,7 @@ list1.o: list1.c list1.h
+ 
+ .PHONY: clean
+ clean:
+-	rm -f *.o a.out core test3
++	rm -f *~ *.o a.out core test3
+ 
+ .PHONY: all
+ all: clean test3
+diff --git a/part3/list3.c b/part3/list3.c
+index 36b9da4..390cd21 100644
+--- a/part3/list3.c
++++ b/part3/list3.c
+@@ -17,6 +17,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include "list1.h"
+ #include "list2.h"
+ #include "list3.h"
+@@ -27,7 +28,7 @@ int sameContents(struct Node* old, struct Node* new)
+     // nested if statement to check if 
+     if(old == NULL && new == NULL)
+     {
+-	returns 1;
++	return 1;
+     }
+     else
+     if(strcmp(old->data, new->data))
+@@ -35,27 +36,23 @@ int sameContents(struct Node* old, struct Node* new)
+     	return 0;
+     }    
+     else
++    {
+ 
+-return sameContents(old->next, new->next);
+-}
++ 	return sameContents(old->next, new->next);
+ 
++    }
++}
+ 
+ struct Node* createPermutedLinkedList(struct Node* list, int* recipe, int size)
+ {	
+     struct Node* new = NULL;
+-    while( size-- > 0)
+-    {
+-	struct Node* tmpptr = list;
+-	while(*recipe > 0)
+-	{	
+-	    tmpptr = tmpptr->next;
+-	    *recipe = *recipe--;
+-	}
++	
++    int i;
++    for(i = size-1; i>= 0; i--)
++    new = prepend(new, strptr(list, *(recipe+1)));
+ 
+-	new = prepend(new, tmpptr->data);
+-	recipe = recipe++;
+-    }
+-    return new;
++
++return new;
+ }
+ 			    	
+ char* strptr(struct Node* stringy, int k)
+diff --git a/part3/list3.h b/part3/list3.h
+index 58890c4..ca2df63 100644
+--- a/part3/list3.h
++++ b/part3/list3.h
+@@ -12,6 +12,9 @@
+  * */
+ 
+ 
++#ifndef _LIST3_H_
++#define _LIST3_H_
++
+ #include "list1.h"
+ #include "list2.h"
+ 
+@@ -23,12 +26,7 @@ struct Node* createPermutedLinkedList(
+ int sameContents(struct Node* list1, struct Node* list2);
+ 
+ 
+-
+-char* strptr(struct Node* stringy, int k)
+-
+-
+-
+-
+-
++char* strptr(struct Node* stringy, int k);
+ 
+ 
++#endif
+diff --git a/part3/test3.c b/part3/test3.c
+index 72c6e05..5e974e6 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -51,6 +51,7 @@ return 0;
+     {
+ 	if(scanf("%d", &n) == 1)
+ 	{
++	
+ 	tmp[i] = n; //stores values in array from input
+ 	}
+ 	else
+-- 
+1.7.9.5
+
+
+From 758dda0f3ad9495fb7f0d6ac604aaaac87a46004 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Tue, 2 Apr 2013 22:47:06 -0400
+Subject: [PATCH 43/53] // almost done, just need to figure out print
+ statements
+
+---
+ part3/test3.c |   26 +++++++-------------------
+ 1 file changed, 7 insertions(+), 19 deletions(-)
+
+diff --git a/part3/test3.c b/part3/test3.c
+index 5e974e6..7faf604 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -37,21 +37,16 @@ int main (int argc, char** argv)
+     printf("original: \n");
+     print(original);
+ 
+-return 0;
+-}
+     // Use scanf to get user input first
+ 
+-  /*  
+     int n;
+-    int howlong;
+-    int tmp[howlong];
+-    int lessThan = 100; //max 100 integer input
+-
++    int howlong; //max 100 integer input
++    int lessThan = 100;
++    int tmp[lessThan];
+     for(i = 0; i < lessThan; i++) //max 100 values
+     {
+ 	if(scanf("%d", &n) == 1)
+ 	{
+-	
+ 	tmp[i] = n; //stores values in array from input
+ 	}
+ 	else
+@@ -61,19 +56,20 @@ return 0;
+ 	}
+     }
+ 
+-    if(howlong != argc-1)
++	int input[howlong];
++ /*   if(howlong != argc-1)
+     {
+ 	printf("undefined");
+ 	printf("\n");
+     }
+     else
+     {
+-	int input[howlong];
++	int input[howlong]; */
++
+ 	for (i = 0; i < howlong; i++)
+ 	{
+ 	    input[i] = tmp[i];
+     	}
+-    }
+ 
+ 
+ printf("creating a new list of %d nodes: ", howlong);
+@@ -82,10 +78,6 @@ for(i = 0; i < howlong; i++)
+     printf("%d", input[i]);
+ }
+ 
+-
+-
+-
+-
+ struct Node* permuted = createPermutedLinkedList(original, input, howlong);
+ 
+ 
+@@ -93,9 +85,6 @@ printf("\n");
+ printf("permuted: ");
+ 
+ 
+-
+-
+-
+ if(sameContents(original, permuted))
+ {
+     printf("SAME");
+@@ -116,4 +105,3 @@ return 0;
+ }
+ 
+ 
+-*/
+-- 
+1.7.9.5
+
+
+From c2050e417e614138eb0b55c43c5940ead4a5c078 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 3 Apr 2013 00:05:48 -0400
+Subject: [PATCH 44/53] // just starting part 4
+
+---
+ part4/Makefile |   26 ++++++++++++++++++
+ part4/list1.c  |   84 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 110 insertions(+)
+ create mode 100644 part4/Makefile
+ create mode 100644 part4/list1.c
+ create mode 100644 part4/test4.c
+
+diff --git a/part4/Makefile b/part4/Makefile
+new file mode 100644
+index 0000000..12ab6af
+--- /dev/null
++++ b/part4/Makefile
+@@ -0,0 +1,26 @@
++C  = gcc
++CXX = g++
++
++
++INCLUDES =
++
++
++CFLAGS   = -g -Wall $(INCLUDES)
++CXXFLAGS = -g -Wall $(INCLUDES)
++
++LDFLAGS = -g
++
++LDLIBS =
++
++test4: test4.o list1.o list4.o
++
++test4.o: test4.c list1.c list1.h list2.h
++
++list4.o: test4.c list4.c list1.h list4.h 
++
++.PHONY: clean
++clean:
++	rm -f *.o a.out core test4
++
++.PHONY: all
++all: clean test4
+diff --git a/part4/list1.c b/part4/list1.c
+new file mode 100644
+index 0000000..8c39db5
+--- /dev/null
++++ b/part4/list1.c
+@@ -0,0 +1,84 @@
++/*
++ * Author: Gentry Tran
++ * Date: 03/29/13
++ *
++ * This is the file where all of the functions
++ * are implemented
++ *
++ * */
++#include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
++#include "list1.h"
++
++struct Node* prepend(struct Node* list, char* s)
++{
++	struct Node* newNode = malloc(sizeof(struct Node));
++	
++	if (newNode == NULL)
++    		return NULL;
++	if(s == NULL)
++	{    char empt_str[] = "";
++		s = empt_str;
++	}
++
++	if(strlen(s) <= 5)
++	{	
++	    newNode->len = strlen(s);
++	    strcpy(newNode->data,s);	
++	}else
++	{    
++	    newNode->len = 5;
++	    strncpy(newNode->data, s, 5);
++	}
++	
++	// newNode is now the head of the list
++	newNode->next = list;
++
++    return newNode;
++
++}
++
++void print(struct Node* list)
++{
++    struct Node* current = list;
++   
++    while (current != NULL) 
++    {
++	printf("->[%u:%s]", current->len, current->data);
++	current = current->next;
++    }
++    printf("\n:");
++
++}
++
++void strcpy_upto(char* t, const char *s, int n)
++{
++    if( strlen(s) > n ) 
++    {
++//	t = (char*)malloc(n+1*sizeof(char));
++	strncpy(t, s, n);
++	printf("t: %s s: %s  n: %i", t, s, n);
++    	printf("\n");
++	
++	}
++    else
++    {
++	strcpy(t, s);
++	printf("t: %s s: %s  n: %i", t, s, n);
++	printf("\n");
++    }
++
++}
++
++void deallocate_list(struct Node* list)
++{
++   struct Node* tmp;
++
++   while(list != NULL)
++   {	
++	tmp = list;
++	list = list->next;
++	free(tmp);	
++   }
++}
+diff --git a/part4/test4.c b/part4/test4.c
+new file mode 100644
+index 0000000..e69de29
+-- 
+1.7.9.5
+
+
+From d107cf09d59da2aca1e75bd274b99beb38526152 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 3 Apr 2013 00:10:42 -0400
+Subject: [PATCH 45/53] // basically copying the main from the part1
+
+---
+ part4/test4.c |   27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/part4/test4.c b/part4/test4.c
+index e69de29..386febe 100644
+--- a/part4/test4.c
++++ b/part4/test4.c
+@@ -0,0 +1,27 @@
++/*
++ *
++ * Author: Gentry Tran
++ *
++ * Started @ 12:06pm
++ *
++ * 04/03/13
++ * 
++ * test4.c file
++ *
++ * */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include "list1.h"
++#include "list2.h"
++
++main(int argc, char* argv[])
++{
++    struct Node* list = NULL:
++
++
++
++
++return 0;
++}
++
+-- 
+1.7.9.5
+
+
+From 513237b911d36685d6a6c1122afc2c857539777b Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 3 Apr 2013 00:15:48 -0400
+Subject: [PATCH 46/53] // copied the same format as test1.c, now change .h
+ file
+
+---
+ part4/test4.c |   15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/part4/test4.c b/part4/test4.c
+index 386febe..dbb2550 100644
+--- a/part4/test4.c
++++ b/part4/test4.c
+@@ -17,11 +17,14 @@
+ 
+ main(int argc, char* argv[])
+ {
+-    struct Node* list = NULL:
+-
+-
+-
+-
+-return 0;
++    struct Node* list = NULL;
++    int i;
++    for(i = 1; i < argc; i++)
++	list = prepend(list,argv[i]);
++    printf("prepended: ");
++    print(list);
++    list = selectionsort(list, compareData, swapData);
++    deallocate_list(list);
++    return 0;
+ }
+ 
+-- 
+1.7.9.5
+
+
+From d62e322ef71eca1561c04137a46f78cb6085c3a0 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 3 Apr 2013 01:33:59 -0400
+Subject: [PATCH 47/53] // started to modify the functions according to new
+ parameters
+
+---
+ part4/list1.c |   27 ++++++++---------
+ part4/list2.c |   92 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ part4/list2.h |   28 ++++++++++++++++++
+ 3 files changed, 133 insertions(+), 14 deletions(-)
+ create mode 100644 part4/list2.c
+ create mode 100644 part4/list2.h
+
+diff --git a/part4/list1.c b/part4/list1.c
+index 8c39db5..828cf82 100644
+--- a/part4/list1.c
++++ b/part4/list1.c
+@@ -6,33 +6,31 @@
+  * are implemented
+  *
+  * */
++
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdlib.h>
+ #include "list1.h"
+ 
++
+ struct Node* prepend(struct Node* list, char* s)
+ {
+ 	struct Node* newNode = malloc(sizeof(struct Node));
+ 	
++
+ 	if (newNode == NULL)
+     		return NULL;
+ 	if(s == NULL)
+-	{    char empt_str[] = "";
+-		s = empt_str;
+-	}
+-
+-	if(strlen(s) <= 5)
+-	{	
+-	    newNode->len = strlen(s);
+-	    strcpy(newNode->data,s);	
+-	}else
+ 	{    
+-	    newNode->len = 5;
+-	    strncpy(newNode->data, s, 5);
++	    char empt_str[] = "";
++	    s = empt_str;
+ 	}
+ 	
+-	// newNode is now the head of the list
++	newNode->data = malloc(sizeof(char)*(strlen(s)+1));
++	strcpy(newNode->data,s);	
++    	
++    	// newNode is now the head of the list
++    
+ 	newNode->next = list;
+ 
+     return newNode;
+@@ -42,10 +40,10 @@ struct Node* prepend(struct Node* list, char* s)
+ void print(struct Node* list)
+ {
+     struct Node* current = list;
+-   
++    const int maxlen = 12;
+     while (current != NULL) 
+     {
+-	printf("->[%u:%s]", current->len, current->data);
++	printf("->[%u:%s]",(int) (strlen(current->data) % maxlen), current->data);
+ 	current = current->next;
+     }
+     printf("\n:");
+@@ -82,3 +80,4 @@ void deallocate_list(struct Node* list)
+ 	free(tmp);	
+    }
+ }
++
+diff --git a/part4/list2.c b/part4/list2.c
+new file mode 100644
+index 0000000..3cb7216
+--- /dev/null
++++ b/part4/list2.c
+@@ -0,0 +1,92 @@
++
++
++
++/*
++ *
++ * Author: Gentry Tran
++ *
++ * Started: 03/31/13 @ 2:05am
++ *
++ *
++ * list2.c file
++ *
++ *
++ * */
++   
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include "list1.h"
++#include "list2.h"
++/*
++struct Node* selectionsort(struct Node* list, int(*f1)(struct Node*, struct Node*), void(*f2)(struct Node*, struct Node*))
++{
++	
++    //set small to first element
++    
++    struct Node* head = list;
++    struct Node* small;
++    struct Node* front;
++
++    for(head = list; head != NULL; head = head->next)
++    {
++	small = head;
++
++	// find the smallest value alphabetically
++	for(front = small; front != NULL; front = front->next)
++	{
++	    if((*f1)(small, front) > 0 )
++		small = front;
++	}
++
++	//place data in correct position
++	(*f2)(small, head);
++
++    }
++
++return list;
++}
++
++
++int compareData (struct Node* ss1, struct Node* ss2)
++{
++return strcmp(ss1->data, ss2->data);
++}
++*/
++/*
++void swapData (struct Node* ss1, struct Node* ss2)
++{
++    if(ss1 == NULL || ss2 ==NULL) //don't allow for empty
++	return;
++
++    struct Node* tmp = (struct Node*)(malloc(sizeof(struct Node*)));
++	    strcpy_upto(tmp->data, ss1->data);
++	    tmp->len = ss1->len;
++	    strcpy_upto(ss1->data, ss2->data);
++	    ss1->len = ss2->len;
++	    strcpy_upto(ss2->data,tmp->data);
++	    ss2->len = tmp->len;
++free(tmp);
++
++}
++
++
++// Used Jae's lecture note, similar to swap function w/pointers
++struct Node* reverse(struct Node *list)
++{
++    // pointers temporary storage
++    struct Node* head;
++    struct Node* body = NULL;
++    while(list != NULL) //changed from the if statement before
++    {
++	//head points to the 2nd node
++	head = list->next;
++	list->next = body;
++        //follows same as int x,y storage	
++	body = list;
++	list = head;
++	}
++return body;
++
++}
++*/
+diff --git a/part4/list2.h b/part4/list2.h
+new file mode 100644
+index 0000000..62dd741
+--- /dev/null
++++ b/part4/list2.h
+@@ -0,0 +1,28 @@
++
++
++
++/* 
++ *
++ *
++ * Author: Gentry Tran
++ *
++ * 
++ * Started: 03/31/13 @ 2:07am
++ *
++ *
++ * list2.h
++ *
++ * */
++#ifndef _LIST2_H_
++#define _LIST2_H_
++
++
++struct Node* selectionsort(struct Node *list, int (*compareData)(struct Node*, struct Node *), void (*swapData)(struct Node*, struct Node *));
++
++void swapData(struct Node*, struct Node*);
++
++int compareData(struct Node*, struct Node*);
++
++struct Node* reverse(struct Node* list);
++
++#endif
+-- 
+1.7.9.5
+
+
+From df16feaf43c01b2b95fefca88ee2aa6c825b79ff Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 3 Apr 2013 02:39:50 -0400
+Subject: [PATCH 48/53] // just figuring out how to adjust functions to match
+
+---
+ part4/list1.c |   13 ++++++++++---
+ part4/test4.c |   11 ++++++++---
+ 2 files changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/part4/list1.c b/part4/list1.c
+index 828cf82..0af94f3 100644
+--- a/part4/list1.c
++++ b/part4/list1.c
+@@ -40,10 +40,17 @@ struct Node* prepend(struct Node* list, char* s)
+ void print(struct Node* list)
+ {
+     struct Node* current = list;
+-    const int maxlen = 12;
+-    while (current != NULL) 
++    int maxlen = 12;
++
++    if(strlen(s) > 12)
++    {
++	int rmdr = (int) strlen(current->data) % maxlen;
++	int len = 	
++
++
++	while (current != NULL) 
+     {
+-	printf("->[%u:%s]",(int) (strlen(current->data) % maxlen), current->data);
++	printf("->[%d:%s]", , current->data);
+ 	current = current->next;
+     }
+     printf("\n:");
+diff --git a/part4/test4.c b/part4/test4.c
+index dbb2550..faf34c2 100644
+--- a/part4/test4.c
++++ b/part4/test4.c
+@@ -15,16 +15,21 @@
+ #include "list1.h"
+ #include "list2.h"
+ 
+-main(int argc, char* argv[])
++int main(int argc, char* argv[])
+ {
+     struct Node* list = NULL;
+     int i;
+     for(i = 1; i < argc; i++)
+-	list = prepend(list,argv[i]);
+-    printf("prepended: ");
++	list = prepend(list, argv[i]);
++    printf("prepended: \n");
+     print(list);
++    
++    /*
+     list = selectionsort(list, compareData, swapData);
++    printf("   sorted: \n");
+     deallocate_list(list);
++    */
++    
+     return 0;
+ }
+ 
+-- 
+1.7.9.5
+
+
+From f238cb36332bcd026dc1d384bd7431fa5c417b60 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 3 Apr 2013 04:56:08 -0400
+Subject: [PATCH 49/53] // finished changing the last print statement, now to
+ test valgrind
+
+---
+ part4/Makefile |   10 ++++++----
+ part4/list1.c  |   33 +++++++++++++++++++--------------
+ part4/list2.c  |   17 +++++++----------
+ part4/test4.c  |    9 ++++-----
+ 4 files changed, 36 insertions(+), 33 deletions(-)
+
+diff --git a/part4/Makefile b/part4/Makefile
+index 12ab6af..762a219 100644
+--- a/part4/Makefile
++++ b/part4/Makefile
+@@ -10,13 +10,15 @@ CXXFLAGS = -g -Wall $(INCLUDES)
+ 
+ LDFLAGS = -g
+ 
+-LDLIBS =
++LDLIBS = -lm
+ 
+-test4: test4.o list1.o list4.o
++test4: test4.o list1.o list2.o
+ 
+-test4.o: test4.c list1.c list1.h list2.h
++test4.o: test4.c list2.h
+ 
+-list4.o: test4.c list4.c list1.h list4.h 
++list2.o: list2.c list2.h
++
++list1.o: list1.c list1.h
+ 
+ .PHONY: clean
+ clean:
+diff --git a/part4/list1.c b/part4/list1.c
+index 0af94f3..ecfa23d 100644
+--- a/part4/list1.c
++++ b/part4/list1.c
+@@ -17,11 +17,13 @@ struct Node* prepend(struct Node* list, char* s)
+ {
+ 	struct Node* newNode = malloc(sizeof(struct Node));
+ 	
+-
++        //malloc failed
+ 	if (newNode == NULL)
+     		return NULL;
+ 	if(s == NULL)
+-	{    
++	{ 
++	   printf("Behavior is undefined\n");  
++
+ 	    char empt_str[] = "";
+ 	    s = empt_str;
+ 	}
+@@ -40,20 +42,21 @@ struct Node* prepend(struct Node* list, char* s)
+ void print(struct Node* list)
+ {
+     struct Node* current = list;
+-    int maxlen = 12;
+-
+-    if(strlen(s) > 12)
+-    {
+-	int rmdr = (int) strlen(current->data) % maxlen;
+-	int len = 	
+-
++    int maxlen;
+ 
+ 	while (current != NULL) 
+     {
+-	printf("->[%d:%s]", , current->data);
++	//maxlen is always 12 unless 
++	//length of the is small
++	maxlen = 12;
++	// get the len of the string
++	if(strlen(current->data) < 12){
++	  maxlen = strlen(current->data);
++	}
++	printf("->[%d:%s]",maxlen , current->data);
+ 	current = current->next;
+     }
+-    printf("\n:");
++    printf("\n");
+ 
+ }
+ 
+@@ -81,10 +84,12 @@ void deallocate_list(struct Node* list)
+    struct Node* tmp;
+ 
+    while(list != NULL)
+-   {	
+-	tmp = list;
++   {
++
++        tmp = list;
+ 	list = list->next;
+-	free(tmp);	
++	free(tmp->data);
++        free(tmp);	
+    }
+ }
+ 
+diff --git a/part4/list2.c b/part4/list2.c
+index 3cb7216..ae5c7f0 100644
+--- a/part4/list2.c
++++ b/part4/list2.c
+@@ -18,7 +18,7 @@
+ #include <string.h>
+ #include "list1.h"
+ #include "list2.h"
+-/*
++
+ struct Node* selectionsort(struct Node* list, int(*f1)(struct Node*, struct Node*), void(*f2)(struct Node*, struct Node*))
+ {
+ 	
+@@ -52,20 +52,18 @@ int compareData (struct Node* ss1, struct Node* ss2)
+ {
+ return strcmp(ss1->data, ss2->data);
+ }
+-*/
+-/*
++
++
+ void swapData (struct Node* ss1, struct Node* ss2)
+ {
+     if(ss1 == NULL || ss2 ==NULL) //don't allow for empty
+ 	return;
+ 
+     struct Node* tmp = (struct Node*)(malloc(sizeof(struct Node*)));
+-	    strcpy_upto(tmp->data, ss1->data);
+-	    tmp->len = ss1->len;
+-	    strcpy_upto(ss1->data, ss2->data);
+-	    ss1->len = ss2->len;
+-	    strcpy_upto(ss2->data,tmp->data);
+-	    ss2->len = tmp->len;
++	    //data is in heap, permanent address to point to
++    tmp->data = ss1->data;	    
++    ss1->data = ss2->data;
++    ss2->data = tmp->data;
+ free(tmp);
+ 
+ }
+@@ -89,4 +87,3 @@ struct Node* reverse(struct Node *list)
+ return body;
+ 
+ }
+-*/
+diff --git a/part4/test4.c b/part4/test4.c
+index faf34c2..d67ecd0 100644
+--- a/part4/test4.c
++++ b/part4/test4.c
+@@ -19,16 +19,15 @@ int main(int argc, char* argv[])
+ {
+     struct Node* list = NULL;
+     int i;
+-    for(i = 1; i < argc; i++)
++   for(i = 1; i < argc; i++)
+ 	list = prepend(list, argv[i]);
+-    printf("prepended: \n");
++    printf("prepended: ");
+     print(list);
+     
+-    /*
+     list = selectionsort(list, compareData, swapData);
+-    printf("   sorted: \n");
++    printf("   sorted: ");
++    print(list);
+     deallocate_list(list);
+-    */
+     
+     return 0;
+ }
+-- 
+1.7.9.5
+
+
+From 3e372006060db1e9acb759d01e8632962f31ae30 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 3 Apr 2013 05:05:55 -0400
+Subject: [PATCH 50/53] // changed my iteration statement to be more consise
+
+---
+ part3/list1.c |   88 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ part3/list3.c |   34 +++++++++++++---------
+ part3/list3.h |    4 ---
+ part3/test3.c |   44 +++++++++++++++++++----------
+ 4 files changed, 137 insertions(+), 33 deletions(-)
+ create mode 100644 part3/list1.c
+
+diff --git a/part3/list1.c b/part3/list1.c
+new file mode 100644
+index 0000000..4546f5f
+--- /dev/null
++++ b/part3/list1.c
+@@ -0,0 +1,88 @@
++/*
++ * Author: Gentry Tran
++ * Date: 03/29/13
++ *
++ * This is the file where all of the functions
++ * are implemented
++ *
++ * */
++
++
++
++#include <stdio.h>
++#include <string.h>
++#include <stdlib.h>
++#include "list1.h"
++
++
++struct Node* prepend(struct Node* list, char* s)
++{
++	struct Node* newNode = malloc(sizeof(struct Node));
++	
++	if (newNode == NULL)
++    		return NULL;
++	if(s == NULL)
++	{    char empt_str[] = "";
++		s = empt_str;
++	}
++
++	if(strlen(s) <= 5)
++	{	
++	    newNode->len = strlen(s);
++	    strcpy(newNode->data,s);	
++	}else
++	{    
++	    newNode->len = 5;
++	    strncpy(newNode->data, s, 5);
++	}
++	
++	// newNode is now the head of the list
++	newNode->next = list;
++
++    return newNode;
++
++}
++
++void print(struct Node* list)
++{
++    struct Node* current = list;
++   
++    while (current != NULL) 
++    {
++	printf("->[%u:%s]", current->len, current->data);
++	current = current->next;
++    }
++    //printf("\n:");
++
++}
++
++void strcpy_upto(char* t, const char *s, int n)
++{
++    if( strlen(s) > n ) 
++    {
++//	t = (char*)malloc(n+1*sizeof(char));
++	strncpy(t, s, n);
++	//printf("t: %s s: %s  n: %i", t, s, n);
++    	//printf("\n");
++	
++	}
++    else
++    {
++	strcpy(t, s);
++	//printf("t: %s s: %s  n: %i", t, s, n);
++	//printf("\n");
++    }
++
++}
++
++void deallocate_list(struct Node* list)
++{
++   struct Node* tmp;
++
++   while(list != NULL)
++   {	
++	tmp = list;
++	list = list->next;
++	free(tmp);	
++   }
++}
+diff --git a/part3/list3.c b/part3/list3.c
+index 390cd21..7661964 100644
+--- a/part3/list3.c
++++ b/part3/list3.c
+@@ -46,22 +46,28 @@ int sameContents(struct Node* old, struct Node* new)
+ struct Node* createPermutedLinkedList(struct Node* list, int* recipe, int size)
+ {	
+     struct Node* new = NULL;
+-	
+-    int i;
+-    for(i = size-1; i>= 0; i--)
+-    new = prepend(new, strptr(list, *(recipe+1)));
+ 
++//from k = 0 to end  of recipe(=size), keep moving values from recipe to bucket
++int k;
++for(k = 0; k < size; k++) {
++//start: create a temp struct and initialize it to list   
++struct Node* tmp = list;
++int i;
++//from i = 0 to the value give by the recipe
++for(i = 0; i < recipe[k]; i++)
++{
+ 
+-return new;
++// you set the temporary struct point to the next node
++tmp = tmp->next;
++}
++    
++//create a new list (prepend function) where the arguments
++// are your list, and the new data that needs to be added
++// from the other list that you're trying to copy
++ 
++new = prepend(new, tmp->data);
+ }
+-			    	
+-char* strptr(struct Node* stringy, int k)
+-{
+-	int i;
+-	for(i = 0; i < k; i++)
+-	{
+-	    stringy = stringy->next;
+-	}
+ 
+-return stringy->data;
++new = reverse(new);
++return new;
+ }
+diff --git a/part3/list3.h b/part3/list3.h
+index ca2df63..e6f1457 100644
+--- a/part3/list3.h
++++ b/part3/list3.h
+@@ -25,8 +25,4 @@ struct Node* createPermutedLinkedList(
+ 
+ int sameContents(struct Node* list1, struct Node* list2);
+ 
+-
+-char* strptr(struct Node* stringy, int k);
+-
+-
+ #endif
+diff --git a/part3/test3.c b/part3/test3.c
+index 7faf604..9f99b7d 100644
+--- a/part3/test3.c
++++ b/part3/test3.c
+@@ -18,8 +18,7 @@
+ #include "list3.h"
+ 
+ 
+-
+-int main (int argc, char** argv)
++int main (int argc, char* argv[])
+ {
+     struct Node* original = NULL;
+         
+@@ -32,11 +31,6 @@ int main (int argc, char** argv)
+     }
+ 
+ 
+-    //use previous reverse function to read arg in order passed in (notes)
+-    original = reverse(original);
+-    printf("original: \n");
+-    print(original);
+-
+     // Use scanf to get user input first
+ 
+     int n;
+@@ -56,33 +50,53 @@ int main (int argc, char** argv)
+ 	}
+     }
+ 
+-	int input[howlong];
+- /*   if(howlong != argc-1)
++  /*
++   *
++    while(tmp[i] > argc - 1 )
+     {
+ 	printf("undefined");
+ 	printf("\n");
++
+     }
+-    else
+-    {
+-	int input[howlong]; */
+ 
+-	for (i = 0; i < howlong; i++)
++*/
++//	int input[howlong];
++
++	/*for (i = 0; i < howlong; i++)
+ 	{
+ 	    input[i] = tmp[i];
+     	}
+ 
++	
++	while(i < howlong)
++	{
++	    i++;
++	    input[i] = tmp[i];
++	*/	
++
++   
++
++
++// use previous reverse function to read arg in order passed in (notes) 
++    original = reverse(original);
++    printf("original: ");
++    print(original);
++    printf("\n");
++
+ 
+ printf("creating a new list of %d nodes: ", howlong);
+ for(i = 0; i < howlong; i++)
+ {
+-    printf("%d", input[i]);
++    printf("%d ", tmp[i]);
+ }
+ 
+-struct Node* permuted = createPermutedLinkedList(original, input, howlong);
++struct Node* permuted = createPermutedLinkedList(original, tmp, howlong);
+ 
+ 
+ printf("\n");
+ printf("permuted: ");
++print(permuted);
++printf("\n");
+ 
+ 
+ if(sameContents(original, permuted))
+-- 
+1.7.9.5
+
+
+From 025491934c4f16625b04b2c6af5b62e8c1e1785d Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 3 Apr 2013 05:18:00 -0400
+Subject: [PATCH 51/53] // Just gOT IT TO WORKS!!!KJDFS:LKDFJAL :WOOOOWHOOOOO
+
+---
+ part4/Makefile |    2 +-
+ part4/test4.c  |    1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/part4/Makefile b/part4/Makefile
+index 762a219..a34347a 100644
+--- a/part4/Makefile
++++ b/part4/Makefile
+@@ -14,7 +14,7 @@ LDLIBS = -lm
+ 
+ test4: test4.o list1.o list2.o
+ 
+-test4.o: test4.c list2.h
++test4.o: test4.c list2.c list2.h
+ 
+ list2.o: list2.c list2.h
+ 
+diff --git a/part4/test4.c b/part4/test4.c
+index d67ecd0..21018dc 100644
+--- a/part4/test4.c
++++ b/part4/test4.c
+@@ -26,6 +26,7 @@ int main(int argc, char* argv[])
+     
+     list = selectionsort(list, compareData, swapData);
+     printf("   sorted: ");
++    list = reverse(list);
+     print(list);
+     deallocate_list(list);
+     
+-- 
+1.7.9.5
+
+
+From 83f62e0a9b14a4d791e6eae275aa134750e2efd4 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 3 Apr 2013 05:34:59 -0400
+Subject: [PATCH 52/53] // tried to find there error, but can't fix it
+
+---
+ part4/list1.c |    3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/part4/list1.c b/part4/list1.c
+index ecfa23d..0c41c22 100644
+--- a/part4/list1.c
++++ b/part4/list1.c
+@@ -85,11 +85,10 @@ void deallocate_list(struct Node* list)
+ 
+    while(list != NULL)
+    {
+-
+         tmp = list;
+ 	list = list->next;
+ 	free(tmp->data);
+-        free(tmp);	
++	free(tmp);	
+    }
+ }
+ 
+-- 
+1.7.9.5
+
+
+From 55f6ef3994bc8ccfd914f9b058c9fc1ea6e5e049 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Wed, 3 Apr 2013 05:38:14 -0400
+Subject: [PATCH 53/53] // just finishing up before submission
+
+---
+ part1/list1.c |    4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/part1/list1.c b/part1/list1.c
+index 4af0160..8c39db5 100644
+--- a/part1/list1.c
++++ b/part1/list1.c
+@@ -6,15 +6,11 @@
+  * are implemented
+  *
+  * */
+-
+-
+-
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdlib.h>
+ #include "list1.h"
+ 
+-
+ struct Node* prepend(struct Node* list, char* s)
+ {
+ 	struct Node* newNode = malloc(sizeof(struct Node));
+-- 
+1.7.9.5
+

@@ -1,0 +1,510 @@
+From f7e596627875f6dfdd8efa3ffa5a9d934da3ebbe Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 12 May 2013 22:50:12 -0400
+Subject: [PATCH 01/10] // accidentally did git init, now recopying code back
+ in..
+
+---
+ maze.cpp |   49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+
+diff --git a/maze.cpp b/maze.cpp
+index c861e56..cb25752 100644
+--- a/maze.cpp
++++ b/maze.cpp
+@@ -184,6 +184,55 @@ void print_gameover(const vector<vector<char> >& m)
+     attroff(A_REVERSE | A_BLINK);
+ }
+ 
++void solve_maze(vector<vector<char> >& m, int r, int c)
++{
++    if (r < 0 || c < 0 || r >= m.size() || c >= m[0].size())
++	return;
++    if (m[r][c] == MAZE_WALL || m[r][c] == MAZE_TRACE)
++	return;
++    if(m[r][c] == MAZE_GOLD)
++	return;
++
++    mvaddch(r, c, MAZE_TRACE);
++    mvaddch(r, c, MAZE_DUDE);
++    refresh();
++    usleep(DELAY);
++    m[r][c] = MAZE_TRACE;
++
++    char D[4] = { 'N', 'E', 'W', 'S' };
++
++    for(int i = 0; i < 4; i++) {
++	switch(D[i]) 
++	{
++	    case 'N':
++		if((m[r-1][c] != MAZE_WALL) && (m[r-1][c] != MAZE_TRACE)){
++		    solve_maze(m,r-1,c);
++		}
++		break;
++
++	    case 'E':
++		if((m[r][c+1] != MAZE_WALL) && (m[r][c+1] != MAZE_TRACE)){
++		}
++		solve_maze(m,r,c+1);
++		break;
++
++	    case 'W':
++		if((m[r][c-1] != MAZE_WALL) && (m[r][c-1] != MAZE_TRACE)){
++		}
++		solve_maze(m,r,c-1);
++		break;
++
++	    case 'S':
++		if((m[r+1][c] != MAZE_WALL) && (m[r+1][c] != MAZE_TRACE)){
++		}
++		solve_maze(m,r+1,c);
++		break;
++	    default:
++		cerr << "unknown direction" << endl;
++		exit(1);
++	}
++    }
++}    
+ int main() 
+ {
+     // Initialize the terminal screen using Ncurses init routines.
+-- 
+1.7.9.5
+
+
+From 953cf42a530ee4b744a002a65e0f211dc6232b10 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 12 May 2013 22:52:00 -0400
+Subject: [PATCH 02/10] // added the print statement for solver
+
+---
+ maze.cpp |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/maze.cpp b/maze.cpp
+index cb25752..28fbc26 100644
+--- a/maze.cpp
++++ b/maze.cpp
+@@ -184,6 +184,20 @@ void print_gameover(const vector<vector<char> >& m)
+     attroff(A_REVERSE | A_BLINK);
+ }
+ 
++void print_maze(const vector<vector<char> >& m)
++{
++    for(int row = 0; row < m.size(); row++) {
++	for(int col = 0; col < m[0].size(); col++) {
++	    if(col == m[0].size()-1){
++		std::cout << m[row][col] << "\n";
++	    }else{
++		std::cout << m[row][col];
++	    }
++	}
++    }
++}
++
++
+ void solve_maze(vector<vector<char> >& m, int r, int c)
+ {
+     if (r < 0 || c < 0 || r >= m.size() || c >= m[0].size())
+-- 
+1.7.9.5
+
+
+From 6c4a8174b277ddf8aba9d02f4fb54748ec12714c Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 12 May 2013 22:53:29 -0400
+Subject: [PATCH 03/10] //just added the delay wait time
+
+---
+ maze.cpp |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/maze.cpp b/maze.cpp
+index 28fbc26..f3958c1 100644
+--- a/maze.cpp
++++ b/maze.cpp
+@@ -19,6 +19,7 @@ const char MAZE_SPACE = ' ';
+ const char MAZE_TRACE = '.';
+ const char MAZE_GOLD  = 'G';
+ const char MAZE_MONEY = '$';
++const int DELAY = 100 *1000; //wait millisecond
+ 
+ /*
+  * Display the maze on the terminal screen by printing each 
+-- 
+1.7.9.5
+
+
+From 2be7e2db225c794d349afe8dbf26fd08ad0df908 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 12 May 2013 22:55:37 -0400
+Subject: [PATCH 04/10] // just added the portion of pushing 'a' to solve
+
+---
+ maze.cpp |    3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/maze.cpp b/maze.cpp
+index f3958c1..97d46fc 100644
+--- a/maze.cpp
++++ b/maze.cpp
+@@ -306,6 +306,9 @@ int main()
+             break;
+         }
+ 
++	if (key == 'a') {
++	    solve_maze(m, row, col);
++	}
+         // Arrow keys move the dude, leaving breadcrumbs on the screen.
+         if (key == KEY_UP || key == KEY_DOWN || 
+                 key == KEY_LEFT || key == KEY_RIGHT) {
+-- 
+1.7.9.5
+
+
+From 59e25c368a18ce5dc2467ec581d71bdb6710acb3 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 12 May 2013 23:03:48 -0400
+Subject: [PATCH 05/10] // added portion to recursion algorithm
+
+---
+ maze.cpp |    5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/maze.cpp b/maze.cpp
+index 97d46fc..71cf86d 100644
+--- a/maze.cpp
++++ b/maze.cpp
+@@ -221,6 +221,7 @@ void solve_maze(vector<vector<char> >& m, int r, int c)
+ 	{
+ 	    case 'N':
+ 		if((m[r-1][c] != MAZE_WALL) && (m[r-1][c] != MAZE_TRACE)){
++		    mvaddch(r, c, MAZE_TRACE);
+ 		    solve_maze(m,r-1,c);
+ 		}
+ 		break;
+@@ -228,18 +229,21 @@ void solve_maze(vector<vector<char> >& m, int r, int c)
+ 	    case 'E':
+ 		if((m[r][c+1] != MAZE_WALL) && (m[r][c+1] != MAZE_TRACE)){
+ 		}
++		mvaddch(r, c, MAZE_TRACE);
+ 		solve_maze(m,r,c+1);
+ 		break;
+ 
+ 	    case 'W':
+ 		if((m[r][c-1] != MAZE_WALL) && (m[r][c-1] != MAZE_TRACE)){
+ 		}
++		mvaddch(r, c, MAZE_TRACE);
+ 		solve_maze(m,r,c-1);
+ 		break;
+ 
+ 	    case 'S':
+ 		if((m[r+1][c] != MAZE_WALL) && (m[r+1][c] != MAZE_TRACE)){
+ 		}
++		mvaddch(r, c, MAZE_TRACE);
+ 		solve_maze(m,r+1,c);
+ 		break;
+ 	    default:
+@@ -248,6 +252,7 @@ void solve_maze(vector<vector<char> >& m, int r, int c)
+ 	}
+     }
+ }    
++
+ int main() 
+ {
+     // Initialize the terminal screen using Ncurses init routines.
+-- 
+1.7.9.5
+
+
+From 1027a7e78e6d07d3d10e05b1635b6f1946ecb9f7 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 12 May 2013 23:12:27 -0400
+Subject: [PATCH 06/10] //submitting first part, incase I don't finish it all
+
+---
+ README.txt |   19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+ create mode 100644 README.txt
+
+diff --git a/README.txt b/README.txt
+new file mode 100644
+index 0000000..819e309
+--- /dev/null
++++ b/README.txt
+@@ -0,0 +1,19 @@
++
++
++Lab 5
++
++Author: Gentry Tran
++
++
++Part 1:
++
++The dude goes through the maze, but does not stop at the gold. 
++
++
++
++Part 2:
++
++Segmentation faults at the dead ends.
++
++
++
+-- 
+1.7.9.5
+
+
+From 5cebc03846417cf24965e6ff3b8f9d70da1d29f3 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 12 May 2013 23:46:32 -0400
+Subject: [PATCH 07/10] //finished part 1 now back to part2
+
+---
+ maze.cpp |   57 ++++++++++++++++++++++++++++++++++++++++-----------------
+ 1 file changed, 40 insertions(+), 17 deletions(-)
+
+diff --git a/maze.cpp b/maze.cpp
+index 71cf86d..d306215 100644
+--- a/maze.cpp
++++ b/maze.cpp
+@@ -20,6 +20,11 @@ const char MAZE_TRACE = '.';
+ const char MAZE_GOLD  = 'G';
+ const char MAZE_MONEY = '$';
+ const int DELAY = 100 *1000; //wait millisecond
++bool done = false;
++int goldRowGlobal = -1;
++int goldColumnGlobal = -1;
++int currentRow = -1;
++int currentColumn = -1;
+ 
+ /*
+  * Display the maze on the terminal screen by printing each 
+@@ -205,14 +210,27 @@ void solve_maze(vector<vector<char> >& m, int r, int c)
+ 	return;
+     if (m[r][c] == MAZE_WALL || m[r][c] == MAZE_TRACE)
+ 	return;
+-    if(m[r][c] == MAZE_GOLD)
++	
++    if(r == goldRowGlobal && c == goldColumnGlobal){
++		done = true;
++
++	mvaddch(r, c, MAZE_DUDE);
++	refresh();
++	usleep(DELAY);
++	print_gameover(m);	
+ 	return;
+-
+-    mvaddch(r, c, MAZE_TRACE);
+-    mvaddch(r, c, MAZE_DUDE);
+-    refresh();
+-    usleep(DELAY);
+-    m[r][c] = MAZE_TRACE;
++	}
++	
++	if(done) return;
++	
++	currentRow = r;
++	currentColumn = c;
++	
++	m[r][c] = MAZE_TRACE;
++	mvaddch(r, c, MAZE_TRACE);
++	mvaddch(r, c, MAZE_DUDE);
++	refresh();
++	usleep(DELAY);
+ 
+     char D[4] = { 'N', 'E', 'W', 'S' };
+ 
+@@ -222,35 +240,36 @@ void solve_maze(vector<vector<char> >& m, int r, int c)
+ 	    case 'N':
+ 		if((m[r-1][c] != MAZE_WALL) && (m[r-1][c] != MAZE_TRACE)){
+ 		    mvaddch(r, c, MAZE_TRACE);
+-		    solve_maze(m,r-1,c);
++			solve_maze(m,r-1,c);
+ 		}
+ 		break;
+ 
+ 	    case 'E':
+-		if((m[r][c+1] != MAZE_WALL) && (m[r][c+1] != MAZE_TRACE)){
++		if((m[r][c+1] != MAZE_WALL) && (m[r][c+1] != MAZE_TRACE)){		
++		    mvaddch(r, c, MAZE_TRACE);
++			solve_maze(m,r,c+1);
+ 		}
+-		mvaddch(r, c, MAZE_TRACE);
+-		solve_maze(m,r,c+1);
+ 		break;
+ 
+ 	    case 'W':
+ 		if((m[r][c-1] != MAZE_WALL) && (m[r][c-1] != MAZE_TRACE)){
+-		}
+-		mvaddch(r, c, MAZE_TRACE);
+-		solve_maze(m,r,c-1);
++		    mvaddch(r, c, MAZE_TRACE);
++			solve_maze(m,r,c-1);
++		}		
+ 		break;
+ 
+ 	    case 'S':
+ 		if((m[r+1][c] != MAZE_WALL) && (m[r+1][c] != MAZE_TRACE)){
++			mvaddch(r, c, MAZE_TRACE);
++			solve_maze(m,r+1,c);
+ 		}
+-		mvaddch(r, c, MAZE_TRACE);
+-		solve_maze(m,r+1,c);
+ 		break;
+ 	    default:
+ 		cerr << "unknown direction" << endl;
+ 		exit(1);
+ 	}
+     }
++
+ }    
+ 
+ int main() 
+@@ -283,6 +302,8 @@ int main()
+             if (m[row][col] == MAZE_SPACE) {
+                 goldRow = row;
+                 goldCol = col;
++				goldRowGlobal = row;
++				goldColumnGlobal = col;
+                 break;
+             }
+         }
+@@ -313,6 +334,8 @@ int main()
+ 
+ 	if (key == 'a') {
+ 	    solve_maze(m, row, col);
++		row = currentRow;
++		col = currentColumn;
+ 	}
+         // Arrow keys move the dude, leaving breadcrumbs on the screen.
+         if (key == KEY_UP || key == KEY_DOWN || 
+@@ -336,4 +359,4 @@ int main()
+ 
+     // All done; get out of the fullscreen curses mode.
+     endwin();
+-}
++} 
+-- 
+1.7.9.5
+
+
+From d8335b52c23978e983c6a9578383b50bae1e360b Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Sun, 12 May 2013 23:50:29 -0400
+Subject: [PATCH 08/10] //have part 1 done, but trying to fix segmentation
+ faults
+
+---
+ README.txt |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/README.txt b/README.txt
+index 819e309..62bd463 100644
+--- a/README.txt
++++ b/README.txt
+@@ -6,9 +6,7 @@ Author: Gentry Tran
+ 
+ 
+ Part 1:
+-
+-The dude goes through the maze, but does not stop at the gold. 
+-
++It works, but I didn't try running valgrind because don't have much time.
+ 
+ 
+ Part 2:
+-- 
+1.7.9.5
+
+
+From b423eb2d9c5ccdbea48c491203b992456e9c5449 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Mon, 13 May 2013 00:18:22 -0400
+Subject: [PATCH 09/10] //just finished part2
+
+---
+ maze.cpp |   30 +++++++++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/maze.cpp b/maze.cpp
+index d306215..c0fc2d0 100644
+--- a/maze.cpp
++++ b/maze.cpp
+@@ -269,9 +269,29 @@ void solve_maze(vector<vector<char> >& m, int r, int c)
+ 		exit(1);
+ 	}
+     }
+-
+ }    
+ 
++void flood_maze(vector<vector<char> >& m, int r, int c)
++{
++
++    if (r < 0 || c < 0 || r >= m.size() || c >= m[0].size())
++	return;
++
++    if (m[r][c] != MAZE_SPACE)
++	return;
++
++    m[r][c] = MAZE_MONEY;
++    mvaddch(r, c, MAZE_MONEY);
++    refresh();
++    usleep(DELAY);
++
++    flood_maze(m,r-1,c);
++    flood_maze(m,r,c+1);
++    flood_maze(m,r,c-1);
++    flood_maze(m,r+1,c);
++}
++
++
+ int main() 
+ {
+     // Initialize the terminal screen using Ncurses init routines.
+@@ -337,6 +357,14 @@ int main()
+ 		row = currentRow;
+ 		col = currentColumn;
+ 	}
++
++	if (key == 'f') {
++	    flood_maze(m, row, col);
++	//	row = currentRow;
++	//	col = currentColumn;
++		
++	    print_gameover(m);
++	}
+         // Arrow keys move the dude, leaving breadcrumbs on the screen.
+         if (key == KEY_UP || key == KEY_DOWN || 
+                 key == KEY_LEFT || key == KEY_RIGHT) {
+-- 
+1.7.9.5
+
+
+From 1692c27957a7521be53d23a7603be76c0388fb33 Mon Sep 17 00:00:00 2001
+From: Gentry Lu Tran <glt2109@columbia.edu>
+Date: Mon, 13 May 2013 00:19:53 -0400
+Subject: [PATCH 10/10] //just finished read me and now final submit late
+
+---
+ README.txt |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/README.txt b/README.txt
+index 62bd463..c280162 100644
+--- a/README.txt
++++ b/README.txt
+@@ -11,7 +11,7 @@ It works, but I didn't try running valgrind because don't have much time.
+ 
+ Part 2:
+ 
+-Segmentation faults at the dead ends.
+-
++part two works, but it isn't continuous like his example, and the only way I
++know how to do it
+ 
+ 
+-- 
+1.7.9.5
+
